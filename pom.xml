@@ -1,0 +1,131 @@
+<!--  N.B. This POM relies on a property anchor.home.deploy which
+   defines where an Anchor distribution exists into which these plugins will be copied
+   
+   This can be set on a per-user basis in a profile in $HOME/.m2/settings.xml
+   
+   Please see the README.md in the top-level folder for an example.   
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-pom</artifactId>
+		<version>0.0.16-SNAPSHOT</version>
+    </parent> 
+
+    <artifactId>anchor-parent-plugins-gpl</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.5-SNAPSHOT</version>
+    <name>anchor-parent-plugins-gpl</name>
+    
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL) version 3.0</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+  
+    	<scm>
+		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</developerConnection>
+		<url>https://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</url>
+	  <tag>anchor-parent-0.0.1</tag>
+  </scm>
+    
+    <modules>
+        <module>anchor-plugin-io-gpl</module>
+        <module>anchor-plugin-fiji</module>
+        <module>anchor-plugin-ml</module>
+    </modules>
+
+	<!-- Provides a means of reaching anchor-pom and ImageJ -->
+    <repositories>
+		<repository>
+		  <releases>
+			<enabled>true</enabled>
+			<updatePolicy>never</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </releases>
+		  <snapshots>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+			<checksumPolicy>warn</checksumPolicy>
+		  </snapshots>
+		  <id>anchor</id>
+		   <name>anchor</name>
+		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <layout>default</layout>
+		</repository>
+		
+		<!-- this should be mirrored from artifactory but it doesnt seem to always work so leave it here as a backup !-->
+		<repository>
+			<id>imagej</id>
+			<name>ImageJ repository</name>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+		
+   	</repositories>
+	
+    <build>
+        <pluginManagement>
+            <plugins>
+				
+				<plugin>
+				    <groupId>org.codehaus.mojo</groupId>
+				    <artifactId>license-maven-plugin</artifactId>
+				    <version>1.8</version>
+				    <configuration>
+				        <licenseName>gpl_v3</licenseName>
+				        <organizationName>ETH Zurich, University of Zurich, Owen Feehan</organizationName>
+				        <inceptionYear>2016</inceptionYear>
+						<includes>
+							<include>**/*.java</include>
+						</includes>
+        				        
+				    </configuration>
+				</plugin>
+				
+
+	
+            </plugins>
+        </pluginManagement>
+        			
+			
+			
+					
+		<!-- Adds license information in each jar -->
+		 <resources>
+		  <resource>
+		    <directory>src/main/resources</directory>
+		  </resource>
+		  
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>notices</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/notices</targetPath>
+		    <includes>
+		       <include>*</include>
+		    </includes>
+		  </resource>
+			
+		  <resource>
+		    <filtering>false</filtering>
+		    <directory>${project.basedir}</directory>
+		    
+		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <targetPath>META-INF/</targetPath>
+		    <includes>
+		      <include>LICENSE.txt</include>
+		      <include>NOTICE.txt</include>
+		    </includes>
+		  </resource>
+		  
+		</resources>			
+			
+    </build>
+
+</project>

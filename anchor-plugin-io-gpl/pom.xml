@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-parent-plugins-gpl</artifactId>
+		<version>0.0.5-SNAPSHOT</version>
+    </parent>
+  <artifactId>anchor-plugin-io-gpl</artifactId>
+  <build>
+
+  </build>
+   <dependencies>
+		
+		<!-- BIOFORMATS -->
+		 <dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>formats-gpl</artifactId>
+	      <version>${bio-formats.version}</version>
+	    </dependency>
+
+	    <dependency>
+	      <groupId>org.openmicroscopy</groupId>
+	      <artifactId>metakit</artifactId>
+	      <version>${metakit.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.openmicroscopy</groupId>
+	      <artifactId>specification</artifactId>
+	      <version>${ome-specification.version}</version>
+	    </dependency>
+	    
+	    <!--<dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>turbojpeg</artifactId>
+	      <version>5.1.1</version>
+	    </dependency>-->
+	    	    
+	</dependencies>
+	
+	<repositories>
+	    <repository>
+	      <id>ome.external</id>
+	      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+	    </repository>
+	    <repository>
+	      <id>ome.releases</id>
+	      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+	    </repository>
+	    <repository>
+	      <id>ome.snapshots</id>
+	      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+	    </repository>
+	    <repository>
+	      <id>unidata.releases</id>
+	      <url>http://artifacts.unidata.ucar.edu/content/repositories/unidata-releases</url>
+	    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ome.releases</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ome.snapshots</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ome.external</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>

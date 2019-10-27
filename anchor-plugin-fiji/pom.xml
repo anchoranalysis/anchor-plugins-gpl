@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-parent-plugins-gpl</artifactId>
+		<version>0.0.5-SNAPSHOT</version>
+    </parent> 
+  <artifactId>anchor-plugin-fiji</artifactId>
+   <dependencies>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-bean</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-core</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-beans-shared</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-feature</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-bean</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-io</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-ml</artifactId>
+	  <version>0.0.5-SNAPSHOT</version>
+	</dependency>
+	
+	<!-- We rely on relevant imagej dependencies being
+	  transitivitely included via this link -->
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-ij</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+  
+	
+	<!-- We bring in the gpl or other imagej plugins that
+	    were not yet included -->
+	<dependency>
+	    <groupId>net.imglib2</groupId>
+	    <artifactId>imglib2-algorithm-gpl</artifactId>
+	    <version>${imglib2-algorithm-gpl.version}</version>
+		
+		<exclusions>
+			<exclusion>
+			  <groupId>net.imglib2</groupId>
+			  <artifactId>imglib2</artifactId>
+			</exclusion>
+		</exclusions>
+		
+	</dependency>
+	
+	<dependency>
+	  <groupId>net.imagej</groupId>
+	  <artifactId>ij1-patcher</artifactId>
+	  <version>${ij1-patcher.version}</version>
+	</dependency>		
+
+
+	<dependency>
+	  <groupId>net.imglib2</groupId>
+	  <artifactId>imglib2-ij</artifactId>
+	  <version>${imglib2-ij.version}</version>
+	  
+	  	<exclusions>
+			<exclusion>
+			  <groupId>net.imglib2</groupId>
+			  <artifactId>imglib2</artifactId>
+			</exclusion>
+		</exclusions>
+		
+	</dependency>
+	
+	
+	
+	<dependency>
+	  <groupId>sc.fiji</groupId>
+	  <artifactId>Auto_Threshold</artifactId>
+	  <version>1.16.1</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>sc.fiji</groupId>
+	  <artifactId>Fiji_Plugins</artifactId>
+	  <version>3.0.0</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>sc.fiji</groupId>
+	  <artifactId>VIB_</artifactId>
+	  <version>2.0.3</version>
+	</dependency>
+
+	<dependency>
+	  <groupId>sc.fiji</groupId>
+	  <artifactId>VIB-lib</artifactId>
+	  <version>2.0.1</version>
+	</dependency>
+	
+	</dependencies> 
+	
+	
+	
+</project>

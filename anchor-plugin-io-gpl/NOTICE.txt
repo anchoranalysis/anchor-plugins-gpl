@@ -1,0 +1,1 @@
+This product depends on other libraries. Their attribution and/or original licenses are found in the notices/ sub-folder
