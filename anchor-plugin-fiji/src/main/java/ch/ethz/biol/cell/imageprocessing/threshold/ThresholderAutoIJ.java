@@ -41,7 +41,7 @@ import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import fiji.threshold.Auto_Threshold;
 
@@ -81,7 +81,7 @@ public class ThresholderAutoIJ extends Thresholder {
 			
 		VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus( ip );
 		
-		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeByte.instance));
+		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance));
 		
 		return new BinaryVoxelBoxByte( vbOut.asByte(), bvOut.createInt() );
 	}

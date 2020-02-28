@@ -45,7 +45,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import fiji.threshold.Auto_Local_Threshold;
 
@@ -76,7 +76,7 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProvider
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(
 			new ImageDim(chnl.getDimensions()),
-			VoxelDataTypeByte.instance
+			VoxelDataTypeUnsignedByte.instance
 		);
 		
 		VoxelBox<ByteBuffer> vb = chnlOut.getVoxelBox().asByte();
@@ -85,7 +85,7 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProvider
 		
 		
 		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
-			ImagePlus ip = IJWrap.createImagePlus(stack.extractSlice(z), 1, false);	
+			ImagePlus ip = IJWrap.createImagePlus(stack.extractSlice(z), false);	
 			
 			Object[] ret = at.exec(ip, method, radius, 0, 0, true);
 			ImagePlus ipOut = (ImagePlus) ret[0];

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.match.ObjWithMatches;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderFromObjMasks;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
@@ -93,7 +93,7 @@ public class ChnlProviderPixelScoreSpread extends ChnlProvider {
 		
 		// We calculate the score for 
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeByte.instance );
+		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(sd, VoxelDataTypeUnsignedByte.instance );
 		int i = 0;
 		for( ObjWithMatches owm : matches ) {
 			chnlOut.getVoxelBox().any().setPixelsCheckMask( owm.getMatches().get(0), i++);
