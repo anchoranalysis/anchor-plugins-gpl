@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -277,7 +276,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		
 
 		@Override
-		public Feature duplicateBean() throws BeanDuplicateException {
+		public Feature duplicateBean() {
 			return new FeatureSVMClassifier( model, new FeatureList(getList()).duplicateBean(), direction );
 		}
 		
