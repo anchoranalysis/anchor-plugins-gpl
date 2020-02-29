@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 
 // Euclidian distance transform from ImageJ
@@ -73,7 +73,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
 			dimProvider.create(),
-			VoxelDataTypeByte.instance
+			VoxelDataTypeUnsignedByte.instance
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		

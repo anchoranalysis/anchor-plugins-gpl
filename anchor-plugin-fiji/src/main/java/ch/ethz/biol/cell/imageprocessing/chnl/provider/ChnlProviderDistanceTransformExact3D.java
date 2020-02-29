@@ -40,14 +40,14 @@ import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToByte;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToShort;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeShort;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 // TODO LICENSE LICENSE LICENSE
 
@@ -87,7 +87,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 	public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
 		Chnl chnlIn = ChnlFactory
 				.instance()
-				.get(VoxelDataTypeByte.instance)
+				.get(VoxelDataTypeUnsignedByte.instance)
 				.create( bvb.getVoxelBox(), res );
 		BinaryChnl binaryChnlIn = new BinaryChnl(chnlIn, bvb.getBinaryValues());
 		
@@ -135,7 +135,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 	}
 	
 	private static Chnl createEmptyChnl( boolean createShort, ImageDim dims ) {
-		VoxelDataType dataType = createShort ? VoxelDataTypeShort.instance : VoxelDataTypeByte.instance;
+		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
 		return ChnlFactory.instance().createEmptyUninitialised( dims, dataType );
 	}
 	
@@ -166,7 +166,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 			distAsFloat.getVoxelBox().any().multiplyBy(multFactor);
 		}
 
-		ChnlConverter<?> converter = createShort ? new ChnlConverterToShort() : new ChnlConverterToByte();
+		ChnlConverter<?> converter = createShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
 		return converter.convert(distAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 	}
 

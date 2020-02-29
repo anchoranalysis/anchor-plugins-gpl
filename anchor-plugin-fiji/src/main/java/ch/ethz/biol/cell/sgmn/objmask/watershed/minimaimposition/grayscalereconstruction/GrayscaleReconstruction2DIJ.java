@@ -37,7 +37,7 @@ import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeByte;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import ch.ethz.biol.cell.nucleii.landini.GreyscaleReconstruct_;
 
@@ -70,7 +70,7 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
 	@Override
 	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb ) throws OperationFailedException {
 		
-		if (!markerVb.getVoxelDataType().equals(VoxelDataTypeByte.instance) || !maskVb.getVoxelDataType().equals(VoxelDataTypeByte.instance)) {
+		if (!markerVb.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance) || !maskVb.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
 			throw new OperationFailedException("Only unsigned byte supported for marker image");
 		}
 		
@@ -78,11 +78,11 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
 		VoxelBox<ByteBuffer> maskCast = maskVb.asByte();
 		
 		// We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want reconstruction by Erosion
-		markerCast.subtractFrom( VoxelDataTypeByte.MAX_VALUE_INT );
+		markerCast.subtractFrom( VoxelDataTypeUnsignedByte.MAX_VALUE_INT );
 		maskVb.subtractFromMaxValue();
 		
 		VoxelBox<ByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
-		ret.subtractFrom( VoxelDataTypeByte.MAX_VALUE_INT );
+		ret.subtractFrom( VoxelDataTypeUnsignedByte.MAX_VALUE_INT );
 		
 		return new VoxelBoxWrapper(ret);
 	}
