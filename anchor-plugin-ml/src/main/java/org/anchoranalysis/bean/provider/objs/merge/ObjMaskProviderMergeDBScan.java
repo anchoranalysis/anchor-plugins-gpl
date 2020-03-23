@@ -85,7 +85,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	@Override
 	public ObjMaskCollection create() throws CreateException {
 		
-		ObjMaskCollection objsToMerge = getObjMaskProvider().create();
+		ObjMaskCollection objsToMerge = getObjs().create();
 				
 		try {
 			return mergeMultiplex(
@@ -125,20 +125,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 			// The difference in distances-from-the-countour (from the distance map) between the two points
 			double distDeltaDistanceContour = normalisedDistanceDeltaContour(a, b);
 			
-			double max = Math.max(distCOG, distDeltaDistanceContour);
-
-			// DEBUG CODE
-			/*System.out.printf(
-				"Distance between %s and %s: cog=%f deltaDistance=%f max=%f maxDistDeltaContour=%f %n",
-				convert(a),
-				convert(b),
-				distCOG,
-				distDeltaDistanceContour,
-				max,
-				maxDistDeltaContour
-			);*/
-			
-			return max;
+			return Math.max(distCOG, distDeltaDistanceContour);
 		}
 				
 		private double normalisedDistanceDeltaContour( double[] a, double[] b  ) {

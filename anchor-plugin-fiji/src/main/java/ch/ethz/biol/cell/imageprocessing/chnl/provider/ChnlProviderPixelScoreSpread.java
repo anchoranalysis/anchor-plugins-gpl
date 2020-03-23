@@ -64,10 +64,10 @@ public class ChnlProviderPixelScoreSpread extends ChnlProvider {
 	private Feature pixelScore;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderSource;
+	private ObjMaskProvider objsSource;
 	
 	@BeanField
-	private ObjMaskProvider objMaskProviderTarget;
+	private ObjMaskProvider objsTarget;
 	
 	@BeanField
 	private ObjMaskSgmn sgmnSpread = new ObjMaskSgmnWatershedYeong();
@@ -78,14 +78,14 @@ public class ChnlProviderPixelScoreSpread extends ChnlProvider {
 
 		Chnl chnlIntensity = intensityProvider.create();
 		
-		ObjMaskCollection objsSrc = objMaskProviderSource.create();
+		ObjMaskCollection objsSrcCollection = objsSource.create();
 		
-		ObjMaskCollection objsTrgt = objMaskProviderTarget.create();
+		ObjMaskCollection objsTrgtCollection = objsTarget.create();
 		
 		ImageDim sd = chnlIntensity.getDimensions();
 		
 		// We grow the objsSrc to objsTrgt and create a one-to-one mapping between the two
-		List<ObjWithMatches> matches = createMappingToGrownSeeds( objsSrc, objsTrgt, sd );
+		List<ObjWithMatches> matches = createMappingToGrownSeeds( objsSrcCollection, objsTrgtCollection, sd );
 		
 		
 		VoxelBoxList voxelBoxList = new VoxelBoxList();
@@ -151,27 +151,27 @@ public class ChnlProviderPixelScoreSpread extends ChnlProvider {
 		this.pixelScore = pixelScore;
 	}
 
-	public ObjMaskProvider getObjMaskProviderSource() {
-		return objMaskProviderSource;
-	}
-
-	public void setObjMaskProviderSource(ObjMaskProvider objMaskProviderSource) {
-		this.objMaskProviderSource = objMaskProviderSource;
-	}
-
-	public ObjMaskProvider getObjMaskProviderTarget() {
-		return objMaskProviderTarget;
-	}
-
-	public void setObjMaskProviderTarget(ObjMaskProvider objMaskProviderTarget) {
-		this.objMaskProviderTarget = objMaskProviderTarget;
-	}
-
 	public ObjMaskSgmn getSgmnSpread() {
 		return sgmnSpread;
 	}
 
 	public void setSgmnSpread(ObjMaskSgmn sgmnSpread) {
 		this.sgmnSpread = sgmnSpread;
+	}
+
+	public ObjMaskProvider getObjsSource() {
+		return objsSource;
+	}
+
+	public void setObjsSource(ObjMaskProvider objsSource) {
+		this.objsSource = objsSource;
+	}
+
+	public ObjMaskProvider getObjsTarget() {
+		return objsTarget;
+	}
+
+	public void setObjsTarget(ObjMaskProvider objsTarget) {
+		this.objsTarget = objsTarget;
 	}
 }
