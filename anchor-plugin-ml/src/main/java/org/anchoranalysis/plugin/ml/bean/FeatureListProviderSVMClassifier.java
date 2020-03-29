@@ -41,6 +41,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
@@ -168,7 +169,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 			List<FirstSecondOrderStatistic> listStats = readScale(filePathScale);
 	
 			return listFromNames(featureNames, getSharedObjects().getSharedFeatureSet(), listStats );
-		} catch (IOException | GetOperationFailedException | CreateException e) {
+		} catch (IOException e) {
 			throw new OperationFailedException(e);
 		}
 	}
@@ -179,7 +180,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		return out;
 	}
 	
-	private FeatureList listFromNames( FeatureNameList featureNames, INamedProvider<Feature> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws GetOperationFailedException, CreateException {
+	private FeatureList listFromNames( FeatureNameList featureNames, INamedProvider<Feature> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
 		FeatureList out = new FeatureList();
 		
@@ -189,17 +190,26 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		
 		for( int i=0; i<featureNames.size(); i++ ) {
 			
-			addOutOrMissing(
-				featureNames.get(i),
-				listStats.get(i),
-				allFeatures,				
-				out,
-				missing
-			);
+			try {
+				addOutOrMissing(
+					featureNames.get(i),
+					listStats.get(i),
+					allFeatures,				
+					out,
+					missing
+				);
+			} catch (NamedProviderGetException e) {
+				throw new OperationFailedException(e.summarize());
+			}
 		}
 		
 		if (missing.size()>0) {
-			throw FeatureListProviderLDAClassifier.createExceptionForMissingStrings(missing);
+			// Embed exception
+			try {
+				throw FeatureListProviderLDAClassifier.createExceptionForMissingStrings(missing);
+			} catch (CreateException e) {
+				throw new OperationFailedException(e);
+			}
 		}
 		
 		return out;
@@ -207,7 +217,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature> allFeatures, FeatureList out, List<String> missing ) throws GetOperationFailedException {
+	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature> allFeatures, FeatureList out, List<String> missing ) throws NamedProviderGetException {
 		Feature feature = allFeatures.getNull(featureName);
 		if (feature!=null) {
 			out.add(
