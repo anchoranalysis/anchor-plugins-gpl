@@ -93,8 +93,8 @@ class FactoryOther {
 		double maxDistDeltaContour
 	) {
 		ObjMaskProviderMergeDBScan merge = new ObjMaskProviderMergeDBScan(); 
-		merge.setObjMaskProvider(unmergedMinima);
-		merge.setObjMaskProviderContainer(container);
+		merge.setObjs(unmergedMinima);
+		merge.setObjsContainer(container);
 		merge.setResProvider(resProvider);
 		merge.setDistanceMapProvider(sourceDistanceMapProvider);
 		merge.setMaxDistCOG(maxDistanceCOG);
@@ -104,7 +104,7 @@ class FactoryOther {
 	
 	public static ObjMaskProvider seeds( ObjMaskProvider mergedMinima, ImageDimProvider dimProvider ) {
 		ObjMaskProviderConvexHullConnectLines provider = new ObjMaskProviderConvexHullConnectLines();
-		provider.setObjMaskProvider(mergedMinima);
+		provider.setObjs(mergedMinima);
 		provider.setDimProvider(dimProvider);
 		return provider;
 	}

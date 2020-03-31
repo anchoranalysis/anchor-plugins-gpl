@@ -56,7 +56,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 	
 	// START PROPERTIES
 	@BeanField
-	private ObjMaskProvider objMaskProvider;
+	private ObjMaskProvider objs;
 	
 	@BeanField
 	private ImageDimProvider dimProvider;
@@ -77,9 +77,9 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
-		ObjMaskCollection objs = objMaskProvider.create();
+		ObjMaskCollection objsCollection = objs.create();
 		
-		for( ObjMask om : objs ) {
+		for( ObjMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();
 			VoxelBox<ByteBuffer> vbDist = ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
 				bvb,
@@ -106,12 +106,12 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 		this.suppressZ = suppressZ;
 	}
 
-	public ObjMaskProvider getObjMaskProvider() {
-		return objMaskProvider;
+	public ObjMaskProvider getObjs() {
+		return objs;
 	}
 
-	public void setObjMaskProvider(ObjMaskProvider objMaskProvider) {
-		this.objMaskProvider = objMaskProvider;
+	public void setObjs(ObjMaskProvider objs) {
+		this.objs = objs;
 	}
 
 	public boolean isCreateShort() {

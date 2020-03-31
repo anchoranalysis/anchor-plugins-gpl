@@ -56,8 +56,8 @@ class FactorySgmn {
 	
 	public static ObjMaskProvider watershedSegment( ObjMaskProvider sourceObjs, ObjMaskProvider seeds, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
-		provider.setObjMaskProviderSourceObjs(sourceObjs);
-		provider.setObjMaskProviderSeeds(seeds);
+		provider.setObjsSource(sourceObjs);
+		provider.setObjsSeeds(seeds);
 		provider.setChnlProvider(distanceTransform);
 		provider.setSgmn( watershedSgmnForSegments() );
 		return provider;
