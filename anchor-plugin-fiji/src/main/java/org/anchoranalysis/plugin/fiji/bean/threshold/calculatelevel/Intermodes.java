@@ -1,4 +1,4 @@
-package ch.ethz.biol.cell.imageprocessing.threshold.calculatelevel;
+package org.anchoranalysis.plugin.fiji.bean.threshold.calculatelevel;
 
 /*
  * #%L
