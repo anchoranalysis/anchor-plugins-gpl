@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.fiji.bean.threshold.calculatelevel;
 
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.calculatelevel.CalculateLevel;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
