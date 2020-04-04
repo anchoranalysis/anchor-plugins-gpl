@@ -88,22 +88,14 @@ public class BivariateGaussianScore extends Feature {
 	@Override
 	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
 		
-		double val1 = getCacheSession().calc( getItem1(), params );
-		double val2 = getCacheSession().calc( getItem2(), params );
+		double val1 = params.calc( getItem1() );
+		double val2 = params.calc( getItem2() );
 		
-		double mean1 = getCacheSession().calc( getItemMean1(), params );
-		double mean2 = getCacheSession().calc( getItemMean2(), params );
+		double mean1 = params.calc( getItemMean1() );
+		double mean2 = params.calc( getItemMean2() );
 		
-		double stdDev1 = getCacheSession().calc( getItemStdDev1(), params );
-		double stdDev2 = getCacheSession().calc( getItemStdDev2(), params );
-		
-		// We normalise
-		
-//		val = val - mean;
-//		mean = 0;
-//		
-//		val = val / stdDev;
-//		stdDev = 1;
+		double stdDev1 = params.calc( getItemStdDev1() );
+		double stdDev2 = params.calc( getItemStdDev2() );
 		
 		return calc( mean1, stdDev1, mean2, stdDev2, val1, val2 );
 	}

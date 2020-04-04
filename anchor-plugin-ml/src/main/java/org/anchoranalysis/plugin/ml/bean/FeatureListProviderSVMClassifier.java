@@ -304,7 +304,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		public double calc(CacheableParams<? extends FeatureCalcParams> params)
 				throws FeatureCalcException {
 			
-			ResultsVector rv = getCacheSession().calc( getList(), params);
+			ResultsVector rv = params.calc( getList() );
 
 // DEBUG CODE 
 //			writeCSV("scaled",rv);
