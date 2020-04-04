@@ -47,6 +47,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -300,7 +301,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 //		}
 	
 		@Override
-		public double calc(FeatureCalcParams params)
+		public double calc(CacheableParams<? extends FeatureCalcParams> params)
 				throws FeatureCalcException {
 			
 			ResultsVector rv = getCacheSession().calc( getList(), params);
