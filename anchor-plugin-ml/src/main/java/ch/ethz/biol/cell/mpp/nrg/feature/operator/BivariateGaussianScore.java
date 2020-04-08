@@ -39,7 +39,7 @@ import umontreal.ssj.probdistmulti.BiNormalGenzDist;
 
 // LICENSE!!!
 // A score between 0 and 1, based upon the CDF of a bivariate gaussian. as one approaches the mean, the score approaches 1.0
-public class BivariateGaussianScore extends Feature {
+public class BivariateGaussianScore extends Feature<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -48,22 +48,22 @@ public class BivariateGaussianScore extends Feature {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature item1 = null;
+	private Feature<FeatureCalcParams> item1 = null;
 	
 	@BeanField
-	private Feature item2 = null;
+	private Feature<FeatureCalcParams> item2 = null;
 	
 	@BeanField
-	private Feature itemMean1 = null;
+	private Feature<FeatureCalcParams> itemMean1 = null;
 	
 	@BeanField
-	private Feature itemStdDev1 = null;
+	private Feature<FeatureCalcParams> itemStdDev1 = null;
 	
 	@BeanField
-	private Feature itemMean2 = null;
+	private Feature<FeatureCalcParams> itemMean2 = null;
 	
 	@BeanField
-	private Feature itemStdDev2 = null;
+	private Feature<FeatureCalcParams> itemStdDev2 = null;
 	// END BEAN PROPERTIES
 	
 	public static double calc(
@@ -86,7 +86,7 @@ public class BivariateGaussianScore extends Feature {
 	}
 	
 	@Override
-	public double calc( CacheableParams<? extends FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureCalcParams> params ) throws FeatureCalcException {
 		
 		double val1 = params.calc( getItem1() );
 		double val2 = params.calc( getItem2() );
@@ -112,51 +112,51 @@ public class BivariateGaussianScore extends Feature {
 		);
 	}
 
-	public Feature getItemMean1() {
+	public Feature<FeatureCalcParams> getItemMean1() {
 		return itemMean1;
 	}
 
-	public void setItemMean1(Feature itemMean1) {
+	public void setItemMean1(Feature<FeatureCalcParams> itemMean1) {
 		this.itemMean1 = itemMean1;
 	}
 
-	public Feature getItemStdDev1() {
+	public Feature<FeatureCalcParams> getItemStdDev1() {
 		return itemStdDev1;
 	}
 
-	public void setItemStdDev1(Feature itemStdDev1) {
+	public void setItemStdDev1(Feature<FeatureCalcParams> itemStdDev1) {
 		this.itemStdDev1 = itemStdDev1;
 	}
 
-	public Feature getItemMean2() {
+	public Feature<FeatureCalcParams> getItemMean2() {
 		return itemMean2;
 	}
 
-	public void setItemMean2(Feature itemMean2) {
+	public void setItemMean2(Feature<FeatureCalcParams> itemMean2) {
 		this.itemMean2 = itemMean2;
 	}
 
-	public Feature getItemStdDev2() {
+	public Feature<FeatureCalcParams> getItemStdDev2() {
 		return itemStdDev2;
 	}
 
-	public void setItemStdDev2(Feature itemStdDev2) {
+	public void setItemStdDev2(Feature<FeatureCalcParams> itemStdDev2) {
 		this.itemStdDev2 = itemStdDev2;
 	}
 
-	public Feature getItem1() {
+	public Feature<FeatureCalcParams> getItem1() {
 		return item1;
 	}
 
-	public void setItem1(Feature item1) {
+	public void setItem1(Feature<FeatureCalcParams> item1) {
 		this.item1 = item1;
 	}
 
-	public Feature getItem2() {
+	public Feature<FeatureCalcParams> getItem2() {
 		return item2;
 	}
 
-	public void setItem2(Feature item2) {
+	public void setItem2(Feature<FeatureCalcParams> item2) {
 		this.item2 = item2;
 	}
 
