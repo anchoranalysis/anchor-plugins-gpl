@@ -62,7 +62,7 @@ import libsvm.svm_model;
 import libsvm.svm_node;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.ZScore;
 
-public class FeatureListProviderSVMClassifier extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderSVMClassifier extends FeatureListProviderReferencedFeatures<FeatureCalcParams> {
 
 	/**
 	 * 
@@ -241,10 +241,10 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	
 	private static Feature<FeatureCalcParams> createScaledFeature( Feature<FeatureCalcParams> feature, FirstSecondOrderStatistic stat ) {
 		
-		Constant mean = new Constant(stat.getMean());
+		Constant<FeatureCalcParams> mean = new Constant<>(stat.getMean());
 		mean.setCustomName("mean");
 		
-		Constant stdDev = new Constant(stat.getScale() );
+		Constant<FeatureCalcParams> stdDev = new Constant<>(stat.getScale() );
 		stdDev.setCustomName("stdDev");
 		
 		ZScore<FeatureCalcParams> featureNormalized = new ZScore<>();
