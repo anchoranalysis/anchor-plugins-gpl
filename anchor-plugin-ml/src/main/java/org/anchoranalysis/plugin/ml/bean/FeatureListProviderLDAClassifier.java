@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderLDAClassifier extends FeatureListProviderReferencedFeatures<FeatureCalcParams> {
+public class FeatureListProviderLDAClassifier<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -111,9 +111,9 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 		return new CreateException( sb.toString() );		
 	}
 	
-	private Feature<FeatureCalcParams> createScoreFeature( KeyValueParams kpv ) throws CreateException {
+	private Feature<T> createScoreFeature( KeyValueParams kpv ) throws CreateException {
 		
-		Sum<FeatureCalcParams> sum = new Sum<>();
+		Sum<T> sum = new Sum<>();
 		sum.setIgnoreNaN(true);
 		
 		// For now let's just check all the feature are present
@@ -124,9 +124,9 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 				continue;
 			}
 			
-			Feature<FeatureCalcParams> feature = getSharedObjects().getSharedFeatureSet().getNull(name);
+			Feature<T> feature = getSharedObjects().getSharedFeatureSet().getNull(name).downcast();
 			sum.getList().add(
-				new MultiplyByConstant<FeatureCalcParams>(feature, kpv.getPropertyAsDouble(name))
+				new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
 			);
 		}
 		
@@ -136,18 +136,18 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 
 	}
 	
-	private Feature<FeatureCalcParams> createThresholdFeature( double threshold ) {
-		Constant<FeatureCalcParams> out = new Constant<>(threshold);
+	private Feature<T> createThresholdFeature( double threshold ) {
+		Constant<T> out = new Constant<>(threshold);
 		out.setCustomName(featureNameThreshold);
 		return out;
 	}
 	
-	private Feature<FeatureCalcParams> createClassifierFeature( double threshold ) {
+	private Feature<T> createClassifierFeature( double threshold ) {
 		// If we are below the the threshold we output -1
 		
-		Reference score = new Reference(featureNameScore);
+		Reference<T> score = new Reference<>(featureNameScore);
 		
-		IfGreaterThan<FeatureCalcParams> featThresh = new IfGreaterThan<>();
+		IfGreaterThan<T> featThresh = new IfGreaterThan<>();
 		featThresh.setFeatureCondition(score );
 		featThresh.setItem( new Constant<>(1) );
 		featThresh.setFeatureElse( new Constant<>(0) );
@@ -158,7 +158,7 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 	}
 	
 	@Override
-	public FeatureList<FeatureCalcParams> create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 
 		KeyValueParams kpv = keyValueParamsProvider.create();
 		
@@ -168,15 +168,15 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 		
 		checkForMissingFeatures( kpv );
 		
-		Feature<FeatureCalcParams> featScore = createScoreFeature(kpv);
+		Feature<T> featScore = createScoreFeature(kpv);
 		
 		double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
 		
-		Feature<FeatureCalcParams> featThreshold = createThresholdFeature(threshold);
+		Feature<T> featThreshold = createThresholdFeature(threshold);
 		
-		Feature<FeatureCalcParams> featClassifier = createClassifierFeature(threshold);
+		Feature<T> featClassifier = createClassifierFeature(threshold);
 		
-		FeatureList<FeatureCalcParams> out = new FeatureList<>();
+		FeatureList<T> out = new FeatureList<>();
 		out.add(featScore);
 		out.add(featThreshold);
 		out.add(featClassifier);
