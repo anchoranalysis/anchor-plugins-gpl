@@ -47,6 +47,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
@@ -61,7 +62,7 @@ import libsvm.svm_model;
 import libsvm.svm_node;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.ZScore;
 
-public class FeatureListProviderSVMClassifier extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderSVMClassifier<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -123,7 +124,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 		
 		assert( getSharedObjects()!=null );
 		assert( getSharedObjects().getSharedFeatureSet()!=null );
@@ -131,9 +132,9 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		try {
 			Path fileSVM = filePathProviderSVM.create();
 				
-			FeatureList features = findModelFeatures( fileSVM );
+			FeatureList<T> features = findModelFeatures( fileSVM );
 
-			Feature featureClassify = buildClassifierFeature(fileSVM, features);
+			Feature<T> featureClassify = buildClassifierFeature(fileSVM, features);
 			
 			return wrapInList(featureClassify);
 			
@@ -142,7 +143,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		}
 	}
 	
-	private Feature buildClassifierFeature( Path fileSVM, FeatureList features ) throws OperationFailedException {
+	private Feature<T> buildClassifierFeature( Path fileSVM, FeatureList<T> features ) throws OperationFailedException {
 		try {
 			svm_model model = svm.svm_load_model(fileSVM.toString());
 			
@@ -152,7 +153,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 			
 			boolean direction = invertDecisionValue ? ascendingLabels : !ascendingLabels;
 			
-			FeatureSVMClassifier featureClassify = new FeatureSVMClassifier( model, features, direction );
+			FeatureSVMClassifier<T> featureClassify = new FeatureSVMClassifier<>( model, features, direction );
 			featureClassify.setCustomName("svmClassifier");
 			return featureClassify;
 		} catch (IOException e) {
@@ -160,7 +161,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		}
 	}
 	
-	private FeatureList findModelFeatures( Path fileSVM ) throws OperationFailedException {
+	private FeatureList<T> findModelFeatures( Path fileSVM ) throws OperationFailedException {
 		try {
 			Path filePathFeatures = differentEnding( fileSVM, ".features");
 			FeatureNameList featureNames = readFeatureNames(filePathFeatures);
@@ -168,21 +169,25 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 			Path filePathScale = differentEnding( fileSVM, ".scale");
 			List<FirstSecondOrderStatistic> listStats = readScale(filePathScale);
 	
-			return listFromNames(featureNames, getSharedObjects().getSharedFeatureSet(), listStats );
+			return listFromNames(
+				featureNames,
+				getSharedObjects().getSharedFeatureSet().downcast(),
+				listStats
+			);
 		} catch (IOException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private static FeatureList wrapInList( Feature f ) {
-		FeatureList out = new FeatureList();
+	private FeatureList<T> wrapInList( Feature<T> f ) {
+		FeatureList<T> out = new FeatureList<>();
 		out.add(f);
 		return out;
 	}
 	
-	private FeatureList listFromNames( FeatureNameList featureNames, INamedProvider<Feature> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
+	private FeatureList<T> listFromNames( FeatureNameList featureNames, INamedProvider<Feature<T>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		
 		List<String> missing = new ArrayList<String>();
 		
@@ -217,8 +222,8 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature> allFeatures, FeatureList out, List<String> missing ) throws NamedProviderGetException {
-		Feature feature = allFeatures.getNull(featureName);
+	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature<T>> allFeatures, FeatureList<T> out, List<String> missing ) throws NamedProviderGetException {
+		Feature<T> feature = allFeatures.getNull(featureName);
 		if (feature!=null) {
 			out.add(
 				maybeNormalise(feature, stat )
@@ -229,7 +234,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	}
 
 	
-	private Feature maybeNormalise( Feature feature, FirstSecondOrderStatistic stat ) {
+	private Feature<T> maybeNormalise( Feature<T> feature, FirstSecondOrderStatistic stat ) {
 		if (normalizeFeatures) {
 			return createScaledFeature(feature,stat);
 		} else {
@@ -238,15 +243,15 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	}
 	
 	
-	private static Feature createScaledFeature( Feature feature, FirstSecondOrderStatistic stat ) {
+	private Feature<T> createScaledFeature( Feature<T> feature, FirstSecondOrderStatistic stat ) {
 		
-		Constant mean = new Constant(stat.getMean());
+		Constant<T> mean = new Constant<>(stat.getMean());
 		mean.setCustomName("mean");
 		
-		Constant stdDev = new Constant(stat.getScale() );
+		Constant<T> stdDev = new Constant<>(stat.getScale() );
 		stdDev.setCustomName("stdDev");
 		
-		ZScore featureNormalized = new ZScore();
+		ZScore<T> featureNormalized = new ZScore<>();
 		featureNormalized.setItem( feature );
 		featureNormalized.setItemMean( mean );
 		featureNormalized.setItemStdDev( stdDev );
@@ -261,7 +266,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	 * @author Owen Feehan
 	 *
 	 */
-	private static class FeatureSVMClassifier extends FeatureListElem {
+	private static class FeatureSVMClassifier<T extends FeatureCalcParams> extends FeatureListElem<T> {
 
 		/**
 		 * 
@@ -277,7 +282,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		private boolean direction;
 		
 		public FeatureSVMClassifier(svm_model model,
-				FeatureList featureList, boolean direction ) {
+				FeatureList<T> featureList, boolean direction ) {
 			super();
 			this.model = model;
 			setList(featureList);
@@ -286,8 +291,12 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 		
 
 		@Override
-		public Feature duplicateBean() {
-			return new FeatureSVMClassifier( model, new FeatureList(getList()).duplicateBean(), direction );
+		public FeatureSVMClassifier<T> duplicateBean() {
+			return new FeatureSVMClassifier<>(
+				model,
+				new FeatureList<>(getList()).duplicateBean(),
+				direction
+			);
 		}
 		
 		// DEBUG METHOD
@@ -300,10 +309,10 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 //		}
 	
 		@Override
-		public double calc(FeatureCalcParams params)
+		public double calc(CacheableParams<T> params)
 				throws FeatureCalcException {
 			
-			ResultsVector rv = getCacheSession().calc( getList(), params);
+			ResultsVector rv = params.calc( getList() );
 
 // DEBUG CODE 
 //			writeCSV("scaled",rv);

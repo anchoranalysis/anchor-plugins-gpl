@@ -40,11 +40,12 @@ import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeature
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
+import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderLDAClassifier extends FeatureListProviderReferencedFeatures {
+public class FeatureListProviderLDAClassifier<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -74,7 +75,7 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 				continue;
 			}
 			
-			Feature feature = getSharedObjects().getSharedFeatureSet().getNull(name);
+			Feature<FeatureCalcParams> feature = getSharedObjects().getSharedFeatureSet().getNull(name);
 			if (feature==null) {
 				list.add(name);
 			}
@@ -110,9 +111,9 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 		return new CreateException( sb.toString() );		
 	}
 	
-	private Feature createScoreFeature( KeyValueParams kpv ) throws CreateException {
+	private Feature<T> createScoreFeature( KeyValueParams kpv ) throws CreateException {
 		
-		Sum sum = new Sum();
+		Sum<T> sum = new Sum<>();
 		sum.setIgnoreNaN(true);
 		
 		// For now let's just check all the feature are present
@@ -123,8 +124,10 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 				continue;
 			}
 			
-			Feature feature = getSharedObjects().getSharedFeatureSet().getNull(name);
-			sum.getList().add( new MultiplyByConstant(feature, kpv.getPropertyAsDouble(name)) );
+			Feature<T> feature = getSharedObjects().getSharedFeatureSet().getNull(name).downcast();
+			sum.getList().add(
+				new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
+			);
 		}
 		
 		sum.setCustomName(featureNameScore);
@@ -133,21 +136,21 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 
 	}
 	
-	private Feature createThresholdFeature( double threshold ) {
-		Constant out = new Constant(threshold);
+	private Feature<T> createThresholdFeature( double threshold ) {
+		Constant<T> out = new Constant<>(threshold);
 		out.setCustomName(featureNameThreshold);
 		return out;
 	}
 	
-	private Feature createClassifierFeature( double threshold ) {
+	private Feature<T> createClassifierFeature( double threshold ) {
 		// If we are below the the threshold we output -1
 		
-		Reference score = new Reference(featureNameScore);
+		Reference<T> score = new Reference<>(featureNameScore);
 		
-		IfGreaterThan featThresh = new IfGreaterThan();
+		IfGreaterThan<T> featThresh = new IfGreaterThan<>();
 		featThresh.setFeatureCondition(score );
-		featThresh.setItem( new Constant(1) );
-		featThresh.setFeatureElse( new Constant(0) );
+		featThresh.setItem( new Constant<>(1) );
+		featThresh.setFeatureElse( new Constant<>(0) );
 		featThresh.setValue( threshold );
 				
 		featThresh.setCustomName(featureNameClassifier);
@@ -155,7 +158,7 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 	}
 	
 	@Override
-	public FeatureList create() throws CreateException {
+	public FeatureList<T> create() throws CreateException {
 
 		KeyValueParams kpv = keyValueParamsProvider.create();
 		
@@ -165,15 +168,15 @@ public class FeatureListProviderLDAClassifier extends FeatureListProviderReferen
 		
 		checkForMissingFeatures( kpv );
 		
-		Feature featScore = createScoreFeature(kpv);
+		Feature<T> featScore = createScoreFeature(kpv);
 		
 		double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
 		
-		Feature featThreshold = createThresholdFeature(threshold);
+		Feature<T> featThreshold = createThresholdFeature(threshold);
 		
-		Feature featClassifier = createClassifierFeature(threshold);
+		Feature<T> featClassifier = createClassifierFeature(threshold);
 		
-		FeatureList out = new FeatureList();
+		FeatureList<T> out = new FeatureList<>();
 		out.add(featScore);
 		out.add(featThreshold);
 		out.add(featClassifier);
