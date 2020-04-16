@@ -37,10 +37,12 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
+import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
+import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDuplicate;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderGaussianBlur;
+import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderBlur;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 
@@ -166,12 +168,20 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		}
 	}
 	
-	private ChnlProvider smooth( ChnlProvider src, double distanceTransformSmoothedSigmaMeters ) {
-		ChnlProviderGaussianBlur provider = new ChnlProviderGaussianBlur();
-		provider.setSigma( distanceTransformSmoothedSigmaMeters );
-		provider.setSigmaInMeters(true);
+	private static ChnlProvider smooth( ChnlProvider src, double distanceTransformSmoothedSigmaMeters ) {
+		ChnlProviderBlur provider = new ChnlProviderBlur();
+		provider.setStrategy(
+			createBlurStrategy(distanceTransformSmoothedSigmaMeters)		
+		);
 		provider.setChnlProvider( src );
 		return provider;
+	}
+	
+	private static BlurStrategy createBlurStrategy( double distanceTransformSmoothedSigmaMeters ) {
+		BlurGaussian3d blurStrategy = new BlurGaussian3d();
+		blurStrategy.setSigma( distanceTransformSmoothedSigmaMeters );
+		blurStrategy.setSigmaInMeters(true);
+		return blurStrategy;
 	}
 	
 	private void addSeedFinding(Define define) throws BeanXmlException {
