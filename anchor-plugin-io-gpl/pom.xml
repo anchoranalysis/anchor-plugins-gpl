@@ -24,12 +24,6 @@
 	      <version>${metakit.version}</version>
 	    </dependency>
 	    
-	    <dependency>
-	      <groupId>org.openmicroscopy</groupId>
-	      <artifactId>specification</artifactId>
-	      <version>${ome-specification.version}</version>
-	    </dependency>
-	    
 	    <!--<dependency>
 	      <groupId>ome</groupId>
 	      <artifactId>turbojpeg</artifactId>
