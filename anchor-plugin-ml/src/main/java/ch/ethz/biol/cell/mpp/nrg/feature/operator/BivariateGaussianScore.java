@@ -30,8 +30,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
-import org.anchoranalysis.feature.params.FeatureParamsDescriptor;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.params.FeatureInputDescriptor;
 import org.anchoranalysis.feature.params.ParamTypeUtilities;
 
 import umontreal.ssj.probdistmulti.BiNormalGenzDist;
@@ -39,7 +39,7 @@ import umontreal.ssj.probdistmulti.BiNormalGenzDist;
 
 // LICENSE!!!
 // A score between 0 and 1, based upon the CDF of a bivariate gaussian. as one approaches the mean, the score approaches 1.0
-public class BivariateGaussianScore extends Feature<FeatureCalcParams> {
+public class BivariateGaussianScore extends Feature<FeatureInput> {
 
 	/**
 	 * 
@@ -48,22 +48,22 @@ public class BivariateGaussianScore extends Feature<FeatureCalcParams> {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private Feature<FeatureCalcParams> item1 = null;
+	private Feature<FeatureInput> item1 = null;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> item2 = null;
+	private Feature<FeatureInput> item2 = null;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> itemMean1 = null;
+	private Feature<FeatureInput> itemMean1 = null;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> itemStdDev1 = null;
+	private Feature<FeatureInput> itemStdDev1 = null;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> itemMean2 = null;
+	private Feature<FeatureInput> itemMean2 = null;
 	
 	@BeanField
-	private Feature<FeatureCalcParams> itemStdDev2 = null;
+	private Feature<FeatureInput> itemStdDev2 = null;
 	// END BEAN PROPERTIES
 	
 	public static double calc(
@@ -86,7 +86,7 @@ public class BivariateGaussianScore extends Feature<FeatureCalcParams> {
 	}
 	
 	@Override
-	public double calc( CacheableParams<FeatureCalcParams> params ) throws FeatureCalcException {
+	public double calc( CacheableParams<FeatureInput> params ) throws FeatureCalcException {
 		
 		double val1 = params.calc( getItem1() );
 		double val2 = params.calc( getItem2() );
@@ -112,56 +112,56 @@ public class BivariateGaussianScore extends Feature<FeatureCalcParams> {
 		);
 	}
 
-	public Feature<FeatureCalcParams> getItemMean1() {
+	public Feature<FeatureInput> getItemMean1() {
 		return itemMean1;
 	}
 
-	public void setItemMean1(Feature<FeatureCalcParams> itemMean1) {
+	public void setItemMean1(Feature<FeatureInput> itemMean1) {
 		this.itemMean1 = itemMean1;
 	}
 
-	public Feature<FeatureCalcParams> getItemStdDev1() {
+	public Feature<FeatureInput> getItemStdDev1() {
 		return itemStdDev1;
 	}
 
-	public void setItemStdDev1(Feature<FeatureCalcParams> itemStdDev1) {
+	public void setItemStdDev1(Feature<FeatureInput> itemStdDev1) {
 		this.itemStdDev1 = itemStdDev1;
 	}
 
-	public Feature<FeatureCalcParams> getItemMean2() {
+	public Feature<FeatureInput> getItemMean2() {
 		return itemMean2;
 	}
 
-	public void setItemMean2(Feature<FeatureCalcParams> itemMean2) {
+	public void setItemMean2(Feature<FeatureInput> itemMean2) {
 		this.itemMean2 = itemMean2;
 	}
 
-	public Feature<FeatureCalcParams> getItemStdDev2() {
+	public Feature<FeatureInput> getItemStdDev2() {
 		return itemStdDev2;
 	}
 
-	public void setItemStdDev2(Feature<FeatureCalcParams> itemStdDev2) {
+	public void setItemStdDev2(Feature<FeatureInput> itemStdDev2) {
 		this.itemStdDev2 = itemStdDev2;
 	}
 
-	public Feature<FeatureCalcParams> getItem1() {
+	public Feature<FeatureInput> getItem1() {
 		return item1;
 	}
 
-	public void setItem1(Feature<FeatureCalcParams> item1) {
+	public void setItem1(Feature<FeatureInput> item1) {
 		this.item1 = item1;
 	}
 
-	public Feature<FeatureCalcParams> getItem2() {
+	public Feature<FeatureInput> getItem2() {
 		return item2;
 	}
 
-	public void setItem2(Feature<FeatureCalcParams> item2) {
+	public void setItem2(Feature<FeatureInput> item2) {
 		this.item2 = item2;
 	}
 
 	@Override
-	public FeatureParamsDescriptor paramType() throws FeatureCalcException {
+	public FeatureInputDescriptor paramType() throws FeatureCalcException {
 		return ParamTypeUtilities.paramTypeForTwo(item1, item2);
 	}
 }

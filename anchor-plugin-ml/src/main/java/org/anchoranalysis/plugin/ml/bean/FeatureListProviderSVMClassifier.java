@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.CacheableParams;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
@@ -62,7 +62,7 @@ import libsvm.svm_model;
 import libsvm.svm_node;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.ZScore;
 
-public class FeatureListProviderSVMClassifier<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -266,7 +266,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureCalcParams> exten
 	 * @author Owen Feehan
 	 *
 	 */
-	private static class FeatureSVMClassifier<T extends FeatureCalcParams> extends FeatureListElem<T> {
+	private static class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
 		/**
 		 * 
