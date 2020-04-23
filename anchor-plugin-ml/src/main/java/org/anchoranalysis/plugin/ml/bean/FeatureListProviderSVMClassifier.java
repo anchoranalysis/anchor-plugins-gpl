@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.ResultsVector;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
@@ -309,10 +309,10 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 //		}
 	
 		@Override
-		public double calc(CacheableParams<T> params)
+		public double calc(SessionInput<T> input)
 				throws FeatureCalcException {
 			
-			ResultsVector rv = params.calc( getList() );
+			ResultsVector rv = input.calc( getList() );
 
 // DEBUG CODE 
 //			writeCSV("scaled",rv);

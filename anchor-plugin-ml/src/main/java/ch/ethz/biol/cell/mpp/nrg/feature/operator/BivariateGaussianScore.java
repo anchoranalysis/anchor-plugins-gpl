@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.operator;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.CacheableParams;
+import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.params.FeatureInput;
 import org.anchoranalysis.feature.params.FeatureInputDescriptor;
@@ -86,16 +86,16 @@ public class BivariateGaussianScore extends Feature<FeatureInput> {
 	}
 	
 	@Override
-	public double calc( CacheableParams<FeatureInput> params ) throws FeatureCalcException {
+	public double calc( SessionInput<FeatureInput> input ) throws FeatureCalcException {
 		
-		double val1 = params.calc( getItem1() );
-		double val2 = params.calc( getItem2() );
+		double val1 = input.calc( getItem1() );
+		double val2 = input.calc( getItem2() );
 		
-		double mean1 = params.calc( getItemMean1() );
-		double mean2 = params.calc( getItemMean2() );
+		double mean1 = input.calc( getItemMean1() );
+		double mean2 = input.calc( getItemMean2() );
 		
-		double stdDev1 = params.calc( getItemStdDev1() );
-		double stdDev2 = params.calc( getItemStdDev2() );
+		double stdDev1 = input.calc( getItemStdDev1() );
+		double stdDev2 = input.calc( getItemStdDev2() );
 		
 		return calc( mean1, stdDev1, mean2, stdDev2, val1, val2 );
 	}
