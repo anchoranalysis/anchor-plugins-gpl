@@ -31,11 +31,11 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.objmask.IntensityMean;
-
-/** Caches some properties of  object mask, and acts as an input to the clustering algorithm. The properties are:
+/** 
+ * Caches some properties of  object mask, and acts as an input to the clustering algorithm. The properties are:
  *   1. center of gravity
  *   2. mean-intensity value at a particular point
  * 
@@ -53,7 +53,7 @@ class ObjMaskWithCOG implements Clusterable {
 		
 		double distanceFromContour;
 		try {
-			distanceFromContour = IntensityMean.calcMeanIntensityObjMask(distanceMap, om);
+			distanceFromContour = IntensityMeanCalculator.calcMeanIntensityObjMask(distanceMap, om);
 		} catch (FeatureCalcException e) {
 			logErrorReporter.getErrorReporter().recordError(ObjMaskWithCOG.class, e);
 			distanceFromContour = Double.NaN;
