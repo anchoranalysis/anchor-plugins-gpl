@@ -30,9 +30,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
-import org.anchoranalysis.feature.params.FeatureInputDescriptor;
-import org.anchoranalysis.feature.params.ParamTypeUtilities;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
+import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptorUtilities;
 
 import umontreal.ssj.probdistmulti.BiNormalGenzDist;
 
@@ -162,6 +162,6 @@ public class BivariateGaussianScore extends Feature<FeatureInput> {
 
 	@Override
 	public FeatureInputDescriptor paramType() throws FeatureCalcException {
-		return ParamTypeUtilities.paramTypeForTwo(item1, item2);
+		return FeatureInputDescriptorUtilities.paramTypeForTwo(item1, item2);
 	}
 }

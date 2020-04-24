@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeature
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
-import org.anchoranalysis.feature.calc.params.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
