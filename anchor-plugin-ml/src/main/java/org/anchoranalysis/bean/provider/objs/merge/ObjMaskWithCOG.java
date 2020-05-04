@@ -31,7 +31,7 @@ import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.plugin.image.feature.bean.obj.single.intensity.IntensityMeanCalculator;
+import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
 /** 
