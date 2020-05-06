@@ -52,10 +52,10 @@ import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
+import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 
 import libsvm.svm;
 import libsvm.svm_model;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.ZScore;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
