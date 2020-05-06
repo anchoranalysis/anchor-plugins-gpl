@@ -41,9 +41,9 @@ import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
