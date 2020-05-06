@@ -40,12 +40,12 @@ import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeature
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
-import org.anchoranalysis.feature.calc.params.FeatureCalcParams;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.MultiplyByConstant;
 
-public class FeatureListProviderLDAClassifier<T extends FeatureCalcParams> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
 	/**
 	 * 
@@ -75,7 +75,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureCalcParams> exten
 				continue;
 			}
 			
-			Feature<FeatureCalcParams> feature = getSharedObjects().getSharedFeatureSet().getNull(name);
+			Feature<FeatureInput> feature = getSharedObjects().getSharedFeatureSet().getNull(name);
 			if (feature==null) {
 				list.add(name);
 			}

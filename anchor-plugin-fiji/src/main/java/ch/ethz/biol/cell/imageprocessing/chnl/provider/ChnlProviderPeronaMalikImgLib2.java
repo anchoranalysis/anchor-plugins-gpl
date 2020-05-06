@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import net.imglib2.algorithm.pde.PeronaMalikAnisotropicDiffusion;
 import net.imglib2.algorithm.pde.PeronaMalikAnisotropicDiffusion.DiffusionFunction;
 import net.imglib2.exception.IncompatibleTypeException;
-import net.imglib2.img.NativeImg;
+import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -69,12 +69,6 @@ public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
 	private boolean strongEdgeEnhancer = true;	// Enables the StrongEdgeEnhancer diffusion function
 	// END BEAN PROPERTIES
 	
-	private static <T extends RealType<T>,S> void doDiffusion( NativeImg<T,S> img, double deltat, DiffusionFunction df, int iterations ) throws IncompatibleTypeException {
-		for( int i=0; i<iterations; i++) {
-			PeronaMalikAnisotropicDiffusion.inFloatInPlace(img, deltat, df );
-		}
-	}
-	
 	// Assumes XY res are identical
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Chnl diffusion( Chnl chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D ) throws CreateException {
@@ -82,12 +76,12 @@ public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
 		Extent e = chnl.getDimensions().getExtnt();
 		try {
 			if (do3D) {
-				NativeImg img = ImgLib2Wrap.wrap( chnl.getVoxelBox(), true );
+				Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
 				doDiffusion(img,deltat,df,iterations);
 			} else {
 			
 				for( int z=0; z<chnl.getDimensions().getZ(); z++) {
-					NativeImg img = ImgLib2Wrap.wrap( chnl.getVoxelBox().any().getPixelsForPlane(z), e );
+					Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox().any().getPixelsForPlane(z), e );
 					doDiffusion(img,deltat,df,iterations);
 				}
 			}
@@ -95,6 +89,12 @@ public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
 			return chnl;
 		} catch (IncompatibleTypeException e1) {
 			throw new CreateException(e1);
+		}
+	}
+	
+	private static <T extends RealType<T>> void doDiffusion( Img<T> img, double deltat, DiffusionFunction df, int iterations ) throws IncompatibleTypeException {
+		for( int i=0; i<iterations; i++) {
+			PeronaMalikAnisotropicDiffusion.inFloatInPlace(img, deltat, df );
 		}
 	}
 	
