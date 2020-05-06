@@ -46,10 +46,6 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
@@ -59,7 +55,6 @@ import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 
 import libsvm.svm;
 import libsvm.svm_model;
-import libsvm.svm_node;
 import ch.ethz.biol.cell.mpp.nrg.feature.operator.ZScore;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
@@ -84,7 +79,25 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	private boolean invertDecisionValue = false;
 	// END BEAN PROPERTIES
 
-	
+	@Override
+	public FeatureList<T> create() throws CreateException {
+		
+		assert( getSharedObjects()!=null );
+		assert( getSharedObjects().getSharedFeatureSet()!=null );
+		
+		try {
+			Path fileSVM = filePathProviderSVM.create();
+				
+			FeatureList<T> features = findModelFeatures( fileSVM );
+
+			Feature<T> featureClassify = buildClassifierFeature(fileSVM, features);
+			
+			return wrapInList(featureClassify);
+			
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
+	}
 	
 	private FeatureNameList readFeatureNames( Path filePath ) throws FileNotFoundException, IOException {
 		
@@ -122,27 +135,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		String strReplaced = fileSVM.toString().replaceAll("\\.svm$", ending );
 		return Paths.get( strReplaced );
 	}
-	
-	@Override
-	public FeatureList<T> create() throws CreateException {
 		
-		assert( getSharedObjects()!=null );
-		assert( getSharedObjects().getSharedFeatureSet()!=null );
-		
-		try {
-			Path fileSVM = filePathProviderSVM.create();
-				
-			FeatureList<T> features = findModelFeatures( fileSVM );
-
-			Feature<T> featureClassify = buildClassifierFeature(fileSVM, features);
-			
-			return wrapInList(featureClassify);
-			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
 	private Feature<T> buildClassifierFeature( Path fileSVM, FeatureList<T> features ) throws OperationFailedException {
 		try {
 			svm_model model = svm.svm_load_model(fileSVM.toString());
@@ -211,7 +204,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		if (missing.size()>0) {
 			// Embed exception
 			try {
-				throw FeatureListProviderLDAClassifier.createExceptionForMissingStrings(missing);
+				throw MissingFeaturesUtilities.createExceptionForMissingStrings(missing);
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
 			}
@@ -257,132 +250,6 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		featureNormalized.setItemStdDev( stdDev );
 		featureNormalized.setCustomName( feature.getCustomName() + " (scaled)");
 		return featureNormalized;
-	}
-	
-	
-	/**
-	 * This is actually violating the Bean Rules for the feature
-	 * 
-	 * @author Owen Feehan
-	 *
-	 */
-	private static class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		// What we take in
-		private svm_model model;
-		
-		/**
-		 * Indicates the direction of the decision-making value. If TRUE, the decision-value should be >0 for Label 1.  If false, it's the opposite.
-		 */
-		private boolean direction;
-		
-		public FeatureSVMClassifier(svm_model model,
-				FeatureList<T> featureList, boolean direction ) {
-			super();
-			this.model = model;
-			setList(featureList);
-			this.direction = direction;
-		}
-		
-
-		@Override
-		public FeatureSVMClassifier<T> duplicateBean() {
-			return new FeatureSVMClassifier<>(
-				model,
-				new FeatureList<>(getList()).duplicateBean(),
-				direction
-			);
-		}
-		
-		// DEBUG METHOD
-//		@SuppressWarnings("unused")
-//		private void writeCSV( String name, ResultsVector rv ) {
-//			TempBoundOutputManager output = TempBoundOutputManager.instance();
-//			FeatureListCSVGeneratorHorizontal generator =new FeatureListCSVGeneratorHorizontal("ff", new FeatureList(getList()).createNames() );
-//			generator.setIterableElement(  new ResultsVectorCollection(rv) );
-//			output.getBoundOutputManager().getWriterAlwaysAllowed().write(name, generator );
-//		}
-	
-		@Override
-		public double calc(SessionInput<T> input)
-				throws FeatureCalcException {
-			
-			ResultsVector rv = input.calc( getList() );
-
-// DEBUG CODE 
-//			writeCSV("scaled",rv);
-//			
-//			FeatureList subFeatures = new FeatureList(getList().stream().map( a-> ((ZScore) a).getItem() ).collect( Collectors.toList() ));
-//			ResultsVector rvUnscaled = cache.calcSuppressErrors( subFeatures, params);
-//			
-//			writeCSV("unscaled",rvUnscaled);
-//			
-//			
-//			
-//			Feature featureEdge = subFeatures.find("pair.objectEdgeIntersectionIntensityMaxSlice.1").duplicateBean();
-//			SequentialSession sessionDebug = new SequentialSession( featureEdge);
-//			try {
-//				sessionDebug.start( new FeatureInitParams(), new SharedFeatureList(), FeatureSVMClassifier.this.getLogger() );
-//			} catch (InitException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			ResultsVector rvDebug = sessionDebug.calc(params);
-//			
-//			FeatureObjMaskPairMergedParams paramsCast = (FeatureObjMaskPairMergedParams) params;
-//			FeatureObjMaskPairMergedParams paramsRev = new FeatureObjMaskPairMergedParams( paramsCast.getObjMask2(), paramsCast.getObjMask1(), paramsCast.getObjMaskMerged() );
-//			paramsRev.setNrgStack( paramsCast.getNrgStack() );
-//			
-//			ResultsVector rvDebug2 = sessionDebug.calc(paramsRev);
-			
-			
-			
-			svm_node[] nodes = convert(rv);
-			
-			double[] arrPredictValues = new double[1];
-			svm.svm_predict_values(model, nodes, arrPredictValues );
-			double predictValue = arrPredictValues[0];
-			
-			//System.out.printf("Rv[50]=%f Rv[51]=%f Rv[52]=%f   predict=%f\n", rv.get(50), rv.get(51), rv.get(52), predictValue );
-			//System.out.printf(" predict=%f\n",  predictValue );
-			
-//			// Assume two class problem
-//			if (predict_values[0] >= 0) {
-//				return 2;
-//			} else {
-//				return 1;
-//			}
-			
-			assert( !Double.isNaN(predictValue) );
-			
-			if (direction) {
-				return predictValue;
-			} else {
-				return predictValue * -1;
-			}
-		}
-		
-		
-
-		private svm_node[] convert( ResultsVector rv ) {
-			
-			svm_node[] out = new svm_node[ rv.length() ];
-			
-			for(int i=0;i<rv.length(); i++)
-			{
-				out[i] = new svm_node();
-				out[i].index = i+1;
-				out[i].value = rv.get(i);
-			}
-			
-			return out;
-		}
-
 	}
 
 	public FilePathProvider getFileProviderSVM() {
