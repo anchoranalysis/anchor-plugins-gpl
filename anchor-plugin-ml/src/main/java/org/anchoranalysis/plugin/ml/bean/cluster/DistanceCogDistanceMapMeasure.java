@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.provider.objs.merge;
+package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import java.util.Arrays;
 

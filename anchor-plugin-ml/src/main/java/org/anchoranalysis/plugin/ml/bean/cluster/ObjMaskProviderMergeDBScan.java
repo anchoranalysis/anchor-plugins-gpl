@@ -1,4 +1,4 @@
-package org.anchoranalysis.bean.provider.objs.merge;
+package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import java.util.Collection;
 import java.util.List;
@@ -103,13 +103,17 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 		ObjMaskCollection out = new ObjMaskCollection();
 		for( Cluster<ObjMaskWithCOG> c : clusters) {
 			// Merge objects together
-			out.add( mergeCluster(c) );
+			out.add(
+				mergeCluster(c)
+			);
 		}
 		return out;
 	}
 	
 	private static ObjMask mergeCluster( Cluster<ObjMaskWithCOG> cluster ) throws OperationFailedException {
-		return ObjMaskMerger.merge( convert(cluster.getPoints()) );
+		return ObjMaskMerger.merge(
+			convert(cluster.getPoints())
+		);
 	}
 	
 	private static ObjMaskCollection convert( Collection<ObjMaskWithCOG> objs ) {
