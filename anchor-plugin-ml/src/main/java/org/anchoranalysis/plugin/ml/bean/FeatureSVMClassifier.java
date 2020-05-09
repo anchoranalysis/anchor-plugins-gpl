@@ -45,11 +45,6 @@ import libsvm.svm_node;
  */
 class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// What we take in
 	private svm_model model;
 	
