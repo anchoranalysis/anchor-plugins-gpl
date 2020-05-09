@@ -36,18 +36,13 @@ import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 
-public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
-
+public class ChnlProviderPeronaMalikImgLib2 extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
 	@BeanField @Positive
 	private double kappa;
 	
@@ -102,20 +97,11 @@ public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
 		DiffusionFunction df = createDiffusionFunction();
-		return diffusion( chnlProvider.create(), deltat, df, iterations, do3D );
+		return diffusion(chnl, deltat, df, iterations, do3D );
 
 	}
-
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 
 	public double getKappa() {
 		return kappa;

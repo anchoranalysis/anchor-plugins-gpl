@@ -30,18 +30,16 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import ij.ImagePlus;
 import process3d.MinMaxMedian;
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.IJWrap;
 
-public class ChnlProviderMinFilterIJ3D extends ChnlProvider {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnlProvider;
-	// END BEAN PROPERTIES
+public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
+	
+	@Override
+	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+		return median3d(chnl);
+	}
 	
 	private Chnl median3d( Chnl chnl ) throws CreateException {
 		
@@ -54,22 +52,4 @@ public class ChnlProviderMinFilterIJ3D extends ChnlProvider {
 		
 		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes() );
 	}
-	
-	@Override
-	public Chnl create() throws CreateException {
-		return median3d(chnlProvider.create());
-	}
-
-	
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
-
-
-
 }
