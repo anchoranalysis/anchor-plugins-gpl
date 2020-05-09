@@ -49,11 +49,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 // Does not re-use the binary image
 public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;

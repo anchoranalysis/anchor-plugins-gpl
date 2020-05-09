@@ -72,11 +72,6 @@ import static anchor.fiji.bean.define.adder.FactorySgmn.*;
  */
 public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private static final String CONNECTED_INPUT = "objsInputConnected";
 	private static final String DISTANCE_TRANSFORM = "chnlDistance";
 	private static final String DISTANCE_TRANSFORM_SMOOTH = "chnlDistanceSmooth";

@@ -35,11 +35,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class Intermodes extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// TODO LICENSE
 	@Override
 	public int calculateLevel(Histogram h) throws OperationFailedException {

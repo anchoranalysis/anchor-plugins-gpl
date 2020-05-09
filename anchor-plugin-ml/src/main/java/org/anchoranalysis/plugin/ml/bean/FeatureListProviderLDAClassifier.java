@@ -48,11 +48,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.conditional.IfCondition;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField 
 	private KeyValueParamsProvider keyValueParamsProvider;

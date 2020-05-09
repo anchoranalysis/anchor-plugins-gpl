@@ -63,11 +63,6 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProvider
 	private int radius = 15;
 	// END BEAN
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public BinaryChnl create() throws CreateException {
 		Chnl chnl = chnlProvider.create().duplicate();

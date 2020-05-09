@@ -36,13 +36,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 // LICENSE TODO Auto_Threshold.class
 public class MinErrorI extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-
-
 	protected static double A(Histogram h, int j) {
 		double x = 0;
 		for (int i=0;i<=j;i++)

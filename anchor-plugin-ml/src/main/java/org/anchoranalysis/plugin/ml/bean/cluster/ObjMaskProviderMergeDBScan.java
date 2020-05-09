@@ -57,11 +57,6 @@ import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
  */
 public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ImageDimProvider resProvider;		// provides a resolution

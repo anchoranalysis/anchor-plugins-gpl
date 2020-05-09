@@ -44,11 +44,6 @@ import org.anchoranalysis.image.extent.Extent;
 public class ChnlProviderPeronaMalikImgLib2 extends ChnlProvider {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START BEAN PROPERTIES
 	@BeanField
 	private ChnlProvider chnlProvider;

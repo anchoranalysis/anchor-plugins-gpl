@@ -34,12 +34,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class Huang extends CalculateLevel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	
 	// http://trac.imagej.net/browser/core/commands/display/src/main/java/imagej/core/commands/display/interactive/threshold/HuangThresholdMethod.java?rev=9704accc7513dd9cf8f840955c7cd6b4b45b7fc7
 	@Override
 	public int calculateLevel( Histogram histogram ) {

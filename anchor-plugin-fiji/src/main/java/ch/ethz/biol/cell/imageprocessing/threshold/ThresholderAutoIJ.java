@@ -47,10 +47,7 @@ import fiji.threshold.Auto_Threshold;
 
 public class ThresholderAutoIJ extends Thresholder {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	//private static Log log = LogFactory.getLog(ThresholderAutoIJ.class);
 	

@@ -58,11 +58,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 // Uses the aspect ratio (relative distance between z and xy slices)
 public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
 	@BeanField
 	private BinaryImgChnlProvider binaryImgChnlProvider;

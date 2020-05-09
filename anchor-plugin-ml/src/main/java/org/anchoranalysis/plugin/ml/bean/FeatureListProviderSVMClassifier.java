@@ -59,11 +59,6 @@ import libsvm.svm_model;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathProvider filePathProviderSVM;
