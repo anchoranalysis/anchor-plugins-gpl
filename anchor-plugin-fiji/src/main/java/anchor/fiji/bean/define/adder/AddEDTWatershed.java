@@ -168,7 +168,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		provider.setStrategy(
 			createBlurStrategy(distanceTransformSmoothedSigmaMeters)		
 		);
-		provider.setChnlProvider( src );
+		provider.setChnl( src );
 		return provider;
 	}
 	
@@ -215,7 +215,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	
 	private ChnlProvider duplicateChnl( String unresolvedID ) {
 		ChnlProviderDuplicate dup = new ChnlProviderDuplicate();
-		dup.setChnlProvider( chnl(unresolvedID) );
+		dup.setChnl( chnl(unresolvedID) );
 		return dup;
 	}
 	

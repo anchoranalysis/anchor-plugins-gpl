@@ -73,14 +73,14 @@ class FactoryOther {
 		provider.setCreateShort(true);
 		provider.setMultiplyBy(distanceTransformMultiplyBy);
 		provider.setSuppressZ(true);
-		provider.setBinaryImgChnlProvider( source );
+		provider.setMask(source);
 		return provider;
 	}
 	
 	public static ChnlProvider distanceTransformAfterInvert( ChnlProvider source ) {
 		ChnlProviderSubtractFromConstant provider = new ChnlProviderSubtractFromConstant();
 		provider.setValue(65535);
-		provider.setChnlProvider(source);
+		provider.setChnl(source);
 		return provider;
 	}
 	
