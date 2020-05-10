@@ -41,7 +41,13 @@ import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 
-public class ChnlProviderPeronaMalikImgLib2 extends ChnlProviderOne {
+/**
+ * Perona-Malik Anisotropic Diffusion
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Positive
