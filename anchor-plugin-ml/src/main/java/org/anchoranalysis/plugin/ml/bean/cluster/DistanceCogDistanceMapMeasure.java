@@ -27,7 +27,10 @@ package org.anchoranalysis.plugin.ml.bean.cluster;
  */
 
 import java.util.Arrays;
+import java.util.Optional;
 
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageRes;
@@ -56,14 +59,18 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	@Override
 	public double compute(double[] a, double[] b) throws DimensionMismatchException {
 		
-		// The first three indices are the 3D cog
-		// The fourth index is the distance-map value (i.e. distance from the contour)
-		double distCOG = normalisedDistanceCOG(a,b);
-		
-		// The difference in distances-from-the-countour (from the distance map) between the two points
-		double distDeltaDistanceContour = normalisedDistanceDeltaContour(a, b);
-		
-		return Math.max(distCOG, distDeltaDistanceContour);
+		try {
+			// The first three indices are the 3D cog
+			// The fourth index is the distance-map value (i.e. distance from the contour)
+			double distCOG = normalisedDistanceCOG(a,b);
+			
+			// The difference in distances-from-the-countour (from the distance map) between the two points
+			double distDeltaDistanceContour = normalisedDistanceDeltaContour(a, b);
+			
+			return Math.max(distCOG, distDeltaDistanceContour);
+		} catch (OperationFailedException e) {
+			throw new AnchorFriendlyRuntimeException("An exception occurred calculating distances", e);
+		}
 	}
 			
 	private double normalisedDistanceDeltaContour( double[] a, double[] b  ) {
@@ -80,11 +87,16 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	 * @param a
 	 * @param b
 	 * @return
+	 * @throws OperationFailedException 
 	 */
-	private double normalisedDistanceCOG( double[] a, double[] b ) {
+	private double normalisedDistanceCOG( double[] a, double[] b ) throws OperationFailedException {
 		
 		// Maximum distance when measured in voxels along the vector between our points 
-		double maxDistVoxels = maxDist.rslv(res, convert(a), convert(b) );
+		double maxDistVoxels = maxDist.rslv(
+			Optional.of(res),
+			convert(a),
+			convert(b)
+		);
 		
 		// We measure the voxel distance between the points
 		double distVoxels = MathArrays.distance( extractPnt(a), extractPnt(b) );

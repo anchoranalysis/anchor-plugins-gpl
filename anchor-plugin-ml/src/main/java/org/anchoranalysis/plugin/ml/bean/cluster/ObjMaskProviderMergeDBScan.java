@@ -34,14 +34,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.extent.ImageRes;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.objmask.ops.ObjMaskMerger;
-import org.anchoranalysis.plugin.image.bean.obj.merge.MergeHelpUtilities;
 import org.anchoranalysis.plugin.image.bean.obj.merge.ObjMaskProviderMergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
@@ -58,9 +55,6 @@ import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ImageDimProvider resProvider;		// provides a resolution
-	
 	/** A distance map which can also be used for making decisions on merging */
 	@BeanField
 	private ChnlProvider distanceMapProvider;
@@ -75,9 +69,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjMaskCollection create() throws CreateException {
-		
-		ObjMaskCollection objsToMerge = getObjs().create();
+	public ObjMaskCollection createFromObjs(ObjMaskCollection objsToMerge) throws CreateException {
 				
 		try {
 			return mergeMultiplex(
@@ -90,13 +82,16 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	}
 	
 	private ObjMaskCollection clusterAndMerge( ObjMaskCollection objs ) throws OperationFailedException {
-		
-		ImageRes res = MergeHelpUtilities.calcRes(resProvider);
+			
 	
 		DBSCANClusterer<ObjMaskWithCOG> clusterer = new DBSCANClusterer<ObjMaskWithCOG>(
 			1.0,	// Maximum distance allowed to merge points
 			0,	// Ensures no object is discarded as "noise"
-			new DistanceCogDistanceMapMeasure(res, maxDistCOG, maxDistDeltaContour)
+			new DistanceCogDistanceMapMeasure(
+				calcResRequired(),
+				maxDistCOG,
+				maxDistDeltaContour
+			)
 		);
 		
 		try {
@@ -165,13 +160,5 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 
 	public void setMaxDistDeltaContour(double maxDistDeltaContour) {
 		this.maxDistDeltaContour = maxDistDeltaContour;
-	}
-
-	public ImageDimProvider getResProvider() {
-		return resProvider;
-	}
-
-	public void setResProvider(ImageDimProvider resProvider) {
-		this.resProvider = resProvider;
 	}
 }
