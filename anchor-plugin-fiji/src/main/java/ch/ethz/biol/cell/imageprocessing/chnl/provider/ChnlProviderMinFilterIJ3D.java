@@ -43,14 +43,8 @@ public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
 	}
 	
 	private Chnl median3d( Chnl chnl ) throws CreateException {
-		
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
-		
-		//IntImage3D ii3d = new IntImage3D( imp.getStack() );
-		//ii3d.medianFilter(radius, radius, radius);
-		
 		imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-		
 		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes() );
 	}
 }
