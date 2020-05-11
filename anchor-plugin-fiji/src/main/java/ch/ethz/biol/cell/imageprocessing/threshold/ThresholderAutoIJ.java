@@ -30,6 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.threshold;
 import ij.ImagePlus;
 
 import java.nio.ByteBuffer;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -66,7 +67,7 @@ public class ThresholderAutoIJ extends Thresholder {
 	// END BEAN
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Histogram histogram) throws OperationFailedException {
+	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Optional<Histogram> histogram) throws OperationFailedException {
 		
 		ImagePlus ip = IJWrap.createImagePlus(inputBuffer);
 		
@@ -105,7 +106,7 @@ public class ThresholderAutoIJ extends Thresholder {
 	}
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Histogram histogram) {
+	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Optional<Histogram> histogram) {
 		throw new IllegalAccessError("Method not supported");
 	}
 }

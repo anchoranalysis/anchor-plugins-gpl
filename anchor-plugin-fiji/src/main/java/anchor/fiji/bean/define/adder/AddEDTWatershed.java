@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -223,7 +223,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		return new ObjMaskProviderReference( rslvName(unresolvedID) );		
 	}
 	
-	private BinaryImgChnlProvider inputMask() {
+	private BinaryChnlProvider inputMask() {
 		return new BinaryImgChnlProviderReference(binaryInputChnlID);
 	}
 	

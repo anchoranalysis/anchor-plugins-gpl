@@ -26,7 +26,7 @@ package anchor.fiji.bean.define.adder;
  * #L%
  */
 
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -50,23 +50,23 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConvexH
 class FactoryOther {
 
 	public static ObjMaskProvider connectedComponentsInput(
-		BinaryImgChnlProvider source,
+		BinaryChnlProvider source,
 		UnitValueVolume minVolumeConnectedComponent
 	) {
 		ObjMaskProviderConnectedComponents provider = new ObjMaskProviderConnectedComponents();
 		provider.setMinVolume(minVolumeConnectedComponent);
-		provider.setBinaryImgChnlProvider( source );
+		provider.setMask( source );
 		return provider;
 	}
 	
 	public static ImageDimProvider dimsFromChnl( ChnlProvider chnlProvider ) {
 		ImageDimProviderFromChnl provider = new ImageDimProviderFromChnl();
-		provider.setChnlProvider(chnlProvider);
+		provider.setChnl(chnlProvider);
 		return provider;
 	}
 	
 	public static ChnlProvider distanceTransformBeforeInvert(
-		BinaryImgChnlProvider source,
+		BinaryChnlProvider source,
 		double distanceTransformMultiplyBy
 	) {
 		ChnlProviderDistanceTransformExact3D provider = new ChnlProviderDistanceTransformExact3D();
