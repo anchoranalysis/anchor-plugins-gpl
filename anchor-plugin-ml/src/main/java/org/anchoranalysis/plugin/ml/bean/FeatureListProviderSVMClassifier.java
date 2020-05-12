@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 import libsvm.svm;
 import libsvm.svm_model;
 
-public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
+public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<FeatureInput> {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -75,7 +75,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	// END BEAN PROPERTIES
 
 	@Override
-	public FeatureList<T> create() throws CreateException {
+	public FeatureList<FeatureInput> create() throws CreateException {
 		
 		assert( getSharedObjects()!=null );
 		assert( getSharedObjects().getSharedFeatureSet()!=null );
@@ -83,9 +83,9 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		try {
 			Path fileSVM = filePathProviderSVM.create();
 				
-			FeatureList<T> features = findModelFeatures( fileSVM );
+			FeatureList<FeatureInput> features = findModelFeatures( fileSVM );
 
-			Feature<T> featureClassify = buildClassifierFeature(fileSVM, features);
+			Feature<FeatureInput> featureClassify = buildClassifierFeature(fileSVM, features);
 			
 			return wrapInList(featureClassify);
 			
@@ -131,7 +131,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		return Paths.get( strReplaced );
 	}
 		
-	private Feature<T> buildClassifierFeature( Path fileSVM, FeatureList<T> features ) throws OperationFailedException {
+	private Feature<FeatureInput> buildClassifierFeature( Path fileSVM, FeatureList<FeatureInput> features ) throws OperationFailedException {
 		try {
 			svm_model model = svm.svm_load_model(fileSVM.toString());
 			
@@ -141,7 +141,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			
 			boolean direction = invertDecisionValue ? ascendingLabels : !ascendingLabels;
 			
-			FeatureSVMClassifier<T> featureClassify = new FeatureSVMClassifier<>( model, features, direction );
+			FeatureSVMClassifier<FeatureInput> featureClassify = new FeatureSVMClassifier<>( model, features, direction );
 			featureClassify.setCustomName("svmClassifier");
 			return featureClassify;
 		} catch (IOException e) {
@@ -149,7 +149,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		}
 	}
 	
-	private FeatureList<T> findModelFeatures( Path fileSVM ) throws OperationFailedException {
+	private FeatureList<FeatureInput> findModelFeatures( Path fileSVM ) throws OperationFailedException {
 		try {
 			Path filePathFeatures = differentEnding( fileSVM, ".features");
 			FeatureNameList featureNames = readFeatureNames(filePathFeatures);
@@ -159,7 +159,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 			return listFromNames(
 				featureNames,
-				getSharedObjects().getSharedFeatureSet().downcast(),
+				getSharedObjects().getSharedFeatureSet(),
 				listStats
 			);
 		} catch (IOException e) {
@@ -167,15 +167,15 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		}
 	}
 	
-	private FeatureList<T> wrapInList( Feature<T> f ) {
-		FeatureList<T> out = new FeatureList<>();
+	private static FeatureList<FeatureInput> wrapInList( Feature<FeatureInput> f ) {
+		FeatureList<FeatureInput> out = new FeatureList<>();
 		out.add(f);
 		return out;
 	}
 	
-	private FeatureList<T> listFromNames( FeatureNameList featureNames, INamedProvider<Feature<T>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
+	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, INamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
-		FeatureList<T> out = new FeatureList<>();
+		FeatureList<FeatureInput> out = new FeatureList<>();
 		
 		List<String> missing = new ArrayList<String>();
 		
@@ -210,8 +210,8 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature<T>> allFeatures, FeatureList<T> out, List<String> missing ) throws NamedProviderGetException {
-		Feature<T> feature = allFeatures.getNull(featureName);
+	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature<FeatureInput>> allFeatures, FeatureList<FeatureInput> out, List<String> missing ) throws NamedProviderGetException {
+		Feature<FeatureInput> feature = allFeatures.getNull(featureName);
 		if (feature!=null) {
 			out.add(
 				maybeNormalise(feature, stat )
@@ -222,7 +222,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	}
 
 	
-	private Feature<T> maybeNormalise( Feature<T> feature, FirstSecondOrderStatistic stat ) {
+	private Feature<FeatureInput> maybeNormalise( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
 		if (normalizeFeatures) {
 			return createScaledFeature(feature,stat);
 		} else {
@@ -231,15 +231,15 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	}
 	
 	
-	private Feature<T> createScaledFeature( Feature<T> feature, FirstSecondOrderStatistic stat ) {
+	private Feature<FeatureInput> createScaledFeature( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
 		
-		Constant<T> mean = new Constant<>(stat.getMean());
+		Constant<FeatureInput> mean = new Constant<>(stat.getMean());
 		mean.setCustomName("mean");
 		
-		Constant<T> stdDev = new Constant<>(stat.getScale() );
+		Constant<FeatureInput> stdDev = new Constant<>(stat.getScale() );
 		stdDev.setCustomName("stdDev");
 		
-		ZScore<T> featureNormalized = new ZScore<>();
+		ZScore<FeatureInput> featureNormalized = new ZScore<>();
 		featureNormalized.setItem( feature );
 		featureNormalized.setItemMean( mean );
 		featureNormalized.setItemStdDev( stdDev );
