@@ -55,7 +55,7 @@ class FactoryOther {
 	) {
 		ObjMaskProviderConnectedComponents provider = new ObjMaskProviderConnectedComponents();
 		provider.setMinVolume(minVolumeConnectedComponent);
-		provider.setMask( source );
+		provider.setBinaryChnl( source );
 		return provider;
 	}
 	
@@ -105,7 +105,7 @@ class FactoryOther {
 	public static ObjMaskProvider seeds( ObjMaskProvider mergedMinima, ImageDimProvider dimProvider ) {
 		ObjMaskProviderConvexHullConnectLines provider = new ObjMaskProviderConvexHullConnectLines();
 		provider.setObjs(mergedMinima);
-		provider.setDimProvider(dimProvider);
+		provider.setDim(dimProvider);
 		return provider;
 	}
 	
