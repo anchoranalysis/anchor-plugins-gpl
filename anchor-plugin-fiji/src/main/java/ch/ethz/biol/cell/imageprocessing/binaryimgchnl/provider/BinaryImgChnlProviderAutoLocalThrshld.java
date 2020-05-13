@@ -34,8 +34,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -49,23 +47,21 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import fiji.threshold.Auto_Local_Threshold;
 
-public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryChnlProvider {
+public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProviderChnlSource {
 	
-	// START BEAN
-	@BeanField
-	private ChnlProvider chnlProvider;
-	
+	// START BEAN PROPERTIES
 	// "Bernsen", "Mean", "Median", "MidGrey", "Niblack", "Sauvola" 
 	@BeanField
 	private String method="";
 	
 	@BeanField
 	private int radius = 15;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl create() throws CreateException {
-		Chnl chnl = chnlProvider.create().duplicate();
+	protected BinaryChnl createFromSource(Chnl chnl) throws CreateException {
+	
+		chnl = chnl.duplicate();
 		
 		Stack stack = new Stack( chnl );
 		
@@ -94,14 +90,6 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryChnlProvider {
 		
 	}
 
-	public ChnlProvider getChnlProvider() {
-		return chnlProvider;
-	}
-
-	public void setChnlProvider(ChnlProvider chnlProvider) {
-		this.chnlProvider = chnlProvider;
-	}
-
 	public String getMethod() {
 		return method;
 	}
@@ -117,5 +105,4 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryChnlProvider {
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
-
 }

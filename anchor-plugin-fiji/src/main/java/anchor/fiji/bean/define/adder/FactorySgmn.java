@@ -49,7 +49,7 @@ class FactorySgmn {
 	public static ObjMaskProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSgmn provider = new ObjMaskProviderSgmn();
 		provider.setMask(mask);
-		provider.setChnlProvider(distanceTransform);
+		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForMinima() );
 		return provider;
 	}
@@ -58,7 +58,7 @@ class FactorySgmn {
 		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
 		provider.setObjsSource(sourceObjs);
 		provider.setObjsSeeds(seeds);
-		provider.setChnlProvider(distanceTransform);
+		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForSegments() );
 		return provider;
 	}
