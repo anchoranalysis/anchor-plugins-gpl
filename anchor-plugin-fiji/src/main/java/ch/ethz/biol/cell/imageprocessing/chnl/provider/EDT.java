@@ -42,9 +42,6 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 //   The license indicates this particular plugin is GPL/PD (Public Domain)
 //
 
-// TODO LICENSE LICENSE LICENSE
-
-// CHECK LICENSE
 /*
  * The idea of the Euclidean Distance Transform is to get the
  * distance of every outside pixel to the nearest outside pixel.

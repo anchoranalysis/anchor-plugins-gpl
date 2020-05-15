@@ -43,10 +43,7 @@ import ch.ethz.biol.cell.nucleii.landini.GreyscaleReconstruct_;
 
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 
 	// START BEAN PROPERTIES
 	

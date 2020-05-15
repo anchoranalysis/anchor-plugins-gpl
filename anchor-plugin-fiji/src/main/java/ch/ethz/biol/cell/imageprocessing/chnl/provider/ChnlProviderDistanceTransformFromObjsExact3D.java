@@ -31,13 +31,12 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objmask.ObjMask;
 import org.anchoranalysis.image.objmask.ObjMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -47,19 +46,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 // Euclidian distance transform from ImageJ
 //
 // Does not re-use the binary image
-public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
+public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDimSource {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
 	@BeanField
 	private ObjMaskProvider objs;
-	
-	@BeanField
-	private ImageDimProvider dimProvider;
 	
 	@BeanField
 	private boolean suppressZ = false;
@@ -69,10 +60,10 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 	// END PROPERTIES
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
+	protected Chnl createFromDim(ImageDim dim) throws CreateException {
+
 		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
-			dimProvider.create(),
+			dim,
 			VoxelDataTypeUnsignedByte.instance
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
@@ -121,13 +112,4 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProvider {
 	public void setCreateShort(boolean createShort) {
 		this.createShort = createShort;
 	}
-
-	public ImageDimProvider getDimProvider() {
-		return dimProvider;
-	}
-
-	public void setDimProvider(ImageDimProvider dimProvider) {
-		this.dimProvider = dimProvider;
-	}
-
 }

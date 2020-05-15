@@ -31,8 +31,6 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.chnl.Chnl;
@@ -56,17 +54,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 // Does not re-use the binary image
 //
 // Uses the aspect ratio (relative distance between z and xy slices)
-public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
+public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	// START PROPERTIES
-	@BeanField
-	private BinaryImgChnlProvider binaryImgChnlProvider;
-	
 	@BeanField
 	private boolean suppressZ = false;
 	
@@ -140,12 +130,9 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 	}
 	
 	@Override
-	public Chnl create() throws CreateException {
-		
-		BinaryChnl chnl = binaryImgChnlProvider.create();
-		return createDistanceMapForChnl(chnl,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
+	protected Chnl createFromMask(BinaryChnl mask) throws CreateException {
+		return createDistanceMapForChnl(mask,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
 	}
-	
 
 	private static Chnl createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) throws CreateException {
 		
@@ -168,14 +155,6 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 
 		ChnlConverter<?> converter = createShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
 		return converter.convert(distAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
-	}
-
-	public BinaryImgChnlProvider getBinaryImgChnlProvider() {
-		return binaryImgChnlProvider;
-	}
-
-	public void setBinaryImgChnlProvider(BinaryImgChnlProvider binaryImgChnlProvider) {
-		this.binaryImgChnlProvider = binaryImgChnlProvider;
 	}
 
 	public boolean isSuppressZ() {
@@ -217,5 +196,4 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProvider {
 	public void setApplyRes(boolean applyRes) {
 		this.applyRes = applyRes;
 	}
-
 }

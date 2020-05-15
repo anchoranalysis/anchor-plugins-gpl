@@ -1,10 +1,10 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+package org.anchoranalysis.plugin.ml.bean;
 
-/*
+/*-
  * #%L
- * anchor-plugin-fiji
+ * anchor-plugin-ml
  * %%
- * Copyright (C) 2019 F. Hoffmann-La Roche Ltd
+ * Copyright (C) 2016 - 2020 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +26,26 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
-
-import ij.ImagePlus;
-import process3d.MinMaxMedian;
+import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.convert.IJWrap;
 
-public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
-	
-	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
-		return median3d(chnl);
-	}
-	
-	private Chnl median3d( Chnl chnl ) throws CreateException {
-		ImagePlus imp = IJWrap.createImagePlus(chnl);
-		imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes() );
+class MissingFeaturesUtilities {
+
+	private MissingFeaturesUtilities() {}
+		
+	public static CreateException createExceptionForMissingStrings( List<String> listNames ) {
+		// Then we have at least one missing feature, throw an exception
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append( "The following features referenced in the model are missing:" );
+		sb.append( System.lineSeparator() );
+		
+		for( String featureName : listNames ) {
+			sb.append( featureName );
+			sb.append( System.lineSeparator() );
+		}
+
+		return new CreateException( sb.toString() );		
 	}
 }

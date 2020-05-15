@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
@@ -71,11 +71,6 @@ import static anchor.fiji.bean.define.adder.FactorySgmn.*;
  *
  */
 public class AddEDTWatershed extends DefineAdderWithPrefixBean {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	private static final String CONNECTED_INPUT = "objsInputConnected";
 	private static final String DISTANCE_TRANSFORM = "chnlDistance";
@@ -173,7 +168,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		provider.setStrategy(
 			createBlurStrategy(distanceTransformSmoothedSigmaMeters)		
 		);
-		provider.setChnlProvider( src );
+		provider.setChnl( src );
 		return provider;
 	}
 	
@@ -220,7 +215,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	
 	private ChnlProvider duplicateChnl( String unresolvedID ) {
 		ChnlProviderDuplicate dup = new ChnlProviderDuplicate();
-		dup.setChnlProvider( chnl(unresolvedID) );
+		dup.setChnl( chnl(unresolvedID) );
 		return dup;
 	}
 	
@@ -228,7 +223,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		return new ObjMaskProviderReference( rslvName(unresolvedID) );		
 	}
 	
-	private BinaryImgChnlProvider inputMask() {
+	private BinaryChnlProvider inputMask() {
 		return new BinaryImgChnlProviderReference(binaryInputChnlID);
 	}
 	

@@ -26,7 +26,7 @@ package anchor.fiji.bean.define.adder;
  * #L%
  */
 
-import org.anchoranalysis.image.bean.provider.BinaryImgChnlProvider;
+import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
@@ -46,10 +46,10 @@ import ch.ethz.biol.cell.sgmn.objmask.watershed.yeong.ObjMaskSgmnWatershedYeong;
  */
 class FactorySgmn {
 	
-	public static ObjMaskProvider minimaUnmerged( BinaryImgChnlProvider mask, ChnlProvider distanceTransform ) {
+	public static ObjMaskProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSgmn provider = new ObjMaskProviderSgmn();
-		provider.setBinaryImgChnlProviderMask(mask);
-		provider.setChnlProvider(distanceTransform);
+		provider.setMask(mask);
+		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForMinima() );
 		return provider;
 	}
@@ -58,7 +58,7 @@ class FactorySgmn {
 		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
 		provider.setObjsSource(sourceObjs);
 		provider.setObjsSeeds(seeds);
-		provider.setChnlProvider(distanceTransform);
+		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForSegments() );
 		return provider;
 	}

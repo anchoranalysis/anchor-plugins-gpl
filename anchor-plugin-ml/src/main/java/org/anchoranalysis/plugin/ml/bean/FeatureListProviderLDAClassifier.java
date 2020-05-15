@@ -32,6 +32,8 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
@@ -42,15 +44,9 @@ import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
-
-import ch.ethz.biol.cell.mpp.nrg.feature.operator.IfGreaterThan;
+import org.anchoranalysis.plugin.operator.feature.bean.conditional.IfCondition;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<T> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// START BEAN PROPERTIES
 	@BeanField 
@@ -63,6 +59,26 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 	private static String featureNameThreshold = "ldaThreshold";
 	private static String featureNameClassifier = "ldaClassifier";
 	
+	@Override
+	public FeatureList<T> create() throws CreateException {
+
+		KeyValueParams kpv = keyValueParamsProvider.create();
+		
+		if (kpv==null) {
+			throw new CreateException("Cannot find KeyValueParams for LDA Model");
+		}
+		
+		checkForMissingFeatures( kpv );
+		
+		double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
+
+		return listThreeFeatures(
+			createScoreFeature(kpv),
+			createThresholdFeature(threshold),
+			createClassifierFeature(threshold)
+		);
+	}
+
 	private void checkForMissingFeatures( KeyValueParams kpv ) throws CreateException {
 		
 		List<String> list = new ArrayList<String>();
@@ -82,33 +98,8 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 		}
 		
 		if (list.size()>0) {
-			throw createExceptionForMissingStrings( list );
+			throw MissingFeaturesUtilities.createExceptionForMissingStrings( list );
 		}
-	}
-	
-	static CreateException createExceptionForMissingStrings( List<String> listNames ) {
-		// Then we have at least one missing feature, throw an exception
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append( "The following features referenced in the model are missing:" );
-		sb.append( System.lineSeparator() );
-		
-		for( String featureName : listNames ) {
-			sb.append( featureName );
-			sb.append( System.lineSeparator() );
-		}
-		
-//		sb.append( System.lineSeparator() );
-//		sb.append( System.lineSeparator() );
-//		
-//		sb.append("The following features are available:");
-//		sb.append( System.lineSeparator() );
-//		
-//		for( String featureName : getSharedObjects().getSharedFeatureSet().keys() ) {
-//			sb.append( featureName );
-//			sb.append( System.lineSeparator() );
-//		}
-		return new CreateException( sb.toString() );		
 	}
 	
 	private Feature<T> createScoreFeature( KeyValueParams kpv ) throws CreateException {
@@ -147,43 +138,28 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 		
 		Reference<T> score = new Reference<>(featureNameScore);
 		
-		IfGreaterThan<T> featThresh = new IfGreaterThan<>();
+		IfCondition<T> featThresh = new IfCondition<>();
 		featThresh.setFeatureCondition(score );
 		featThresh.setItem( new Constant<>(1) );
 		featThresh.setFeatureElse( new Constant<>(0) );
-		featThresh.setValue( threshold );
+		featThresh.setThreshold(
+			new RelationToConstant(
+				new GreaterThanBean(),
+				threshold
+			)
+		);
 				
 		featThresh.setCustomName(featureNameClassifier);
 		return featThresh;		
 	}
 	
-	@Override
-	public FeatureList<T> create() throws CreateException {
-
-		KeyValueParams kpv = keyValueParamsProvider.create();
-		
-		if (kpv==null) {
-			throw new CreateException("Cannot find KeyValueParams for LDA Model");
-		}
-		
-		checkForMissingFeatures( kpv );
-		
-		Feature<T> featScore = createScoreFeature(kpv);
-		
-		double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
-		
-		Feature<T> featThreshold = createThresholdFeature(threshold);
-		
-		Feature<T> featClassifier = createClassifierFeature(threshold);
-		
-		FeatureList<T> out = new FeatureList<>();
-		out.add(featScore);
-		out.add(featThreshold);
-		out.add(featClassifier);
+	private static <S extends FeatureInput> FeatureList<S> listThreeFeatures( Feature<S> feat1, Feature<S> feat2, Feature<S> feat3) {
+		FeatureList<S> out = new FeatureList<>();
+		out.add(feat1);
+		out.add(feat2);
+		out.add(feat3);
 		return out;
 	}
-	
-
 
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
