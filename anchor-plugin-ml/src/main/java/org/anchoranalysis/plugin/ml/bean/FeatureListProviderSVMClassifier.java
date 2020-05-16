@@ -59,6 +59,8 @@ import libsvm.svm_model;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<FeatureInput> {
 
+	private final static String CLASSIFIER_FEATURE_NAME = "svmClassifier";
+	
 	// START BEAN PROPERTIES
 	@BeanField
 	private FilePathProvider filePathProviderSVM;
@@ -142,7 +144,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			boolean direction = invertDecisionValue ? ascendingLabels : !ascendingLabels;
 			
 			FeatureSVMClassifier<FeatureInput> featureClassify = new FeatureSVMClassifier<>( model, features, direction );
-			featureClassify.setCustomName("svmClassifier");
+			featureClassify.setCustomName(CLASSIFIER_FEATURE_NAME);
 			return featureClassify;
 		} catch (IOException e) {
 			throw new OperationFailedException(e);

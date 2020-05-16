@@ -95,7 +95,7 @@ class FactoryOther {
 		ObjMaskProviderMergeDBScan merge = new ObjMaskProviderMergeDBScan(); 
 		merge.setObjs(unmergedMinima);
 		merge.setObjsContainer(container);
-		merge.setResProvider(resProvider);
+		merge.setDim(resProvider);
 		merge.setDistanceMapProvider(sourceDistanceMapProvider);
 		merge.setMaxDistCOG(maxDistanceCOG);
 		merge.setMaxDistDeltaContour(maxDistDeltaContour);
