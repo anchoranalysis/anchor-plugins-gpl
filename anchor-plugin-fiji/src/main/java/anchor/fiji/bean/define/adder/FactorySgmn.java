@@ -30,13 +30,13 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong.ObjMaskSgmnWatershedYeong;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSgmn;
 import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.MinimaImpositionGrayscaleReconstruction;
 import ch.ethz.biol.cell.sgmn.objmask.watershed.minimaimposition.grayscalereconstruction.GrayscaleReconstructionRobinson;
-import ch.ethz.biol.cell.sgmn.objmask.watershed.yeong.ObjMaskSgmnWatershedYeong;
 
 /**
  * Beans related to segmentation
