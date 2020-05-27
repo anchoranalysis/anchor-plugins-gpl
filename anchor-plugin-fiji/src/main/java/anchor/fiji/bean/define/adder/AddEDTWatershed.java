@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
+import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDuplicate;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderBlur;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
@@ -224,7 +224,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	}
 	
 	private BinaryChnlProvider inputMask() {
-		return new BinaryImgChnlProviderReference(binaryInputChnlID);
+		return new BinaryChnlProviderReference(binaryInputChnlID);
 	}
 	
 

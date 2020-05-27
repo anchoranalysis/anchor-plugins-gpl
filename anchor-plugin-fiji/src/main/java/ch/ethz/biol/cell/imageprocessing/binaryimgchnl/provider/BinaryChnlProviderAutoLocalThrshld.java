@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import fiji.threshold.Auto_Local_Threshold;
 
-public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProviderChnlSource {
+public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSource {
 	
 	// START BEAN PROPERTIES
 	// "Bernsen", "Mean", "Median", "MidGrey", "Niblack", "Sauvola" 

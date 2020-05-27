@@ -136,7 +136,7 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 
 
 	public void setDo3D(boolean do3D) {
-		do3D = do3D;
+		this.do3D = do3D;
 	}
 
 
