@@ -185,13 +185,13 @@ class EDT  {
 		private float multiplyConstant;
 
 		public Z(VoxelBox<ByteBuffer> in, VoxelBox<FloatBuffer> out, float multiplyConstant) {
-			super( in.extnt().getZ() );
+			super( in.extent().getZ() );
 			
 			this.multiplyConstant = multiplyConstant;
 			
-			int d = in.extnt().getZ();
+			int d = in.extent().getZ();
 			
-			bufferXYSize = in.extnt().getVolumeXY();
+			bufferXYSize = in.extent().getVolumeXY();
 			
 			inSlice = new byte[d][];
 			outSlice = new float[d][];
@@ -226,10 +226,10 @@ class EDT  {
 		private int offset, lastOffset, rowStride, columnStride, sliceIndex;
 
 		public OneDimension(VoxelBox<FloatBuffer> out, boolean iterateX) {
-			super(iterateX ? out.extnt().getX() : out.extnt().getY() );
+			super(iterateX ? out.extent().getX() : out.extent().getY() );
 			stack = out;
 			
-			Extent e = out.extnt();
+			Extent e = out.extent();
 			
 			columnStride = iterateX ? 1 : e.getX();
 			rowStride = iterateX ? e.getX() : 1;
@@ -245,7 +245,7 @@ class EDT  {
 		public final boolean nextRow() {
 			offset += rowStride;
 			if (offset >= lastOffset) {
-				if (++sliceIndex >= stack.extnt().getZ())
+				if (++sliceIndex >= stack.extent().getZ())
 					return false;
 				offset = 0;
 				slice = stack.getPixelsForPlane(sliceIndex).buffer();
