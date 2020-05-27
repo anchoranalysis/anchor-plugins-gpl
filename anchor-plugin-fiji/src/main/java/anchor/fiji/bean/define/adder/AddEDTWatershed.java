@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3d;
+import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryImgChnlProviderReference;
@@ -173,7 +173,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	}
 	
 	private static BlurStrategy createBlurStrategy( double distanceTransformSmoothedSigmaMeters ) {
-		BlurGaussian3d blurStrategy = new BlurGaussian3d();
+		BlurGaussian3D blurStrategy = new BlurGaussian3D();
 		blurStrategy.setSigma( distanceTransformSmoothedSigmaMeters );
 		blurStrategy.setSigmaInMeters(true);
 		return blurStrategy;
