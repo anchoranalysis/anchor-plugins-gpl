@@ -35,12 +35,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.name.provider.INamedProvider;
+import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -175,7 +176,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		return out;
 	}
 	
-	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, INamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
+	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, NamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
 		FeatureList<FeatureInput> out = new FeatureList<>();
 		
@@ -212,11 +213,11 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, INamedProvider<Feature<FeatureInput>> allFeatures, FeatureList<FeatureInput> out, List<String> missing ) throws NamedProviderGetException {
-		Feature<FeatureInput> feature = allFeatures.getNull(featureName);
-		if (feature!=null) {
+	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, NamedProvider<Feature<FeatureInput>> allFeatures, FeatureList<FeatureInput> out, List<String> missing ) throws NamedProviderGetException {
+		Optional<Feature<FeatureInput>> feature = allFeatures.getOptional(featureName);
+		if (feature.isPresent()) {
 			out.add(
-				maybeNormalise(feature, stat )
+				maybeNormalise(feature.get(), stat )
 			);
 		} else {
 			missing.add(featureName);
