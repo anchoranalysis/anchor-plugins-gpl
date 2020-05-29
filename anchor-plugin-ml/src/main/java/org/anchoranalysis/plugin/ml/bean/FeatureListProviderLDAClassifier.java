@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -91,8 +92,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 				continue;
 			}
 			
-			Feature<FeatureInput> feature = getSharedObjects().getSharedFeatureSet().getNull(name);
-			if (feature==null) {
+			if (getSharedObjects().getSharedFeatureSet().keys().contains(name)) {
 				list.add(name);
 			}
 		}
@@ -107,20 +107,25 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 		Sum<T> sum = new Sum<>();
 		sum.setIgnoreNaN(true);
 		
-		// For now let's just check all the feature are present
-		for( String name : kpv.keySet() ) {
-			
-			// Skip the threshold name
-			if (name.equals(ldaThresholdKey)) {
-				continue;
+		try {
+			// For now let's just check all the feature are present
+			for( String name : kpv.keySet() ) {
+				
+				// Skip the threshold name
+				if (name.equals(ldaThresholdKey)) {
+					continue;
+				}
+				
+				Feature<T> feature = getSharedObjects().getSharedFeatureSet().getException(name).downcast();
+				sum.getList().add(
+					new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
+				);
 			}
 			
-			Feature<T> feature = getSharedObjects().getSharedFeatureSet().getNull(name).downcast();
-			sum.getList().add(
-				new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
-			);
+		} catch (NamedProviderGetException e) {
+			throw new CreateException(e);
 		}
-		
+			
 		sum.setCustomName(featureNameScore);
 		return sum;
 		

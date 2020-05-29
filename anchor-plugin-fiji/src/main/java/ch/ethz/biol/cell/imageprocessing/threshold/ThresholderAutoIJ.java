@@ -47,46 +47,45 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import fiji.threshold.Auto_Threshold;
 
 public class ThresholderAutoIJ extends Thresholder {
-
 	
-
-	//private static Log log = LogFactory.getLog(ThresholderAutoIJ.class);
-	
-	// START BEAN
-	// Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)", 
-	//   "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag",
-	//   "Triangle", "Yen"
+	// START BEAN PROPERTIES
+	/** 
+	 * One of the following strings to identify ImageJ's thresholding algorithms (or an empty string for the default).
+	 * 
+	 *   Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)", 
+	 *   "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag",
+	 *   "Triangle", "Yen"
+	 **/
 	@BeanField
 	private String method="";	
 
 	@BeanField
 	private boolean noBlack = false;
-	
-	@BeanField
-	private int lastThreshold;
-	// END BEAN
+	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, BinaryValuesByte bvOut, Optional<Histogram> histogram) throws OperationFailedException {
+	public BinaryVoxelBox<ByteBuffer> threshold(
+		VoxelBoxWrapper inputBuffer,
+		BinaryValuesByte bvOut,
+		Optional<Histogram> histogram,
+		Optional<ObjMask> mask
+	) throws OperationFailedException {
+		
+		if (mask.isPresent()) {
+			throw new OperationFailedException("A mask is not supported for this operation");
+		}
 		
 		ImagePlus ip = IJWrap.createImagePlus(inputBuffer);
 		
 		Auto_Threshold at = new Auto_Threshold();
 		
-		Object[] ret = at.exec(ip, method, false, noBlack, true, false, false, true);
-		
-		lastThreshold = (Integer) ret[0];
+		at.exec(ip, method, false, noBlack, true, false, false, true);
 			
 		VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus( ip );
 		
 		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance));
 		
 		return new BinaryVoxelBoxByte( vbOut.asByte(), bvOut.createInt() );
-	}
-
-	@Override
-	public int getLastThreshold() {
-		return lastThreshold;
 	}
 
 	public String getMethod() {
@@ -105,8 +104,5 @@ public class ThresholderAutoIJ extends Thresholder {
 		this.noBlack = noBlack;
 	}
 
-	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(VoxelBoxWrapper inputBuffer, ObjMask objMask, BinaryValuesByte bvOut, Optional<Histogram> histogram) {
-		throw new IllegalAccessError("Method not supported");
-	}
+
 }

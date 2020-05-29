@@ -39,7 +39,6 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.chnl.Chnl;
 import org.anchoranalysis.image.chnl.factory.ChnlFactory;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
@@ -47,7 +46,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 import fiji.threshold.Auto_Local_Threshold;
 
-public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProviderChnlSource {
+public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSource {
 	
 	// START BEAN PROPERTIES
 	// "Bernsen", "Mean", "Median", "MidGrey", "Niblack", "Sauvola" 
@@ -66,7 +65,7 @@ public class BinaryImgChnlProviderAutoLocalThrshld extends BinaryImgChnlProvider
 		Stack stack = new Stack( chnl );
 		
 		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(
-			new ImageDim(chnl.getDimensions()),
+			chnl.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);
 		

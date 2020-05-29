@@ -82,7 +82,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 				false
 			);
 			
-			BoundingBox bboxSrc = new BoundingBox(vbDist.extnt());
+			BoundingBox bboxSrc = new BoundingBox(vbDist.extent());
 			vbDist.copyPixelsToCheckMask(bboxSrc, vbOut, om.getBoundingBox(), om.getVoxelBox(), om.getBinaryValuesByte());
 		}
 		
