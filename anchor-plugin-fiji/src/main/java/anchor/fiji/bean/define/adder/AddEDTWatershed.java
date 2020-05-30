@@ -275,5 +275,4 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	public void setMaxDistanceDeltaContour(double maxDistanceDeltaContour) {
 		this.maxDistanceDeltaContour = maxDistanceDeltaContour;
 	}
-
 }
