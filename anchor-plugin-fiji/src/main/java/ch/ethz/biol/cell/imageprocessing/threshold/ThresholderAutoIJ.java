@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -68,7 +68,7 @@ public class ThresholderAutoIJ extends Thresholder {
 		VoxelBoxWrapper inputBuffer,
 		BinaryValuesByte bvOut,
 		Optional<Histogram> histogram,
-		Optional<ObjMask> mask
+		Optional<ObjectMask> mask
 	) throws OperationFailedException {
 		
 		if (mask.isPresent()) {

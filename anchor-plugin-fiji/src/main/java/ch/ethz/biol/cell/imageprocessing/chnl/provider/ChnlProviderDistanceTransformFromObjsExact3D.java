@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objmask.ObjMask;
-import org.anchoranalysis.image.objmask.ObjMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -60,17 +60,17 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 	// END PROPERTIES
 	
 	@Override
-	protected Chnl createFromDim(ImageDim dim) throws CreateException {
+	protected Channel createFromDim(ImageDim dim) throws CreateException {
 
-		Chnl chnlOut = ChnlFactory.instance().createEmptyInitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			dim,
 			VoxelDataTypeUnsignedByte.instance
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
-		ObjMaskCollection objsCollection = objs.create();
+		ObjectMaskCollection objsCollection = objs.create();
 		
-		for( ObjMask om : objsCollection ) {
+		for( ObjectMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();
 			VoxelBox<ByteBuffer> vbDist = ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
 				bvb,

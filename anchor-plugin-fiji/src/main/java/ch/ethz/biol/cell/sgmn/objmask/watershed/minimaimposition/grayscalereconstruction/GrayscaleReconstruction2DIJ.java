@@ -35,7 +35,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -45,7 +45,7 @@ import ch.ethz.biol.cell.nucleii.landini.GreyscaleReconstruct_;
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 	
 	@Override
-	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjMask> containingMask) throws OperationFailedException {
+	public VoxelBoxWrapper reconstruction( VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjectMask> containingMask) throws OperationFailedException {
 		
 		if (containingMask.isPresent()) {
 			throw new OperationFailedException("A mask is not supported for this operation");

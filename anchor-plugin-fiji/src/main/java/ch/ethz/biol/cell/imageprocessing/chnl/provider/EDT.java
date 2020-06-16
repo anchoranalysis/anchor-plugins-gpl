@@ -32,8 +32,8 @@ import java.nio.FloatBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactorySingleType;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -93,9 +93,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
  */
 class EDT  {
 
-	public Chnl compute( BinaryChnl chnl, ChnlFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) throws CreateException {
+	public Channel compute( BinaryChnl chnl, ChannelFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) throws CreateException {
 		
-		Chnl result = factory.createEmptyInitialised( chnl.getDimensions() );
+		Channel result = factory.createEmptyInitialised( chnl.getDimensions() );
 		
 		VoxelBox<FloatBuffer> vbResult = result.getVoxelBox().asFloat();
 		

@@ -32,13 +32,13 @@ import process3d.MinMaxMedian;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 
 public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		ImagePlus imp = IJWrap.createImagePlus(chnl);
 		imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
 		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes() );
