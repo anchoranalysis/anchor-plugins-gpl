@@ -38,7 +38,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -68,7 +68,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
-		ObjectMaskCollection objsCollection = objs.create();
+		ObjectCollection objsCollection = objs.create();
 		
 		for( ObjectMask om : objsCollection ) {
 			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();

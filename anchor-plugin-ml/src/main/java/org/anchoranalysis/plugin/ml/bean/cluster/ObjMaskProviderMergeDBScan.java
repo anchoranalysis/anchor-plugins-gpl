@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectMaskCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollection;
 import org.anchoranalysis.image.objectmask.ops.ObjMaskMerger;
 import org.anchoranalysis.plugin.image.bean.obj.merge.ObjMaskProviderMergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
@@ -69,7 +69,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectMaskCollection createFromObjs(ObjectMaskCollection objsToMerge) throws CreateException {
+	public ObjectCollection createFromObjs(ObjectCollection objsToMerge) throws CreateException {
 				
 		try {
 			return mergeMultiplex(
@@ -81,7 +81,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 		}
 	}
 	
-	private ObjectMaskCollection clusterAndMerge( ObjectMaskCollection objs ) throws OperationFailedException {
+	private ObjectCollection clusterAndMerge( ObjectCollection objs ) throws OperationFailedException {
 			
 	
 		DBSCANClusterer<ObjMaskWithCOG> clusterer = new DBSCANClusterer<ObjMaskWithCOG>(
@@ -106,17 +106,17 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	
 	}
 	
-	private Collection<ObjMaskWithCOG> convert( ObjectMaskCollection objs, Channel distanceMap ) {
+	private Collection<ObjMaskWithCOG> convert( ObjectCollection objs, Channel distanceMap ) {
 		return objs.asList().stream().map( c ->
 			new ObjMaskWithCOG(c, distanceMap, getLogger()  )
 		).collect( Collectors.toList() );
 	}
 	
-	private static ObjectMaskCollection mergeClusters(
+	private static ObjectCollection mergeClusters(
 		List<Cluster<ObjMaskWithCOG>> clusters
 	) throws OperationFailedException {
 
-		ObjectMaskCollection out = new ObjectMaskCollection();
+		ObjectCollection out = new ObjectCollection();
 		for( Cluster<ObjMaskWithCOG> c : clusters) {
 			// Merge objects together
 			out.add(
@@ -132,8 +132,8 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 		);
 	}
 	
-	private static ObjectMaskCollection convert( Collection<ObjMaskWithCOG> objs ) {
-		return new ObjectMaskCollection(
+	private static ObjectCollection convert( Collection<ObjMaskWithCOG> objs ) {
+		return new ObjectCollection(
 			objs.stream().map( c -> c.om ).collect( Collectors.toList() )
 		);
 	}
