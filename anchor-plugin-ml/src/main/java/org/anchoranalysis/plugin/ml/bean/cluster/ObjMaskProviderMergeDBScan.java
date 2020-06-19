@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -38,6 +36,7 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.objectmask.ObjectCollectionFactory;
 import org.anchoranalysis.image.objectmask.ops.ObjectMaskMerger;
 import org.anchoranalysis.plugin.image.bean.obj.merge.ObjMaskProviderMergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
@@ -107,23 +106,18 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	}
 	
 	private Collection<ObjMaskWithCOG> convert( ObjectCollection objs, Channel distanceMap ) {
-		return objs.stream().map( c ->
+		return objs.mapAsList( c ->
 			new ObjMaskWithCOG(c, distanceMap, getLogger()  )
-		).collect( Collectors.toList() );
+		);
 	}
 	
 	private static ObjectCollection mergeClusters(
 		List<Cluster<ObjMaskWithCOG>> clusters
 	) throws OperationFailedException {
-
-		ObjectCollection out = new ObjectCollection();
-		for( Cluster<ObjMaskWithCOG> c : clusters) {
-			// Merge objects together
-			out.add(
-				mergeCluster(c)
-			);
-		}
-		return out;
+		return ObjectCollectionFactory.mapFrom(
+			clusters,
+			ObjMaskProviderMergeDBScan::mergeCluster
+		);
 	}
 	
 	private static ObjectMask mergeCluster( Cluster<ObjMaskWithCOG> cluster ) throws OperationFailedException {
@@ -133,9 +127,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	}
 	
 	private static ObjectCollection convert( Collection<ObjMaskWithCOG> objs ) {
-		return new ObjectCollection(
-			objs.stream().map( c -> c.om )
-		);
+		return ObjectCollectionFactory.mapFrom(objs, ObjMaskWithCOG::getObjectMask);
 	}
 
 	public ChnlProvider getDistanceMapProvider() {

@@ -42,7 +42,7 @@ import org.apache.commons.math3.ml.clustering.Clusterable;
  * */
 class ObjMaskWithCOG implements Clusterable {
 
-	ObjectMask om;
+	private ObjectMask om;
 	private double[] pnts;
 	
 	public ObjMaskWithCOG(ObjectMask om, Channel distanceMap, LogErrorReporter logErrorReporter ) {
@@ -74,5 +74,9 @@ class ObjMaskWithCOG implements Clusterable {
 		arr[2] = pnt.getZ();
 		arr[3] = distanceFromContour;
 		return arr;
+	}
+
+	public ObjectMask getObjectMask() {
+		return om;
 	}
 }
