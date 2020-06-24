@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
-import org.anchoranalysis.image.chnl.Chnl;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -68,7 +68,7 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 	
 	// Assumes XY res are identical
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Chnl diffusion( Chnl chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D ) throws CreateException {
+	public static Channel diffusion( Channel chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D ) throws CreateException {
 		
 		Extent e = chnl.getDimensions().getExtnt();
 		try {
@@ -104,7 +104,7 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 	}
 	
 	@Override
-	public Chnl createFromChnl(Chnl chnl) throws CreateException {
+	public Channel createFromChnl(Channel chnl) throws CreateException {
 		DiffusionFunction df = createDiffusionFunction();
 		return diffusion(chnl, deltat, df, iterations, do3D );
 

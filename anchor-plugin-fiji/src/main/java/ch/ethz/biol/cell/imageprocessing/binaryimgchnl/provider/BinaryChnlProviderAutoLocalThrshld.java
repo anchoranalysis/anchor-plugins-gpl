@@ -36,8 +36,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -58,13 +58,13 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Chnl chnl) throws CreateException {
+	protected BinaryChnl createFromSource(Channel chnl) throws CreateException {
 	
 		chnl = chnl.duplicate();
 		
 		Stack stack = new Stack( chnl );
 		
-		Chnl chnlOut = ChnlFactory.instance().createEmptyUninitialised(
+		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(
 			chnl.getDimensions(),
 			VoxelDataTypeUnsignedByte.instance
 		);

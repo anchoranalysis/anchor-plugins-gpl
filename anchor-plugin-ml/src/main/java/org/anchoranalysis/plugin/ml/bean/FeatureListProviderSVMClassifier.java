@@ -52,6 +52,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
+import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 
@@ -111,7 +112,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		return out;
 	}
 	
-	private static List<FirstSecondOrderStatistic> readScale( Path filePath ) throws IOException {
+	private static List<FirstSecondOrderStatistic> readScale( Path filePath ) throws CSVReaderException {
 		
 		List<FirstSecondOrderStatistic> out = new ArrayList<>();
 		
@@ -165,7 +166,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 				getSharedObjects().getSharedFeatureSet(),
 				listStats
 			);
-		} catch (IOException e) {
+		} catch (CSVReaderException | IOException e) {
 			throw new OperationFailedException(e);
 		}
 	}

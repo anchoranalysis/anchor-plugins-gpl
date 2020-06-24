@@ -33,13 +33,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.chnl.factory.ChnlFactory;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDim;
 import org.anchoranalysis.image.extent.ImageRes;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverter;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedByte;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChnlConverterToUnsignedShort;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
+import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -75,17 +75,17 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	
 	// We can also change a binary voxel buffer
 	public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
-		Chnl chnlIn = ChnlFactory
+		Channel chnlIn = ChannelFactory
 				.instance()
 				.get(VoxelDataTypeUnsignedByte.instance)
 				.create( bvb.getVoxelBox(), res );
 		BinaryChnl binaryChnlIn = new BinaryChnl(chnlIn, bvb.getBinaryValues());
 		
-		Chnl distanceMap = createDistanceMapForChnl(binaryChnlIn, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes );
+		Channel distanceMap = createDistanceMapForChnl(binaryChnlIn, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes );
 		return distanceMap.getVoxelBox().asByte();
 	}
 	
-	public static Chnl createDistanceMapForChnl( BinaryChnl chnl, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
+	public static Channel createDistanceMapForChnl( BinaryChnl chnl, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
 		if( chnl.getBinaryValues().getOnInt()!=255) {
 			throw new CreateException("Binary On must be 255");
 		}
@@ -109,11 +109,11 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	
 		if (suppressZ) {
 		
-			Chnl chnlOut = createEmptyChnl( createShort, chnl.getDimensions() );
+			Channel chnlOut = createEmptyChnl( createShort, chnl.getDimensions() );
 			
 			for( int z=0; z<chnl.getDimensions().getExtnt().getZ(); z++ ) {
 				BinaryChnl chnlSlice = chnl.extractSlice(z) ;
-				Chnl distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
+				Channel distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
 				chnlOut.getVoxelBox().transferPixelsForPlane( z, distSlice.getVoxelBox(), 0, true );
 			}
 			
@@ -124,25 +124,25 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		}
 	}
 	
-	private static Chnl createEmptyChnl( boolean createShort, ImageDim dims ) {
+	private static Channel createEmptyChnl( boolean createShort, ImageDim dims ) {
 		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
-		return ChnlFactory.instance().createEmptyUninitialised( dims, dataType );
+		return ChannelFactory.instance().createEmptyUninitialised( dims, dataType );
 	}
 	
 	@Override
-	protected Chnl createFromMask(BinaryChnl mask) throws CreateException {
+	protected Channel createFromMask(BinaryChnl mask) throws CreateException {
 		return createDistanceMapForChnl(mask,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
 	}
 
-	private static Chnl createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) throws CreateException {
+	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) throws CreateException {
 		
 		EDT edtPlugin = new EDT();
 		
 		// Assumes X and Y have the same resolution
 		
-		Chnl distAsFloat = edtPlugin.compute(
+		Channel distAsFloat = edtPlugin.compute(
 			chnl,
-			ChnlFactory.instance().get(VoxelDataTypeFloat.instance),
+			ChannelFactory.instance().get(VoxelDataTypeFloat.instance),
 			suppressZ,
 			multFactorZ
 		);
@@ -153,7 +153,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 			distAsFloat.getVoxelBox().any().multiplyBy(multFactor);
 		}
 
-		ChnlConverter<?> converter = createShort ? new ChnlConverterToUnsignedShort() : new ChnlConverterToUnsignedByte();
+		ChannelConverter<?> converter = createShort ? new ChannelConverterToUnsignedShort() : new ChannelConverterToUnsignedByte();
 		return converter.convert(distAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 	}
 

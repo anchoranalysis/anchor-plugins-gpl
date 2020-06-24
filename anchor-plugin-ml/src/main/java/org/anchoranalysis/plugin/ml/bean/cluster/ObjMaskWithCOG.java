@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.ml.bean.cluster;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.LogErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.chnl.Chnl;
-import org.anchoranalysis.image.objmask.ObjMask;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.objectmask.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
@@ -42,10 +42,10 @@ import org.apache.commons.math3.ml.clustering.Clusterable;
  * */
 class ObjMaskWithCOG implements Clusterable {
 
-	ObjMask om;
+	private ObjectMask om;
 	private double[] pnts;
 	
-	public ObjMaskWithCOG(ObjMask om, Chnl distanceMap, LogErrorReporter logErrorReporter ) {
+	public ObjMaskWithCOG(ObjectMask om, Channel distanceMap, LogErrorReporter logErrorReporter ) {
 		super();
 		this.om = om;
 		
@@ -74,5 +74,9 @@ class ObjMaskWithCOG implements Clusterable {
 		arr[2] = pnt.getZ();
 		arr[3] = distanceFromContour;
 		return arr;
+	}
+
+	public ObjectMask getObjectMask() {
+		return om;
 	}
 }
