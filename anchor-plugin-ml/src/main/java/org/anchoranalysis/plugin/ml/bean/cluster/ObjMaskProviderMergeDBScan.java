@@ -106,7 +106,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	}
 	
 	private Collection<ObjMaskWithCOG> convert( ObjectCollection objs, Channel distanceMap ) {
-		return objs.stream().mapAsList( c ->
+		return objs.stream().mapToList( c ->
 			new ObjMaskWithCOG(c, distanceMap, getLogger()  )
 		);
 	}
