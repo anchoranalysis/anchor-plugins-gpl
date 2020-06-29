@@ -39,6 +39,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
@@ -73,7 +74,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 		
 		double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
 
-		return listThreeFeatures(
+		return FeatureListFactory.from(
 			createScoreFeature(kpv),
 			createThresholdFeature(threshold),
 			createClassifierFeature(threshold)
@@ -133,9 +134,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 	}
 	
 	private Feature<T> createThresholdFeature( double threshold ) {
-		Constant<T> out = new Constant<>(threshold);
-		out.setCustomName(featureNameThreshold);
-		return out;
+		return new Constant<>(featureNameThreshold, threshold);
 	}
 	
 	private Feature<T> createClassifierFeature( double threshold ) {
@@ -158,14 +157,6 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 		return featThresh;		
 	}
 	
-	private static <S extends FeatureInput> FeatureList<S> listThreeFeatures( Feature<S> feat1, Feature<S> feat2, Feature<S> feat3) {
-		FeatureList<S> out = new FeatureList<>();
-		out.add(feat1);
-		out.add(feat2);
-		out.add(feat3);
-		return out;
-	}
-
 	public KeyValueParamsProvider getKeyValueParamsProvider() {
 		return keyValueParamsProvider;
 	}

@@ -45,6 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -88,10 +89,10 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			Path fileSVM = filePathProviderSVM.create();
 				
 			FeatureList<FeatureInput> features = findModelFeatures( fileSVM );
-
-			Feature<FeatureInput> featureClassify = buildClassifierFeature(fileSVM, features);
 			
-			return wrapInList(featureClassify);
+			return FeatureListFactory.from(
+				buildClassifierFeature(fileSVM, features)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
@@ -170,13 +171,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	private static FeatureList<FeatureInput> wrapInList( Feature<FeatureInput> f ) {
-		FeatureList<FeatureInput> out = new FeatureList<>();
-		out.add(f);
-		return out;
-	}
-	
+		
 	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, NamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
 		FeatureList<FeatureInput> out = new FeatureList<>();
@@ -237,16 +232,18 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 	private Feature<FeatureInput> createScaledFeature( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
 		
-		Constant<FeatureInput> mean = new Constant<>(stat.getMean());
-		mean.setCustomName("mean");
-		
-		Constant<FeatureInput> stdDev = new Constant<>(stat.getScale() );
-		stdDev.setCustomName("stdDev");
-		
 		ZScore<FeatureInput> featureNormalized = new ZScore<>();
+
 		featureNormalized.setItem( feature );
-		featureNormalized.setItemMean( mean );
-		featureNormalized.setItemStdDev( stdDev );
+		
+		featureNormalized.setItemMean(
+			new Constant<>("mean", stat.getMean())
+		);
+		
+		featureNormalized.setItemStdDev(
+			new Constant<>("stdDev", stat.getScale())
+		);
+		
 		featureNormalized.setCustomName( feature.getCustomName() + " (scaled)");
 		return featureNormalized;
 	}

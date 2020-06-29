@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.ml.bean;
  */
 
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -57,7 +58,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 			FeatureList<T> featureList, boolean direction ) {
 		super();
 		this.model = model;
-		setList(featureList.asList());
+		setList(featureList);
 		this.direction = direction;
 	}
 	
@@ -66,7 +67,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 	public FeatureSVMClassifier<T> duplicateBean() {
 		return new FeatureSVMClassifier<>(
 			model,
-			new FeatureList<>(getList()).duplicateBean(),
+			FeatureListFactory.wrapDuplicate(getList()),
 			direction
 		);
 	}
@@ -75,7 +76,9 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 	public double calc(SessionInput<T> input)
 			throws FeatureCalcException {
 		
-		ResultsVector rv = input.calc( getList() );
+		ResultsVector rv = input.calc(
+			FeatureListFactory.wrapReuse( getList() )
+		);
 		
 		svm_node[] nodes = convert(rv);
 		
