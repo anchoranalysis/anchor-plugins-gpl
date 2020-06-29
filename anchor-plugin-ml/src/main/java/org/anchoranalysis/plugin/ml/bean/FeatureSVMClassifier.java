@@ -57,7 +57,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 			FeatureList<T> featureList, boolean direction ) {
 		super();
 		this.model = model;
-		setList(featureList);
+		setList(featureList.asList());
 		this.direction = direction;
 	}
 	
