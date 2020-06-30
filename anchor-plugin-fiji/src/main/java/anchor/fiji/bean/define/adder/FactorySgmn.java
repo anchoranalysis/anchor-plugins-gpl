@@ -28,7 +28,7 @@ package anchor.fiji.bean.define.adder;
 
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImpositionGrayscaleReconstruction;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
@@ -46,7 +46,7 @@ import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
  */
 class FactorySgmn {
 	
-	public static ObjMaskProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
+	public static ObjectCollectionProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSgmn provider = new ObjMaskProviderSgmn();
 		provider.setMask(mask);
 		provider.setChnl(distanceTransform);
@@ -54,7 +54,7 @@ class FactorySgmn {
 		return provider;
 	}
 	
-	public static ObjMaskProvider watershedSegment( ObjMaskProvider sourceObjs, ObjMaskProvider seeds, ChnlProvider distanceTransform ) {
+	public static ObjectCollectionProvider watershedSegment( ObjectCollectionProvider sourceObjs, ObjectCollectionProvider seeds, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
 		provider.setObjsSource(sourceObjs);
 		provider.setObjsSeeds(seeds);
