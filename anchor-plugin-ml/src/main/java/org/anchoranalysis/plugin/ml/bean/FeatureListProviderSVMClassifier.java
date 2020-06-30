@@ -172,28 +172,26 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		}
 	}
 		
-	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, NamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
-		
-		FeatureList<FeatureInput> out = new FeatureList<>();
+	private FeatureList<FeatureInput> listFromNames(
+		FeatureNameList featureNames,
+		NamedProvider<Feature<FeatureInput>> allFeatures,
+		List<FirstSecondOrderStatistic> listStats
+	) throws OperationFailedException {
 		
 		List<String> missing = new ArrayList<String>();
-		
 		assert( listStats.size()==featureNames.size() );
 		
-		for( int i=0; i<featureNames.size(); i++ ) {
-			
-			try {
-				addOutOrMissing(
-					featureNames.get(i),
-					listStats.get(i),
-					allFeatures,				
-					out,
-					missing
-				);
-			} catch (NamedProviderGetException e) {
-				throw new OperationFailedException(e.summarize());
-			}
-		}
+		FeatureList<FeatureInput> out = FeatureListFactory.mapFromRangeOptional(
+			0,
+			featureNames.size(),
+			NamedProviderGetException.class,
+			index -> getOrAddToMissing(
+				featureNames.get(index),
+				listStats.get(index),
+				allFeatures,				
+				missing
+			)
+		);
 		
 		if (missing.size()>0) {
 			// Embed exception
@@ -209,14 +207,15 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, NamedProvider<Feature<FeatureInput>> allFeatures, FeatureList<FeatureInput> out, List<String> missing ) throws NamedProviderGetException {
+	private Optional<Feature<FeatureInput>> getOrAddToMissing( String featureName, FirstSecondOrderStatistic stat, NamedProvider<Feature<FeatureInput>> allFeatures, List<String> missing ) throws NamedProviderGetException {
 		Optional<Feature<FeatureInput>> feature = allFeatures.getOptional(featureName);
 		if (feature.isPresent()) {
-			out.add(
+			return Optional.of(
 				maybeNormalise(feature.get(), stat )
 			);
 		} else {
 			missing.add(featureName);
+			return Optional.empty();
 		}
 	}
 
