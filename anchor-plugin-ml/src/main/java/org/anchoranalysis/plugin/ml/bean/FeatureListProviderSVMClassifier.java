@@ -181,28 +181,29 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		List<String> missing = new ArrayList<String>();
 		assert( listStats.size()==featureNames.size() );
 		
-		FeatureList<FeatureInput> out = FeatureListFactory.mapFromRangeOptional(
-			0,
-			featureNames.size(),
-			NamedProviderGetException.class,
-			index -> getOrAddToMissing(
-				featureNames.get(index),
-				listStats.get(index),
-				allFeatures,				
-				missing
-			)
-		);
-		
-		if (missing.size()>0) {
-			// Embed exception
-			try {
+		try {
+			FeatureList<FeatureInput> out = FeatureListFactory.mapFromRangeOptional(
+				0,
+				featureNames.size(),
+				NamedProviderGetException.class,
+				index -> getOrAddToMissing(
+					featureNames.get(index),
+					listStats.get(index),
+					allFeatures,				
+					missing
+				)
+			);
+			
+			if (missing.size()>0) {
+				// Embed exception
 				throw MissingFeaturesUtilities.createExceptionForMissingStrings(missing);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
 			}
+			
+			return out;
+			
+		} catch (NamedProviderGetException | CreateException e) {
+			throw new OperationFailedException(e);
 		}
-		
-		return out;
 	}
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
