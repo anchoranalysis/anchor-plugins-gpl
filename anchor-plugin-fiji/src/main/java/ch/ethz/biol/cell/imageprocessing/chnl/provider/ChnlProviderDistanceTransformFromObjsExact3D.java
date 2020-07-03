@@ -64,7 +64,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			dim,
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		

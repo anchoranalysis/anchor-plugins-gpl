@@ -83,7 +83,7 @@ public class ThresholderAutoIJ extends Thresholder {
 			
 		VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus( ip );
 		
-		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance));
+		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
 		
 		return new BinaryVoxelBoxByte( vbOut.asByte(), bvOut.createInt() );
 	}

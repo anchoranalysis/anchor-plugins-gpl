@@ -77,7 +77,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageResolution res, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
 		Channel chnlIn = ChannelFactory
 				.instance()
-				.get(VoxelDataTypeUnsignedByte.instance)
+				.get(VoxelDataTypeUnsignedByte.INSTANCE)
 				.create( bvb.getVoxelBox(), res );
 		BinaryChnl binaryChnlIn = new BinaryChnl(chnlIn, bvb.getBinaryValues());
 		
@@ -125,7 +125,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	}
 	
 	private static Channel createEmptyChnl( boolean createShort, ImageDimensions dims ) {
-		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
+		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE;
 		return ChannelFactory.instance().createEmptyUninitialised( dims, dataType );
 	}
 	
@@ -142,7 +142,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 		Channel distAsFloat = edtPlugin.compute(
 			chnl,
-			ChannelFactory.instance().get(VoxelDataTypeFloat.instance),
+			ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
 			suppressZ,
 			multFactorZ
 		);

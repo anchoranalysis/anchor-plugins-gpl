@@ -66,7 +66,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 		
 		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(
 			chnl.getDimensions(),
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		
 		VoxelBox<ByteBuffer> vb = chnlOut.getVoxelBox().asByte();

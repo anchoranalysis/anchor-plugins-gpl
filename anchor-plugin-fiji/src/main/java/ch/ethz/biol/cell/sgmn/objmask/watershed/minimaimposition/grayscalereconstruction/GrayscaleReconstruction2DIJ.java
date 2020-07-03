@@ -52,7 +52,7 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
 			throw new OperationFailedException("A mask is not supported for this operation");
 		}
 		
-		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			throw new OperationFailedException("Only unsigned byte supported for marker image");
 		}
 		
