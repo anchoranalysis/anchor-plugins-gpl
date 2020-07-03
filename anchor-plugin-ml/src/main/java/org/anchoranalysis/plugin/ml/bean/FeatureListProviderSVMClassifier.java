@@ -62,7 +62,7 @@ import libsvm.svm_model;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<FeatureInput> {
 
-	private final static String CLASSIFIER_FEATURE_NAME = "svmClassifier";
+	private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 	
 	// START BEAN PROPERTIES
 	@BeanField
