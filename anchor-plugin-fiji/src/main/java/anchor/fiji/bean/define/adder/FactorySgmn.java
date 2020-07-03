@@ -37,6 +37,8 @@ import org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong.ObjMaskSgmnWate
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSgmn;
 import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Beans related to segmentation
@@ -44,6 +46,7 @@ import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
  * @author FEEHANO
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FactorySgmn {
 	
 	public static ObjectCollectionProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {

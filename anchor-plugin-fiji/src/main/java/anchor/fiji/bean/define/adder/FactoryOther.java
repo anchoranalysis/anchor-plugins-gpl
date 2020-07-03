@@ -39,6 +39,8 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderSubtractFromC
 import ch.ethz.biol.cell.imageprocessing.dim.provider.ImageDimProviderFromChnl;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConnectedComponents;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConvexHullConnectLines;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -47,6 +49,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConvexH
  * @author FEEHANO
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FactoryOther {
 
 	public static ObjectCollectionProvider connectedComponentsInput(
