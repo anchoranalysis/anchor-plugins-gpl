@@ -29,7 +29,7 @@ package anchor.fiji.bean.define.adder;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.plugin.ml.bean.cluster.ObjMaskProviderMergeDBScan;
@@ -39,17 +39,20 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderSubtractFromC
 import ch.ethz.biol.cell.imageprocessing.dim.provider.ImageDimProviderFromChnl;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConnectedComponents;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConvexHullConnectLines;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 
 /**
  * Beans related to non-segmentation
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FactoryOther {
 
-	public static ObjMaskProvider connectedComponentsInput(
+	public static ObjectCollectionProvider connectedComponentsInput(
 		BinaryChnlProvider source,
 		UnitValueVolume minVolumeConnectedComponent
 	) {
@@ -84,9 +87,9 @@ class FactoryOther {
 		return provider;
 	}
 	
-	public static ObjMaskProvider mergeMinima(
-		ObjMaskProvider unmergedMinima,
-		ObjMaskProvider container,
+	public static ObjectCollectionProvider mergeMinima(
+		ObjectCollectionProvider unmergedMinima,
+		ObjectCollectionProvider container,
 		ImageDimProvider resProvider,
 		ChnlProvider sourceDistanceMapProvider,
 		UnitValueDistance maxDistanceCOG,
@@ -102,7 +105,7 @@ class FactoryOther {
 		return merge;
 	}
 	
-	public static ObjMaskProvider seeds( ObjMaskProvider mergedMinima, ImageDimProvider dimProvider ) {
+	public static ObjectCollectionProvider seeds( ObjectCollectionProvider mergedMinima, ImageDimProvider dimProvider ) {
 		ObjMaskProviderConvexHullConnectLines provider = new ObjMaskProviderConvexHullConnectLines();
 		provider.setObjs(mergedMinima);
 		provider.setDim(dimProvider);

@@ -45,6 +45,7 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -61,7 +62,7 @@ import libsvm.svm_model;
 
 public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<FeatureInput> {
 
-	private final static String CLASSIFIER_FEATURE_NAME = "svmClassifier";
+	private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -88,10 +89,10 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			Path fileSVM = filePathProviderSVM.create();
 				
 			FeatureList<FeatureInput> features = findModelFeatures( fileSVM );
-
-			Feature<FeatureInput> featureClassify = buildClassifierFeature(fileSVM, features);
 			
-			return wrapInList(featureClassify);
+			return FeatureListFactory.from(
+				buildClassifierFeature(fileSVM, features)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
@@ -170,58 +171,52 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	private static FeatureList<FeatureInput> wrapInList( Feature<FeatureInput> f ) {
-		FeatureList<FeatureInput> out = new FeatureList<>();
-		out.add(f);
-		return out;
-	}
-	
-	private FeatureList<FeatureInput> listFromNames( FeatureNameList featureNames, NamedProvider<Feature<FeatureInput>> allFeatures, List<FirstSecondOrderStatistic> listStats ) throws OperationFailedException {
 		
-		FeatureList<FeatureInput> out = new FeatureList<>();
+	private FeatureList<FeatureInput> listFromNames(
+		FeatureNameList featureNames,
+		NamedProvider<Feature<FeatureInput>> allFeatures,
+		List<FirstSecondOrderStatistic> listStats
+	) throws OperationFailedException {
 		
 		List<String> missing = new ArrayList<String>();
-		
 		assert( listStats.size()==featureNames.size() );
 		
-		for( int i=0; i<featureNames.size(); i++ ) {
-			
-			try {
-				addOutOrMissing(
-					featureNames.get(i),
-					listStats.get(i),
+		try {
+			FeatureList<FeatureInput> out = FeatureListFactory.mapFromRangeOptional(
+				0,
+				featureNames.size(),
+				NamedProviderGetException.class,
+				index -> getOrAddToMissing(
+					featureNames.get(index),
+					listStats.get(index),
 					allFeatures,				
-					out,
 					missing
-				);
-			} catch (NamedProviderGetException e) {
-				throw new OperationFailedException(e.summarize());
-			}
-		}
-		
-		if (missing.size()>0) {
-			// Embed exception
-			try {
+				)
+			);
+			
+			if (missing.size()>0) {
+				// Embed exception
 				throw MissingFeaturesUtilities.createExceptionForMissingStrings(missing);
-			} catch (CreateException e) {
-				throw new OperationFailedException(e);
 			}
+			
+			return out;
+			
+		} catch (NamedProviderGetException | CreateException e) {
+			throw new OperationFailedException(e);
 		}
-		
-		return out;
 	}
 	
 	/** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise 
 	 * @throws GetOperationFailedException */
-	private void addOutOrMissing( String featureName, FirstSecondOrderStatistic stat, NamedProvider<Feature<FeatureInput>> allFeatures, FeatureList<FeatureInput> out, List<String> missing ) throws NamedProviderGetException {
+	private Optional<Feature<FeatureInput>> getOrAddToMissing( String featureName, FirstSecondOrderStatistic stat, NamedProvider<Feature<FeatureInput>> allFeatures, List<String> missing ) throws NamedProviderGetException {
 		Optional<Feature<FeatureInput>> feature = allFeatures.getOptional(featureName);
 		if (feature.isPresent()) {
-			out.add(
+			return Optional.of(
 				maybeNormalise(feature.get(), stat )
 			);
 		} else {
 			missing.add(featureName);
+			return Optional.empty();
 		}
 	}
 
@@ -237,16 +232,18 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 	private Feature<FeatureInput> createScaledFeature( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
 		
-		Constant<FeatureInput> mean = new Constant<>(stat.getMean());
-		mean.setCustomName("mean");
-		
-		Constant<FeatureInput> stdDev = new Constant<>(stat.getScale() );
-		stdDev.setCustomName("stdDev");
-		
 		ZScore<FeatureInput> featureNormalized = new ZScore<>();
+
 		featureNormalized.setItem( feature );
-		featureNormalized.setItemMean( mean );
-		featureNormalized.setItemStdDev( stdDev );
+		
+		featureNormalized.setItemMean(
+			new Constant<>("mean", stat.getMean())
+		);
+		
+		featureNormalized.setItemStdDev(
+			new Constant<>("stdDev", stat.getScale())
+		);
+		
 		featureNormalized.setCustomName( feature.getCustomName() + " (scaled)");
 		return featureNormalized;
 	}

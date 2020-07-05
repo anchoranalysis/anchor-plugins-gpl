@@ -35,7 +35,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.objectmask.ObjectMask;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -52,7 +52,7 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
 			throw new OperationFailedException("A mask is not supported for this operation");
 		}
 		
-		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.instance)) {
+		if (!marker.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE) || !mask.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
 			throw new OperationFailedException("Only unsigned byte supported for marker image");
 		}
 		

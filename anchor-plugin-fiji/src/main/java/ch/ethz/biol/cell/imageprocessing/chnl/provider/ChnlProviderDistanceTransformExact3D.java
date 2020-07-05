@@ -35,8 +35,8 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.extent.ImageRes;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
@@ -74,10 +74,10 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	// END PROPERTIES
 	
 	// We can also change a binary voxel buffer
-	public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageRes res, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
+	public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageResolution res, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
 		Channel chnlIn = ChannelFactory
 				.instance()
-				.get(VoxelDataTypeUnsignedByte.instance)
+				.get(VoxelDataTypeUnsignedByte.INSTANCE)
 				.create( bvb.getVoxelBox(), res );
 		BinaryChnl binaryChnlIn = new BinaryChnl(chnlIn, bvb.getBinaryValues());
 		
@@ -124,8 +124,8 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		}
 	}
 	
-	private static Channel createEmptyChnl( boolean createShort, ImageDim dims ) {
-		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.instance : VoxelDataTypeUnsignedByte.instance;
+	private static Channel createEmptyChnl( boolean createShort, ImageDimensions dims ) {
+		VoxelDataType dataType = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE;
 		return ChannelFactory.instance().createEmptyUninitialised( dims, dataType );
 	}
 	
@@ -142,7 +142,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 		Channel distAsFloat = edtPlugin.compute(
 			chnl,
-			ChannelFactory.instance().get(VoxelDataTypeFloat.instance),
+			ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
 			suppressZ,
 			multFactorZ
 		);

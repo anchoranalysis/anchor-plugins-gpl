@@ -28,8 +28,8 @@ package anchor.fiji.bean.define.adder;
 
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
-import org.anchoranalysis.image.bean.sgmn.objmask.ObjMaskSgmn;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImpositionGrayscaleReconstruction;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong.ObjMaskSgmnWatershedYeong;
@@ -37,16 +37,19 @@ import org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong.ObjMaskSgmnWate
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSgmn;
 import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Beans related to segmentation
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FactorySgmn {
 	
-	public static ObjMaskProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
+	public static ObjectCollectionProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSgmn provider = new ObjMaskProviderSgmn();
 		provider.setMask(mask);
 		provider.setChnl(distanceTransform);
@@ -54,7 +57,7 @@ class FactorySgmn {
 		return provider;
 	}
 	
-	public static ObjMaskProvider watershedSegment( ObjMaskProvider sourceObjs, ObjMaskProvider seeds, ChnlProvider distanceTransform ) {
+	public static ObjectCollectionProvider watershedSegment( ObjectCollectionProvider sourceObjs, ObjectCollectionProvider seeds, ChnlProvider distanceTransform ) {
 		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
 		provider.setObjsSource(sourceObjs);
 		provider.setObjsSeeds(seeds);
@@ -63,13 +66,13 @@ class FactorySgmn {
 		return provider;
 	}
 		
-	private static ObjMaskSgmn watershedSgmnForMinima() {
+	private static ObjectSegmentation watershedSgmnForMinima() {
 		ObjMaskSgmnWatershedYeong sgmn = new ObjMaskSgmnWatershedYeong();
 		sgmn.setExitWithMinima(true);
 		return sgmn;
 	}
 	
-	private static ObjMaskSgmn watershedSgmnForSegments() {
+	private static ObjectSegmentation watershedSgmnForSegments() {
 		
 		ObjMaskSgmnMinimaImposition impose = new ObjMaskSgmnMinimaImposition();
 		impose.setSgmn( new ObjMaskSgmnWatershedYeong() );

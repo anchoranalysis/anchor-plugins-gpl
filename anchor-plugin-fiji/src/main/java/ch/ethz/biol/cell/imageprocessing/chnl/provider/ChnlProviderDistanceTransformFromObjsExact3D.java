@@ -31,14 +31,14 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjMaskProvider;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDim;
-import org.anchoranalysis.image.objectmask.ObjectMask;
-import org.anchoranalysis.image.objectmask.ObjectCollection;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -50,7 +50,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 
 	// START PROPERTIES
 	@BeanField
-	private ObjMaskProvider objs;
+	private ObjectCollectionProvider objs;
 	
 	@BeanField
 	private boolean suppressZ = false;
@@ -60,11 +60,11 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 	// END PROPERTIES
 	
 	@Override
-	protected Channel createFromDim(ImageDim dim) throws CreateException {
+	protected Channel createFromDim(ImageDimensions dim) throws CreateException {
 
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
 			dim,
-			VoxelDataTypeUnsignedByte.instance
+			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
@@ -97,11 +97,11 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 		this.suppressZ = suppressZ;
 	}
 
-	public ObjMaskProvider getObjs() {
+	public ObjectCollectionProvider getObjs() {
 		return objs;
 	}
 
-	public void setObjs(ObjMaskProvider objs) {
+	public void setObjs(ObjectCollectionProvider objs) {
 		this.objs = objs;
 	}
 

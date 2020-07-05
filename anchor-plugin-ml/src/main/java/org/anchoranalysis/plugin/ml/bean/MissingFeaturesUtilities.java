@@ -30,9 +30,11 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 
-class MissingFeaturesUtilities {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private MissingFeaturesUtilities() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class MissingFeaturesUtilities {
 		
 	public static CreateException createExceptionForMissingStrings( List<String> listNames ) {
 		// Then we have at least one missing feature, throw an exception
