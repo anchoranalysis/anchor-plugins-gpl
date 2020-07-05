@@ -46,7 +46,7 @@ import lombok.NoArgsConstructor;
 /**
  * Beans related to non-segmentation
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)

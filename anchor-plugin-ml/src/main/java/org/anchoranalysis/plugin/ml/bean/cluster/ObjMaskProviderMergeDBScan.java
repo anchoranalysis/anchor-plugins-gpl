@@ -48,7 +48,7 @@ import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
  * 	- Euclidian distance
  *  - an eps (max distance for neighbourhood connection) where distance is less than maxDist (calculated on XY resolution)
  *  
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {

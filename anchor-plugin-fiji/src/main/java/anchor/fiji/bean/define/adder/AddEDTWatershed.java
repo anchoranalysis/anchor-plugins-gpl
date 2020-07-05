@@ -67,7 +67,7 @@ import static anchor.fiji.bean.define.adder.FactorySgmn.*;
  *  	6. Create seeds by drawing a line between the merged-minima-points so they are now connected.
  *  	7. Apply the watershed transformation using the seeds to create segments
  * 
- * @author FEEHANO
+ * @author Owen Feehan
  *
  */
 public class AddEDTWatershed extends DefineAdderWithPrefixBean {
