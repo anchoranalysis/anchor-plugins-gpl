@@ -83,7 +83,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 
 	private void checkForMissingFeatures( KeyValueParams kpv ) throws CreateException {
 		
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		
 		// For now let's just check all the feature are present
 		for( String name : kpv.keySet() ) {
@@ -98,7 +98,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 			}
 		}
 		
-		if (list.size()>0) {
+		if (!list.isEmpty()) {
 			throw MissingFeaturesUtilities.createExceptionForMissingStrings( list );
 		}
 	}

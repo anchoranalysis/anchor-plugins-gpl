@@ -99,9 +99,6 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 		
 		// We measure the voxel distance between the points
 		double distVoxels = MathArrays.distance( extractPnt(a), extractPnt(b) );
-		
-		//System.out.printf("maxDistVox=%f  distVoxels=%f%n", maxDistVoxels, distVoxels);
-		
 		return distVoxels/maxDistVoxels;
 	}
 	

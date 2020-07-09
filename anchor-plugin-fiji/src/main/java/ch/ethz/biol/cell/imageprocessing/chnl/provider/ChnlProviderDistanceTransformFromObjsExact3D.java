@@ -42,6 +42,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 // Euclidian distance transform from ImageJ
 //
@@ -49,13 +52,13 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDimSource {
 
 	// START PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean createShort = false;
 	// END PROPERTIES
 	
@@ -87,29 +90,5 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 		}
 		
 		return chnlOut;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public boolean isCreateShort() {
-		return createShort;
-	}
-
-	public void setCreateShort(boolean createShort) {
-		this.createShort = createShort;
 	}
 }
