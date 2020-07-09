@@ -9,7 +9,11 @@ abstract class EDTOneDimension extends EDTDimensionBase {
 	
 	private VoxelBox<FloatBuffer> stack;
 	private FloatBuffer slice;
-	private int offset, lastOffset, rowStride, columnStride, sliceIndex;
+	private int offset;
+	private int lastOffset;
+	private int rowStride;
+	private int columnStride;
+	private int sliceIndex;
 
 	public EDTOneDimension(VoxelBox<FloatBuffer> out, boolean iterateX) {
 		super(iterateX ? out.extent().getX() : out.extent().getY() );

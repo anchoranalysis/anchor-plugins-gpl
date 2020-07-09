@@ -95,7 +95,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		}
 		
 		
-		if (chnl.getDimensions().getExtnt().getZ() > 1 && !suppressZ ) {
+		if (chnl.getDimensions().getExtent().getZ() > 1 && !suppressZ ) {
 			
 			double zRelRes = chnl.getDimensions().getRes().getZRelRes(); 
 			if (Double.isNaN(zRelRes)) {
@@ -111,7 +111,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 			Channel chnlOut = createEmptyChnl( createShort, chnl.getDimensions() );
 			
-			for( int z=0; z<chnl.getDimensions().getExtnt().getZ(); z++ ) {
+			for( int z=0; z<chnl.getDimensions().getExtent().getZ(); z++ ) {
 				BinaryChnl chnlSlice = chnl.extractSlice(z) ;
 				Channel distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
 				chnlOut.getVoxelBox().transferPixelsForPlane( z, distSlice.getVoxelBox(), 0, true );
@@ -134,13 +134,11 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		return createDistanceMapForChnl(mask,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
 	}
 
-	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) throws CreateException {
-		
-		EDT edtPlugin = new EDT();
+	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) {
 		
 		// Assumes X and Y have the same resolution
 		
-		Channel distAsFloat = edtPlugin.compute(
+		Channel distAsFloat = EDT.compute(
 			chnl,
 			ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
 			suppressZ,

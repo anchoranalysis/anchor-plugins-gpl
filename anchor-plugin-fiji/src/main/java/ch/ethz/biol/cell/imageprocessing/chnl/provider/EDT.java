@@ -7,63 +7,65 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-//
-// THIS IS DERIVED FROM Fiji_Plugins.jar in Imagej   EDT.class
-//   The license indicates this particular plugin is GPL/PD (Public Domain)
-//
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-/*
+/**
+ * An Euclidian Distance transform derived from Fiji_Plugins.jar in Imagej
+ * <p>
  * The idea of the Euclidean Distance Transform is to get the
  * distance of every outside pixel to the nearest outside pixel.
- *
+ *<p>
  * We use the algorithm proposed in
-
+<pre>
 	@TECHREPORT{Felzenszwalb04distancetransforms,
 	    author = {Pedro F. Felzenszwalb and Daniel P. Huttenlocher},
 	    title = {Distance transforms of sampled functions},
 	    institution = {Cornell Computing and Information Science},
 	    year = {2004}
 	}
-
+</pre>
  * Felzenszwalb & Huttenlocher's idea is to extend the concept to
  * a broader one, namely to minimize not only the distance to an
  * outside pixel, but to minimize the distance plus a value that
  * depends on the outside pixel.
- *
+ * <p>
  * In mathematical terms: we determine the minimum of the term
- *
- *	g(x) = min(d^2(x, y) + f(y) for all y)
- *
+ * <p>
+ *	<code>g(x) = min(d^2(x, y) + f(y) for all y)</code>
+ * <p>
  * where y runs through all pixels and d^2 is the square of the
  * Euclidean distance. For the Euclidean distance transform, f(y)
  * is 0 for all outside pixels, and infinity for all inside
  * pixels, and the result is the square root of g(x).
- *
+ * <p>
  * The trick is to calculate g in one dimension, store the result,
  * and use it as f(y) in the next dimension. Continue until you
  * covered all dimensions.
- *
+ * <p>
  * In order to find the minimum in one dimension (i.e. row by
  * row), the following fact is exploited: for two different
- * y1 < y2, (x - y1)^2 + f(y1) < (x - y2)^2 + f(y2) for x < s,
+ * <code>y1 < y2, (x - y1)^2 + f(y1) < (x - y2)^2 + f(y2)</code> for <code>x < s</code>,
  * where s is the intersection point of the two parabolae (there
  * is the corner case where one parabola is always lower than
  * the other one, in that case there is no intersection).
- *
+ * <p>
  * Using this fact, for each row of n elements, a maximum number
  * of n parabolae are constructed, adding them one by one for each
  * y, adjusting the range of x for which this y yields the minimum,
  * possibly overriding a number of previously added parabolae.
- *
+ * <p>
  * At most n parabolae can be added, so the complexity is still
  * linear.
- *
+ * <p>
  * After this step, the list of parabolae is iterated to calculate
  * the values for g(x).
+ * <p>
+ * The license in FIJI indicates this particular plugin is GPL/PD (Public Domain).
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EDT  {
-
-	public Channel compute( BinaryChnl chnl, ChannelFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) {
+	public static Channel compute( BinaryChnl chnl, ChannelFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) {
 		
 		Channel result = factory.createEmptyInitialised( chnl.getDimensions() );
 		

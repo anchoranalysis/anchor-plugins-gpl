@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.ml.bean;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -99,7 +98,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		}
 	}
 	
-	private FeatureNameList readFeatureNames( Path filePath ) throws FileNotFoundException, IOException {
+	private FeatureNameList readFeatureNames( Path filePath ) throws IOException {
 		
 		FeatureNameList out = new FeatureNameList();
 		
@@ -178,7 +177,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		List<FirstSecondOrderStatistic> listStats
 	) throws OperationFailedException {
 		
-		List<String> missing = new ArrayList<String>();
+		List<String> missing = new ArrayList<>();
 		assert( listStats.size()==featureNames.size() );
 		
 		try {
