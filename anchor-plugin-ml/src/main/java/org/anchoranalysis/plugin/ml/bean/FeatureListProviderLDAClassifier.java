@@ -93,7 +93,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 				continue;
 			}
 			
-			if (getSharedObjects().getSharedFeatureSet().keys().contains(name)) {
+			if (getInitializationParameters().getSharedFeatureSet().keys().contains(name)) {
 				list.add(name);
 			}
 		}
@@ -117,7 +117,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 					continue;
 				}
 				
-				Feature<T> feature = getSharedObjects().getSharedFeatureSet().getException(name).downcast();
+				Feature<T> feature = getInitializationParameters().getSharedFeatureSet().getException(name).downcast();
 				sum.getList().add(
 					new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
 				);

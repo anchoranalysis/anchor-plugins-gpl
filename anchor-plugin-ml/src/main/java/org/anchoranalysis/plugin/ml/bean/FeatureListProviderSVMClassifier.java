@@ -83,9 +83,6 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	@Override
 	public FeatureList<FeatureInput> create() throws CreateException {
 		
-		assert( getSharedObjects()!=null );
-		assert( getSharedObjects().getSharedFeatureSet()!=null );
-		
 		try {
 			Path fileSVM = filePathProviderSVM.create();
 				
@@ -167,7 +164,7 @@ public class FeatureListProviderSVMClassifier extends FeatureListProviderReferen
 	
 			return listFromNames(
 				featureNames,
-				getSharedObjects().getSharedFeatureSet(),
+				getInitializationParameters().getSharedFeatureSet(),
 				listStats
 			);
 		} catch (CSVReaderException | IOException e) {
