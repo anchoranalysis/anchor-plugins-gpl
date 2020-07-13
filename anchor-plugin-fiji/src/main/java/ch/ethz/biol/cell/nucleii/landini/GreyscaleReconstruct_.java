@@ -136,19 +136,19 @@ public class GreyscaleReconstruct_ implements PlugIn {
 	* @return an Object[] array with the name and the scaled ImagePlus.
 	* Does NOT show the new, image; just returns it. */
 	 @SuppressWarnings("unused")
-	public Object[] exec(ImagePlus imp1, ImagePlus imp2, String new_name, boolean createWindow, boolean connect4) {
+	public Object[] exec(ImagePlus imp1, ImagePlus imp2, String new_name, boolean createWindow, boolean connect4) {	// NOSONAR
 
 		// 0 - Check validity of parameters
-		if (null == imp1) return null;
-		if (null == imp2) return null;
+		if (null == imp1) return null;	// NOSONAR
+		if (null == imp2) return null;	// NOSONAR
 		if (null == new_name) new_name = imp2.getTitle();
  
 		int width  = imp1.getWidth();
 		int height = imp1.getHeight();
-		ImageProcessor ip1, ip2, ip3, ip4, ip5;
-		ImagePlus imp3, imp4, imp5;
+		ImageProcessor ip1, ip2, ip3, ip4, ip5;		// NOSONAR
+		ImagePlus imp3, imp4, imp5;	// NOSONAR
 		ImageStatistics stats;
-		int i, j, x, y, size;
+		int i, j, x, y, size;	// NOSONAR
 		byte b_0 = (byte) (0 & 0xff);
 		byte b_255 = (byte) (255 & 0xff);
 		IJ.showStatus("Greyscale Reconstruction...");

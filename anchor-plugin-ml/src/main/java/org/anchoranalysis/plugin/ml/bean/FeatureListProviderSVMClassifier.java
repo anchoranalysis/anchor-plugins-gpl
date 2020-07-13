@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.ml.bean;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -59,36 +58,37 @@ import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 
 import libsvm.svm;
 import libsvm.svm_model;
+import lombok.Getter;
+import lombok.Setter;
 
-public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends FeatureListProviderReferencedFeatures<FeatureInput> {
+public class FeatureListProviderSVMClassifier extends FeatureListProviderReferencedFeatures<FeatureInput> {
 
 	private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePathProvider filePathProviderSVM;
 	
 	/**
 	 * Normalize features
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean normalizeFeatures = true;
 	
 	// Multiples the decision value by -1.  Useful for when the feature is used in a minimization/maximization routine.
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean invertDecisionValue = false;
 	// END BEAN PROPERTIES
 
 	@Override
 	public FeatureList<FeatureInput> create() throws CreateException {
 		
-		assert( getSharedObjects()!=null );
-		assert( getSharedObjects().getSharedFeatureSet()!=null );
-		
 		try {
 			Path fileSVM = filePathProviderSVM.create();
 				
-			FeatureList<FeatureInput> features = findModelFeatures( fileSVM );
+			FeatureList<FeatureInput> features = findModelFeatures(
+				filePathProviderSVM.create()
+			);
 			
 			return FeatureListFactory.from(
 				buildClassifierFeature(fileSVM, features)
@@ -99,7 +99,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		}
 	}
 	
-	private FeatureNameList readFeatureNames( Path filePath ) throws FileNotFoundException, IOException {
+	private FeatureNameList readFeatureNames( Path filePath ) throws IOException {
 		
 		FeatureNameList out = new FeatureNameList();
 		
@@ -164,7 +164,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 	
 			return listFromNames(
 				featureNames,
-				getSharedObjects().getSharedFeatureSet(),
+				getInitializationParameters().getSharedFeatureSet(),
 				listStats
 			);
 		} catch (CSVReaderException | IOException e) {
@@ -178,7 +178,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 		List<FirstSecondOrderStatistic> listStats
 	) throws OperationFailedException {
 		
-		List<String> missing = new ArrayList<String>();
+		List<String> missing = new ArrayList<>();
 		assert( listStats.size()==featureNames.size() );
 		
 		try {
@@ -194,7 +194,7 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 				)
 			);
 			
-			if (missing.size()>0) {
+			if (!missing.isEmpty()) {
 				// Embed exception
 				throw MissingFeaturesUtilities.createExceptionForMissingStrings(missing);
 			}
@@ -219,64 +219,26 @@ public class FeatureListProviderSVMClassifier<T extends FeatureInput> extends Fe
 			return Optional.empty();
 		}
 	}
-
 	
-	private Feature<FeatureInput> maybeNormalise( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
+	private <S extends FeatureInput> Feature<S> maybeNormalise( Feature<S> feature, FirstSecondOrderStatistic stat ) {
 		if (normalizeFeatures) {
 			return createScaledFeature(feature,stat);
 		} else {
 			return feature;
 		}
 	}
-	
-	
-	private Feature<FeatureInput> createScaledFeature( Feature<FeatureInput> feature, FirstSecondOrderStatistic stat ) {
 		
-		ZScore<FeatureInput> featureNormalized = new ZScore<>();
-
+	private <S extends FeatureInput> Feature<S> createScaledFeature( Feature<S> feature, FirstSecondOrderStatistic stat ) {
+		
+		ZScore<S> featureNormalized = new ZScore<>();
 		featureNormalized.setItem( feature );
-		
 		featureNormalized.setItemMean(
 			new Constant<>("mean", stat.getMean())
 		);
-		
 		featureNormalized.setItemStdDev(
 			new Constant<>("stdDev", stat.getScale())
 		);
-		
 		featureNormalized.setCustomName( feature.getCustomName() + " (scaled)");
 		return featureNormalized;
-	}
-
-	public FilePathProvider getFileProviderSVM() {
-		return filePathProviderSVM;
-	}
-
-	public void setFileProviderSVM(FilePathProvider fileProviderSVM) {
-		this.filePathProviderSVM = fileProviderSVM;
-	}
-
-	public boolean isNormalizeFeatures() {
-		return normalizeFeatures;
-	}
-
-	public void setNormalizeFeatures(boolean normalizeFeatures) {
-		this.normalizeFeatures = normalizeFeatures;
-	}
-
-	public boolean isInvertDecisionValue() {
-		return invertDecisionValue;
-	}
-
-	public void setInvertDecisionValue(boolean invertDecisionValue) {
-		this.invertDecisionValue = invertDecisionValue;
-	}
-
-	public FilePathProvider getFilePathProviderSVM() {
-		return filePathProviderSVM;
-	}
-
-	public void setFilePathProviderSVM(FilePathProvider filePathProviderSVM) {
-		this.filePathProviderSVM = filePathProviderSVM;
 	}
 }

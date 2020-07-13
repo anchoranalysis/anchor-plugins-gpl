@@ -23,12 +23,6 @@
 	      <artifactId>metakit</artifactId>
 	      <version>${metakit.version}</version>
 	    </dependency>
-	    
-	    <!--<dependency>
-	      <groupId>ome</groupId>
-	      <artifactId>turbojpeg</artifactId>
-	      <version>5.1.1</version>
-	    </dependency>-->
 	    	    
 	</dependencies>
 	

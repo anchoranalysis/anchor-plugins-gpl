@@ -47,29 +47,38 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
-// TODO LICENSE LICENSE LICENSE
+import lombok.Getter;
+import lombok.Setter;
 
-// Euclidian distance transform from ImageJ
-//
-// Does not re-use the binary image
-//
-// Uses the aspect ratio (relative distance between z and xy slices)
+
+/**
+ * Euclidian Distance Transform from ImageJ that works on 2D as well as 3D z-stacks.
+ * <p>
+ * See <a href="https://en.wikipedia.org/wiki/Distance_transform">Distance transform on Wikipedia</a>.
+ * <p>
+ * A new channel is always created i.e. the input channel is unchanged.
+ * <p>
+ * The plugin uses aspect ratio (relative distance between z and xy slices) in its distance calculations.
+ *  
+ * @author Owen Feehan
+ *
+ */
 public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
 	// START PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double multiplyBy = 1.0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double multiplyByZRes = 1.0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean createShort = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean applyRes = false;
 	// END PROPERTIES
 	
@@ -95,7 +104,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		}
 		
 		
-		if (chnl.getDimensions().getExtnt().getZ() > 1 && !suppressZ ) {
+		if (chnl.getDimensions().getExtent().getZ() > 1 && !suppressZ ) {
 			
 			double zRelRes = chnl.getDimensions().getRes().getZRelRes(); 
 			if (Double.isNaN(zRelRes)) {
@@ -111,7 +120,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 			Channel chnlOut = createEmptyChnl( createShort, chnl.getDimensions() );
 			
-			for( int z=0; z<chnl.getDimensions().getExtnt().getZ(); z++ ) {
+			for( int z=0; z<chnl.getDimensions().getExtent().getZ(); z++ ) {
 				BinaryChnl chnlSlice = chnl.extractSlice(z) ;
 				Channel distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
 				chnlOut.getVoxelBox().transferPixelsForPlane( z, distSlice.getVoxelBox(), 0, true );
@@ -134,13 +143,11 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		return createDistanceMapForChnl(mask,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
 	}
 
-	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) throws CreateException {
-		
-		EDT edtPlugin = new EDT();
+	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) {
 		
 		// Assumes X and Y have the same resolution
 		
-		Channel distAsFloat = edtPlugin.compute(
+		Channel distAsFloat = EDT.compute(
 			chnl,
 			ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
 			suppressZ,
@@ -155,45 +162,5 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
 		ChannelConverter<?> converter = createShort ? new ChannelConverterToUnsignedShort() : new ChannelConverterToUnsignedByte();
 		return converter.convert(distAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
-
-	public double getMultiplyBy() {
-		return multiplyBy;
-	}
-
-	public void setMultiplyBy(double multiplyBy) {
-		this.multiplyBy = multiplyBy;
-	}
-
-	public double getMultiplyByZRes() {
-		return multiplyByZRes;
-	}
-
-	public void setMultiplyByZRes(double multiplyByZRes) {
-		this.multiplyByZRes = multiplyByZRes;
-	}
-
-	public boolean isCreateShort() {
-		return createShort;
-	}
-
-	public void setCreateShort(boolean createShort) {
-		this.createShort = createShort;
-	}
-
-	public boolean isApplyRes() {
-		return applyRes;
-	}
-
-	public void setApplyRes(boolean applyRes) {
-		this.applyRes = applyRes;
 	}
 }

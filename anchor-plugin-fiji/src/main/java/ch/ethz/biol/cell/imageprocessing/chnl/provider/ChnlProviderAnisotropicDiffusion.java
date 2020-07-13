@@ -70,7 +70,7 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Channel diffusion( Channel chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D ) throws CreateException {
 		
-		Extent e = chnl.getDimensions().getExtnt();
+		Extent e = chnl.getDimensions().getExtent();
 		try {
 			if (do3D) {
 				Img img = ImgLib2Wrap.wrap( chnl.getVoxelBox() );
@@ -89,7 +89,7 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 		}
 	}
 	
-	private static <T extends RealType<T>> void doDiffusion( Img<T> img, double deltat, DiffusionFunction df, int iterations ) throws IncompatibleTypeException {
+	private static <T extends RealType<T>> void doDiffusion( Img<T> img, double deltat, DiffusionFunction df, int iterations ) {
 		for( int i=0; i<iterations; i++) {
 			PeronaMalikAnisotropicDiffusion.inFloatInPlace(img, deltat, df );
 		}

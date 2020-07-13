@@ -97,7 +97,7 @@ public class BinaryReconstruct_ implements PlugIn {
 		// 1 - Obtain the currently active image if necessary:
 
                 // 2 - Ask for parameters:
-		boolean createWindow = true, whiteParticles =Prefs.blackBackground, connect4=false;
+		boolean createWindow = true, whiteParticles =Prefs.blackBackground, connect4=false;	// NOSONAR
 		GenericDialog gd = new GenericDialog("Binary Reconstruction");
 		gd.addMessage("Binary Reconstruction v 2.2");
 		gd.addChoice("mask :", titles, titles[0]);
@@ -166,7 +166,7 @@ public class BinaryReconstruct_ implements PlugIn {
 	*  so careful when calling this method from another plugin. Make sure both images are binary!!
 	* Does NOT show the new, image; just returns it. */
 	 @SuppressWarnings("unused")
-	public Object[] exec(ImagePlus imp1, ImagePlus imp2, String new_name, boolean createWindow, boolean whiteParticles, boolean connect4) {
+	public Object[] exec(ImagePlus imp1, ImagePlus imp2, String new_name, boolean createWindow, boolean whiteParticles, boolean connect4) {	// NOSONAR
 
 		// 0 - Check validity of parameters
 		if (null == imp1) return null;
@@ -176,12 +176,12 @@ public class BinaryReconstruct_ implements PlugIn {
 		int width  = imp1.getWidth();
 		int height = imp1.getHeight();
 		int size = width * height;
-		ImageProcessor ip1, ip3;
+		ImageProcessor ip1, ip3;	// NOSONAR
 		ImagePlus imp3;
 
-		int x, y, offset, pointer;
-		int foreground = 255, background = 0;
-		byte bf =  (byte) 0xff, bb = (byte) 0, b127= (byte) (127 & 0xff);
+		int x, y, offset, pointer;	// NOSONAR
+		int foreground = 255, background = 0;	// NOSONAR
+		byte bf =  (byte) 0xff, bb = (byte) 0, b127= (byte) (127 & 0xff);	// NOSONAR
 
 		IJ.showStatus("Binary Reconstruction...");
 
@@ -199,8 +199,8 @@ public class BinaryReconstruct_ implements PlugIn {
 
 		if (!whiteParticles) { 
 			foreground = 0;
-			background = 255;
-			bf= (byte) 0;
+			background = 255;	// NOSONAR
+			bf= (byte) 0;	// NOSONAR
 			bb=(byte) 0xff;
 		}
 

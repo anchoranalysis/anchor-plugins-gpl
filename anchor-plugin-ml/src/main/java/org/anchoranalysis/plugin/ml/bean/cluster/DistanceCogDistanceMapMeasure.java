@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.util.MathArrays;
 
@@ -57,7 +56,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	}
 
 	@Override
-	public double compute(double[] a, double[] b) throws DimensionMismatchException {
+	public double compute(double[] a, double[] b) {
 		
 		try {
 			// The first three indices are the 3D cog
@@ -100,9 +99,6 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 		
 		// We measure the voxel distance between the points
 		double distVoxels = MathArrays.distance( extractPnt(a), extractPnt(b) );
-		
-		//System.out.printf("maxDistVox=%f  distVoxels=%f%n", maxDistVoxels, distVoxels);
-		
 		return distVoxels/maxDistVoxels;
 	}
 	
@@ -115,7 +111,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	}
 			
 	/** Converts a double-array (first three elements) to a 3d point */
-	private static Point3d convert( double arr[] ) {
+	private static Point3d convert( double[] arr ) {
 		return new Point3d( arr[0], arr[1], arr[2] );
 	}
 }

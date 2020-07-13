@@ -83,7 +83,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 
 	private void checkForMissingFeatures( KeyValueParams kpv ) throws CreateException {
 		
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		
 		// For now let's just check all the feature are present
 		for( String name : kpv.keySet() ) {
@@ -93,12 +93,12 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 				continue;
 			}
 			
-			if (getSharedObjects().getSharedFeatureSet().keys().contains(name)) {
+			if (getInitializationParameters().getSharedFeatureSet().keys().contains(name)) {
 				list.add(name);
 			}
 		}
 		
-		if (list.size()>0) {
+		if (!list.isEmpty()) {
 			throw MissingFeaturesUtilities.createExceptionForMissingStrings( list );
 		}
 	}
@@ -117,7 +117,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput> extends Fe
 					continue;
 				}
 				
-				Feature<T> feature = getSharedObjects().getSharedFeatureSet().getException(name).downcast();
+				Feature<T> feature = getInitializationParameters().getSharedFeatureSet().getException(name).downcast();
 				sum.getList().add(
 					new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name))
 				);

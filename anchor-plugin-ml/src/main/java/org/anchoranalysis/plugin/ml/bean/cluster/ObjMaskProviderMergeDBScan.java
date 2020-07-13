@@ -71,19 +71,15 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	public ObjectCollection createFromObjs(ObjectCollection objsToMerge) throws CreateException {
 				
 		try {
-			return mergeMultiplex(
-				objsToMerge,
-				b -> clusterAndMerge(b)
-			);
+			return mergeMultiplex(objsToMerge, this::clusterAndMerge);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
 	private ObjectCollection clusterAndMerge( ObjectCollection objs ) throws OperationFailedException {
-			
-	
-		DBSCANClusterer<ObjMaskWithCOG> clusterer = new DBSCANClusterer<ObjMaskWithCOG>(
+				
+		DBSCANClusterer<ObjMaskWithCOG> clusterer = new DBSCANClusterer<>(
 			1.0,	// Maximum distance allowed to merge points
 			0,	// Ensures no object is discarded as "noise"
 			new DistanceCogDistanceMapMeasure(
