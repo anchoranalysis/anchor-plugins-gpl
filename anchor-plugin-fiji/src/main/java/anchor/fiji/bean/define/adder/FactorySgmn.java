@@ -29,14 +29,14 @@ package anchor.fiji.bean.define.adder;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
-import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.MinimaImpositionGrayscaleReconstruction;
-import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
-import org.anchoranalysis.plugin.image.bean.sgmn.watershed.yeong.ObjMaskSgmnWatershedYeong;
+import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.ImposeMinima;
+import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.MinimaImpositionGrayscaleReconstruction;
+import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
+import org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong.WatershedYeong;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSgmn;
-import ch.ethz.biol.cell.sgmn.objmask.ObjMaskSgmnMinimaImposition;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -66,16 +66,16 @@ class FactorySgmn {
 		return provider;
 	}
 		
-	private static ObjectSegmentation watershedSgmnForMinima() {
-		ObjMaskSgmnWatershedYeong sgmn = new ObjMaskSgmnWatershedYeong();
+	private static SegmentChannelIntoObjects watershedSgmnForMinima() {
+		WatershedYeong sgmn = new WatershedYeong();
 		sgmn.setExitWithMinima(true);
 		return sgmn;
 	}
 	
-	private static ObjectSegmentation watershedSgmnForSegments() {
+	private static SegmentChannelIntoObjects watershedSgmnForSegments() {
 		
-		ObjMaskSgmnMinimaImposition impose = new ObjMaskSgmnMinimaImposition();
-		impose.setSgmn( new ObjMaskSgmnWatershedYeong() );
+		ImposeMinima impose = new ImposeMinima();
+		impose.setSegment( new WatershedYeong() );
 		impose.setMinimaImposition( minimaImposion() );
 		return impose;
 
