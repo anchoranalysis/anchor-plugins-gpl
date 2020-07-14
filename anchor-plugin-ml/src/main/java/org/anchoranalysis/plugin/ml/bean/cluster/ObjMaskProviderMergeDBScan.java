@@ -42,6 +42,9 @@ import org.anchoranalysis.plugin.image.bean.obj.merge.ObjMaskProviderMergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Merges objects using the DBScan clustering algorithm based on:
@@ -55,31 +58,31 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 
 	// START BEAN PROPERTIES
 	/** A distance map which can also be used for making decisions on merging */
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider distanceMapProvider;
 	
 	/** The maximum distance allowed between center-of-gravities of objects */
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistCOG;			// provides a maximum distance for a single step (eps). This is resolved in XY plane (assuming isotropy)
 	
 	/** The maximum distance allowed between the 'distance from contour' values provided from the distanceMap for each point. */
-	@BeanField
+	@BeanField @Getter @Setter
 	private double maxDistDeltaContour = Double.MAX_VALUE;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsToMerge) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectsToMerge) throws CreateException {
 				
 		try {
-			return mergeMultiplex(objsToMerge, this::clusterAndMerge);
+			return mergeMultiplex(objectsToMerge, this::clusterAndMerge);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
-	private ObjectCollection clusterAndMerge( ObjectCollection objs ) throws OperationFailedException {
+	private ObjectCollection clusterAndMerge(ObjectCollection objects) throws OperationFailedException {
 				
-		DBSCANClusterer<ObjMaskWithCOG> clusterer = new DBSCANClusterer<>(
+		DBSCANClusterer<ObjectMaskPlus> clusterer = new DBSCANClusterer<>(
 			1.0,	// Maximum distance allowed to merge points
 			0,	// Ensures no object is discarded as "noise"
 			new DistanceCogDistanceMapMeasure(
@@ -92,7 +95,7 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 		try {
 			Channel distanceMap = distanceMapProvider.create();
 					
-			List<Cluster<ObjMaskWithCOG>> clusters = clusterer.cluster( convert(objs, distanceMap) );
+			List<Cluster<ObjectMaskPlus>> clusters = clusterer.cluster( convert(objects, distanceMap) );
 			return mergeClusters(clusters);
 			
 		} catch (CreateException e) {
@@ -101,14 +104,14 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 	
 	}
 	
-	private Collection<ObjMaskWithCOG> convert( ObjectCollection objs, Channel distanceMap ) {
-		return objs.stream().mapToList( c ->
-			new ObjMaskWithCOG(c, distanceMap, getLogger()  )
+	private Collection<ObjectMaskPlus> convert( ObjectCollection objects, Channel distanceMap ) {
+		return objects.stream().mapToList(objectMask ->
+			new ObjectMaskPlus(objectMask, distanceMap, getLogger()  )
 		);
 	}
 	
 	private static ObjectCollection mergeClusters(
-		List<Cluster<ObjMaskWithCOG>> clusters
+		List<Cluster<ObjectMaskPlus>> clusters
 	) throws OperationFailedException {
 		return ObjectCollectionFactory.mapFrom(
 			clusters,
@@ -116,37 +119,13 @@ public class ObjMaskProviderMergeDBScan extends ObjMaskProviderMergeBase {
 		);
 	}
 	
-	private static ObjectMask mergeCluster( Cluster<ObjMaskWithCOG> cluster ) throws OperationFailedException {
+	private static ObjectMask mergeCluster( Cluster<ObjectMaskPlus> cluster ) throws OperationFailedException {
 		return ObjectMaskMerger.merge(
 			convert(cluster.getPoints())
 		);
 	}
 	
-	private static ObjectCollection convert( Collection<ObjMaskWithCOG> objs ) {
-		return ObjectCollectionFactory.mapFrom(objs, ObjMaskWithCOG::getObjectMask);
-	}
-
-	public ChnlProvider getDistanceMapProvider() {
-		return distanceMapProvider;
-	}
-
-	public void setDistanceMapProvider(ChnlProvider distanceMapProvider) {
-		this.distanceMapProvider = distanceMapProvider;
-	}
-
-	public UnitValueDistance getMaxDistCOG() {
-		return maxDistCOG;
-	}
-
-	public void setMaxDistCOG(UnitValueDistance maxDistCOG) {
-		this.maxDistCOG = maxDistCOG;
-	}
-
-	public double getMaxDistDeltaContour() {
-		return maxDistDeltaContour;
-	}
-
-	public void setMaxDistDeltaContour(double maxDistDeltaContour) {
-		this.maxDistDeltaContour = maxDistDeltaContour;
+	private static ObjectCollection convert( Collection<ObjectMaskPlus> objects ) {
+		return ObjectCollectionFactory.mapFrom(objects, ObjectMaskPlus::getObject);
 	}
 }

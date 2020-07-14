@@ -45,6 +45,8 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDuplicate;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderBlur;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
+import lombok.Getter;
+import lombok.Setter;
 
 import static anchor.fiji.bean.define.adder.FactoryOther.*;
 import static anchor.fiji.bean.define.adder.FactorySgmn.*;
@@ -83,25 +85,25 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	
 	// START BEAN PROPERTIES
 	/** The ID of the binary input mask that determines the region of the watershed */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String binaryInputChnlID;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueVolume minVolumeConnectedComponent = new UnitValueVolumeVoxels(1);
 	
 	/** Multiplies the distance transform by this factor to make it more meaningful in a short */
-	@BeanField
+	@BeanField @Getter @Setter
 	private double distanceTransformMultiplyBy = 1.0;
 
 	/** If non-zero, a Gaussian blur is applied to the distance transform using the sigma in meters below */
-	@BeanField
+	@BeanField @Getter @Setter
 	private double distanceTransformSmoothSigmaMeters = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistanceBetweenMinima;
 	
 	/** The maximum distance allowed between two seeds in terms of their values in the distance map */
-	@BeanField
+	@BeanField @Getter @Setter
 	private double maxDistanceDeltaContour = Double.MAX_VALUE;
 	// END BEAN PROPERTIES
 	
@@ -124,7 +126,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	
 	private void addSegments(Define define) throws BeanXmlException {
 		addWithName(define, SEGMENTS,
-			watershedSegment( objs(CONNECTED_INPUT), objs(SEEDS), chnl(DISTANCE_TRANSFORM) )
+			watershedSegment( objects(CONNECTED_INPUT), objects(SEEDS), channel(DISTANCE_TRANSFORM) )
 		);
 	}
 	
@@ -147,7 +149,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		}
 		
 		addWithName(define, DISTANCE_TRANSFORM,
-			distanceTransformAfterInvert( duplicateChnl(srcForInversion()) )
+			distanceTransformAfterInvert( duplicateChnl(sourceForInversion()) )
 		);
 	}
 	
@@ -155,7 +157,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		return distanceTransformSmoothSigmaMeters > 0;
 	}
 	
-	private String srcForInversion() {
+	private String sourceForInversion() {
 		if (isDistanceTransformSmoothed()) {
 			return DISTANCE_TRANSFORM_SMOOTH;
 		} else {
@@ -181,15 +183,15 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	
 	private void addSeedFinding(Define define) throws BeanXmlException {
 		addWithName(define, MINIMA_UNMERGED,
-			minimaUnmerged( inputMask(), chnl(DISTANCE_TRANSFORM) )
+			minimaUnmerged( inputMask(), channel(DISTANCE_TRANSFORM) )
 		);
 		
 		addWithName(define, MINIMA_MERGED,
 			mergeMinima(
-				objs(MINIMA_UNMERGED),
-				objs(CONNECTED_INPUT),
+				objects(MINIMA_UNMERGED),
+				objects(CONNECTED_INPUT),
 				dimensions(),
-				chnl(DISTANCE_TRANSFORM),
+				channel(DISTANCE_TRANSFORM),
 				maxDistanceBetweenMinima,
 				maxDistanceDeltaContour
 			)
@@ -197,82 +199,33 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 		
 		addWithName(define, SEEDS,
 			seeds(
-				objs(MINIMA_MERGED),
+				objects(MINIMA_MERGED),
 				dimensions()
 			)
 		);
 	}
 		
-	private ChnlProvider chnl( String unresolvedID ) {
+	private ChnlProvider channel( String unresolvedID ) {
 		return new ChnlProviderReference( rslvName(unresolvedID) );		
 	}
 	
 	private ImageDimProvider dimensions() {
 		return dimsFromChnl(
-			chnl(DISTANCE_TRANSFORM)
+			channel(DISTANCE_TRANSFORM)
 		);
 	}
 	
 	private ChnlProvider duplicateChnl( String unresolvedID ) {
 		ChnlProviderDuplicate dup = new ChnlProviderDuplicate();
-		dup.setChnl( chnl(unresolvedID) );
+		dup.setChnl( channel(unresolvedID) );
 		return dup;
 	}
 	
-	private ObjectCollectionProvider objs( String unresolvedID ) {
+	private ObjectCollectionProvider objects( String unresolvedID ) {
 		return new ObjMaskProviderReference( rslvName(unresolvedID) );		
 	}
 	
 	private BinaryChnlProvider inputMask() {
 		return new BinaryChnlProviderReference(binaryInputChnlID);
-	}
-	
-
-	public String getBinaryInputChnlID() {
-		return binaryInputChnlID;
-	}
-
-	public void setBinaryInputChnlID(String binaryInputChnlID) {
-		this.binaryInputChnlID = binaryInputChnlID;
-	}
-
-	public UnitValueVolume getMinVolumeConnectedComponent() {
-		return minVolumeConnectedComponent;
-	}
-
-	public void setMinVolumeConnectedComponent(UnitValueVolume minVolumeConnectedComponent) {
-		this.minVolumeConnectedComponent = minVolumeConnectedComponent;
-	}
-
-	public double getDistanceTransformMultiplyBy() {
-		return distanceTransformMultiplyBy;
-	}
-
-	public void setDistanceTransformMultiplyBy(double distanceTransformMultiplyBy) {
-		this.distanceTransformMultiplyBy = distanceTransformMultiplyBy;
-	}
-
-	public UnitValueDistance getMaxDistanceBetweenMinima() {
-		return maxDistanceBetweenMinima;
-	}
-
-	public void setMaxDistanceBetweenMinima(UnitValueDistance maxDistanceBetweenMinima) {
-		this.maxDistanceBetweenMinima = maxDistanceBetweenMinima;
-	}
-
-	public double getDistanceTransformSmoothSigmaMeters() {
-		return distanceTransformSmoothSigmaMeters;
-	}
-
-	public void setDistanceTransformSmoothSigmaMeters(double distanceTransformSmoothSigmaMeters) {
-		this.distanceTransformSmoothSigmaMeters = distanceTransformSmoothSigmaMeters;
-	}
-
-	public double getMaxDistanceDeltaContour() {
-		return maxDistanceDeltaContour;
-	}
-
-	public void setMaxDistanceDeltaContour(double maxDistanceDeltaContour) {
-		this.maxDistanceDeltaContour = maxDistanceDeltaContour;
 	}
 }

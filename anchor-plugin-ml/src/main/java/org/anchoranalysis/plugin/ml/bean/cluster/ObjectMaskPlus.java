@@ -34,37 +34,45 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
+import lombok.Getter;
+
 /** 
- * Caches some properties of  object mask, and acts as an input to the clustering algorithm. The properties are:
- *   1. center of gravity
- *   2. mean-intensity value at a particular point
+ * Caches some properties of  object mask, and acts as an input to the clustering algorithm.
+ * <p>
+ * The properties are:
+ * <ul>
+ * <li>center of gravity
+ * <li>mean-intensity value at a particular point
+ * </ul>
  * 
  * */
-class ObjMaskWithCOG implements Clusterable {
+class ObjectMaskPlus implements Clusterable {
 
-	private ObjectMask om;
-	private double[] pnts;
+	@Getter
+	private final ObjectMask object;
+	private final double[] points;
 	
-	public ObjMaskWithCOG(ObjectMask om, Channel distanceMap, Logger logger ) {
+	public ObjectMaskPlus(ObjectMask object, Channel distanceMap, Logger logger ) {
 		super();
-		this.om = om;
-		
-		Point3d cogD = om.centerOfGravity();
+		this.object = object;
 		
 		double distanceFromContour;
 		try {
-			distanceFromContour = IntensityMeanCalculator.calcMeanIntensityObjMask(distanceMap, om);
+			distanceFromContour = IntensityMeanCalculator.calcMeanIntensityObject(distanceMap, object);
 		} catch (FeatureCalcException e) {
-			logger.errorReporter().recordError(ObjMaskWithCOG.class, e);
+			logger.errorReporter().recordError(ObjectMaskPlus.class, e);
 			distanceFromContour = Double.NaN;
 		}
 		
-		pnts = arrayFrom(cogD , distanceFromContour );
+		points = arrayFrom(
+			object.centerOfGravity(),
+			distanceFromContour
+		);
 	}
 
 	@Override
 	public double[] getPoint() {
-		return pnts;
+		return points;
 	}
 	
 	private static double[] arrayFrom( Point3d pnt, double distanceFromContour ) {
@@ -74,9 +82,5 @@ class ObjMaskWithCOG implements Clusterable {
 		arr[2] = pnt.getZ();
 		arr[3] = distanceFromContour;
 		return arr;
-	}
-
-	public ObjectMask getObjectMask() {
-		return om;
 	}
 }

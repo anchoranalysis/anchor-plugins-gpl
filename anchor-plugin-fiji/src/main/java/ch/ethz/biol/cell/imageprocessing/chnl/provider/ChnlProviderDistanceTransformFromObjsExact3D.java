@@ -37,7 +37,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -53,7 +52,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 
 	// START PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
@@ -71,10 +70,8 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 		);
 		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
 		
-		ObjectCollection objsCollection = objs.create();
-		
-		for( ObjectMask om : objsCollection ) {
-			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox().duplicate();
+		for( ObjectMask object : objects.create() ) {
+			BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
 			VoxelBox<ByteBuffer> vbDist = ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
 				bvb,
 				chnlOut.getDimensions().getRes(),
@@ -86,7 +83,7 @@ public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDi
 			);
 			
 			BoundingBox bboxSrc = new BoundingBox(vbDist.extent());
-			vbDist.copyPixelsToCheckMask(bboxSrc, vbOut, om.getBoundingBox(), om.getVoxelBox(), om.getBinaryValuesByte());
+			vbDist.copyPixelsToCheckMask(bboxSrc, vbOut, object.getBoundingBox(), object.getVoxelBox(), object.getBinaryValuesByte());
 		}
 		
 		return chnlOut;
