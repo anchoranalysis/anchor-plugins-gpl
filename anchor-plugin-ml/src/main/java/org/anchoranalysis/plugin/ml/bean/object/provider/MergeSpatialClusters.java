@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.ml.bean.cluster;
+package org.anchoranalysis.plugin.ml.bean.object.provider;
 
 /*-
  * #%L
@@ -47,14 +47,18 @@ import lombok.Setter;
 
 
 /**
- * Merges objects using the DBScan clustering algorithm based on:
- * 	- Euclidian distance
- *  - an eps (max distance for neighbourhood connection) where distance is less than maxDist (calculated on XY resolution)
+ * Merges spatially-adjacent objects using the DBScan clustering algorithm
+ * <p>
+ * The features passed to DBScanare based on:
+ * <ul>
+ * <li>Euclidian distance
+ * <li>an @{code eps} (max distance for neighborhood connection) where distance is less than {@code maxDist} (calculated on XY resolution)
+ * </ul>
  *  
  * @author Owen Feehan
  *
  */
-public class ObjMaskProviderMergeDBScan extends MergeBase {
+public class MergeSpatialClusters extends MergeBase {
 
 	// START BEAN PROPERTIES
 	/** A distance map which can also be used for making decisions on merging */
@@ -115,7 +119,7 @@ public class ObjMaskProviderMergeDBScan extends MergeBase {
 	) throws OperationFailedException {
 		return ObjectCollectionFactory.mapFrom(
 			clusters,
-			ObjMaskProviderMergeDBScan::mergeCluster
+			MergeSpatialClusters::mergeCluster
 		);
 	}
 	

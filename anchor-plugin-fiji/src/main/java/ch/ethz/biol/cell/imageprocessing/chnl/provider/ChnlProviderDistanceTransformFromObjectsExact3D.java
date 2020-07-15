@@ -48,7 +48,7 @@ import lombok.Setter;
 // Euclidian distance transform from ImageJ
 //
 // Does not re-use the binary image
-public class ChnlProviderDistanceTransformFromObjsExact3D extends ChnlProviderDimSource {
+public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProviderDimSource {
 
 	// START PROPERTIES
 	@BeanField @Getter @Setter

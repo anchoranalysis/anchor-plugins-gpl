@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.ml.bean.cluster;
+package org.anchoranalysis.plugin.ml.bean.object.provider;
 
 /*
  * #%L

@@ -32,13 +32,13 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.plugin.ml.bean.cluster.ObjMaskProviderMergeDBScan;
+import org.anchoranalysis.plugin.ij.bean.object.provider.DrawLineAlongConvexHull;
+import org.anchoranalysis.plugin.image.bean.object.provider.connected.ConnectedComponentsFromMask;
+import org.anchoranalysis.plugin.ml.bean.object.provider.MergeSpatialClusters;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDistanceTransformExact3D;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderSubtractFromConstant;
 import ch.ethz.biol.cell.imageprocessing.dim.provider.ImageDimProviderFromChnl;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConnectedComponents;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderConvexHullConnectLines;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -56,7 +56,7 @@ class FactoryOther {
 		BinaryChnlProvider source,
 		UnitValueVolume minVolumeConnectedComponent
 	) {
-		ObjMaskProviderConnectedComponents provider = new ObjMaskProviderConnectedComponents();
+		ConnectedComponentsFromMask provider = new ConnectedComponentsFromMask();
 		provider.setMinVolume(minVolumeConnectedComponent);
 		provider.setBinaryChnl( source );
 		return provider;
@@ -95,7 +95,7 @@ class FactoryOther {
 		UnitValueDistance maxDistanceCOG,
 		double maxDistDeltaContour
 	) {
-		ObjMaskProviderMergeDBScan merge = new ObjMaskProviderMergeDBScan(); 
+		MergeSpatialClusters merge = new MergeSpatialClusters(); 
 		merge.setObjects(unmergedMinima);
 		merge.setObjectsContainer(container);
 		merge.setDim(resProvider);
@@ -106,7 +106,7 @@ class FactoryOther {
 	}
 	
 	public static ObjectCollectionProvider seeds( ObjectCollectionProvider mergedMinima, ImageDimProvider dimProvider ) {
-		ObjMaskProviderConvexHullConnectLines provider = new ObjMaskProviderConvexHullConnectLines();
+		DrawLineAlongConvexHull provider = new DrawLineAlongConvexHull();
 		provider.setObjects(mergedMinima);
 		provider.setDim(dimProvider);
 		return provider;

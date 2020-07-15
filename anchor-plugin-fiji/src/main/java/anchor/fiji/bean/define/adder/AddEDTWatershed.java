@@ -39,12 +39,12 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
+import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDuplicate;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderBlur;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -222,7 +222,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	}
 	
 	private ObjectCollectionProvider objects( String unresolvedID ) {
-		return new ObjMaskProviderReference( rslvName(unresolvedID) );		
+		return new Reference( rslvName(unresolvedID) );		
 	}
 	
 	private BinaryChnlProvider inputMask() {

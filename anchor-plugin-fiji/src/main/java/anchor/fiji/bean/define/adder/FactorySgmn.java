@@ -30,13 +30,13 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
+import org.anchoranalysis.plugin.image.bean.object.provider.segment.SegmentChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.segment.SegmentWithSeeds;
 import org.anchoranalysis.plugin.image.bean.object.segment.ImposeMinima;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.MinimaImpositionGrayscaleReconstruction;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong.WatershedYeong;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSeededObjSgmn;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderSgmn;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -50,16 +50,16 @@ import lombok.NoArgsConstructor;
 class FactorySgmn {
 	
 	public static ObjectCollectionProvider minimaUnmerged( BinaryChnlProvider mask, ChnlProvider distanceTransform ) {
-		ObjMaskProviderSgmn provider = new ObjMaskProviderSgmn();
+		SegmentChannel provider = new SegmentChannel();
 		provider.setMask(mask);
 		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForMinima() );
 		return provider;
 	}
 	
-	public static ObjectCollectionProvider watershedSegment( ObjectCollectionProvider sourceObjs, ObjectCollectionProvider seeds, ChnlProvider distanceTransform ) {
-		ObjMaskProviderSeededObjSgmn provider = new ObjMaskProviderSeededObjSgmn();
-		provider.setObjectsSource(sourceObjs);
+	public static ObjectCollectionProvider watershedSegment( ObjectCollectionProvider sourceObjects, ObjectCollectionProvider seeds, ChnlProvider distanceTransform ) {
+		SegmentWithSeeds provider = new SegmentWithSeeds();
+		provider.setObjectsSource(sourceObjects);
 		provider.setObjectsSeeds(seeds);
 		provider.setChnl(distanceTransform);
 		provider.setSgmn( watershedSgmnForSegments() );
