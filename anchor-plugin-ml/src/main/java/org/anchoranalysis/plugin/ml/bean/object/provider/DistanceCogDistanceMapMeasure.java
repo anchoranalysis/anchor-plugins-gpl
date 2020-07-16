@@ -98,16 +98,16 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 		);
 		
 		// We measure the voxel distance between the points
-		double distVoxels = MathArrays.distance( extractPnt(a), extractPnt(b) );
+		double distVoxels = MathArrays.distance( extractPoint(a), extractPoint(b) );
 		return distVoxels/maxDistVoxels;
 	}
 	
-	private static double[] extractPnt( double[] pnt ) {
-		return Arrays.copyOfRange(pnt, 0, 3);
+	private static double[] extractPoint( double[] point ) {
+		return Arrays.copyOfRange(point, 0, 3);
 	}
 	
-	private static double extractContourDistance( double[] pnt ) {
-		return pnt[3];
+	private static double extractContourDistance( double[] point ) {
+		return point[3];
 	}
 			
 	/** Converts a double-array (first three elements) to a 3d point */

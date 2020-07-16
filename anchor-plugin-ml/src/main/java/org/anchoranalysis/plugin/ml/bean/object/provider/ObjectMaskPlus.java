@@ -75,11 +75,11 @@ class ObjectMaskPlus implements Clusterable {
 		return points;
 	}
 	
-	private static double[] arrayFrom( Point3d pnt, double distanceFromContour ) {
+	private static double[] arrayFrom( Point3d point, double distanceFromContour ) {
 		double[] arr = new double[4];
-		arr[0] = pnt.getX();
-		arr[1] = pnt.getY();
-		arr[2] = pnt.getZ();
+		arr[0] = point.getX();
+		arr[1] = point.getY();
+		arr[2] = point.getZ();
 		arr[3] = distanceFromContour;
 		return arr;
 	}
