@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.ml.bean.object.provider;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.plugin.ml.bean.object.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +29,8 @@ package org.anchoranalysis.plugin.ml.bean.object.provider;
 
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,94 +45,87 @@ import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
-import lombok.Getter;
-import lombok.Setter;
-
-
 /**
  * Merges spatially-adjacent objects using the DBScan clustering algorithm
- * <p>
- * The features passed to DBScanare based on:
- * <ul>
- * <li>Euclidian distance
- * <li>an @{code eps} (max distance for neighborhood connection) where distance is less than {@code maxDistanceCOG} (calculated on XY resolution)
- * </ul>
- *  
- * @author Owen Feehan
  *
+ * <p>The features passed to DBScanare based on:
+ *
+ * <ul>
+ *   <li>Euclidian distance
+ *   <li>an @{code eps} (max distance for neighborhood connection) where distance is less than
+ *       {@code maxDistanceCOG} (calculated on XY resolution)
+ * </ul>
+ *
+ * @author Owen Feehan
  */
 public class MergeSpatialClusters extends MergeBase {
 
-	// START BEAN PROPERTIES
-	/** A distance map which can also be used for making decisions on merging */
-	@BeanField @Getter @Setter
-	private ChnlProvider distanceMapProvider;
-	
-	/** The maximum distance allowed between center-of-gravities of objects */
-	@BeanField @Getter @Setter
-	private UnitValueDistance maxDistanceCOG;			// provides a maximum distance for a single step (eps). This is resolved in XY plane (assuming isotropy)
-	
-	/** The maximum distance allowed between the 'distance from contour' values provided from the distanceMap for each point. */
-	@BeanField @Getter @Setter
-	private double maxDistanceDeltaContour = Double.MAX_VALUE;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public ObjectCollection createFromObjects(ObjectCollection objectsToMerge) throws CreateException {
-				
-		try {
-			return mergeMultiplex(objectsToMerge, this::clusterAndMerge);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	private ObjectCollection clusterAndMerge(ObjectCollection objects) throws OperationFailedException {
-				
-		DBSCANClusterer<ObjectMaskPlus> clusterer = new DBSCANClusterer<>(
-			1.0,	// Maximum distance allowed to merge points
-			0,	// Ensures no object is discarded as "noise"
-			new DistanceCogDistanceMapMeasure(
-				calcResRequired(),
-				maxDistanceCOG,
-				maxDistanceDeltaContour
-			)
-		);
-		
-		try {
-			Channel distanceMap = distanceMapProvider.create();
-					
-			List<Cluster<ObjectMaskPlus>> clusters = clusterer.cluster( convert(objects, distanceMap) );
-			return mergeClusters(clusters);
-			
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	
-	}
-	
-	private Collection<ObjectMaskPlus> convert( ObjectCollection objects, Channel distanceMap ) {
-		return objects.stream().mapToList(objectMask ->
-			new ObjectMaskPlus(objectMask, distanceMap, getLogger()  )
-		);
-	}
-	
-	private static ObjectCollection mergeClusters(
-		List<Cluster<ObjectMaskPlus>> clusters
-	) throws OperationFailedException {
-		return ObjectCollectionFactory.mapFrom(
-			clusters,
-			MergeSpatialClusters::mergeCluster
-		);
-	}
-	
-	private static ObjectMask mergeCluster( Cluster<ObjectMaskPlus> cluster ) throws OperationFailedException {
-		return ObjectMaskMerger.merge(
-			convert(cluster.getPoints())
-		);
-	}
-	
-	private static ObjectCollection convert( Collection<ObjectMaskPlus> objects ) {
-		return ObjectCollectionFactory.mapFrom(objects, ObjectMaskPlus::getObject);
-	}
+    // START BEAN PROPERTIES
+    /** A distance map which can also be used for making decisions on merging */
+    @BeanField @Getter @Setter private ChnlProvider distanceMapProvider;
+
+    /** The maximum distance allowed between center-of-gravities of objects */
+    @BeanField @Getter @Setter
+    private UnitValueDistance
+            maxDistanceCOG; // provides a maximum distance for a single step (eps). This is resolved
+    // in XY plane (assuming isotropy)
+
+    /**
+     * The maximum distance allowed between the 'distance from contour' values provided from the
+     * distanceMap for each point.
+     */
+    @BeanField @Getter @Setter private double maxDistanceDeltaContour = Double.MAX_VALUE;
+    // END BEAN PROPERTIES
+
+    @Override
+    public ObjectCollection createFromObjects(ObjectCollection objectsToMerge)
+            throws CreateException {
+
+        try {
+            return mergeMultiplex(objectsToMerge, this::clusterAndMerge);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private ObjectCollection clusterAndMerge(ObjectCollection objects)
+            throws OperationFailedException {
+
+        DBSCANClusterer<ObjectMaskPlus> clusterer =
+                new DBSCANClusterer<>(
+                        1.0, // Maximum distance allowed to merge points
+                        0, // Ensures no object is discarded as "noise"
+                        new DistanceCogDistanceMapMeasure(
+                                calcResRequired(), maxDistanceCOG, maxDistanceDeltaContour));
+
+        try {
+            Channel distanceMap = distanceMapProvider.create();
+
+            List<Cluster<ObjectMaskPlus>> clusters =
+                    clusterer.cluster(convert(objects, distanceMap));
+            return mergeClusters(clusters);
+
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    private Collection<ObjectMaskPlus> convert(ObjectCollection objects, Channel distanceMap) {
+        return objects.stream()
+                .mapToList(objectMask -> new ObjectMaskPlus(objectMask, distanceMap, getLogger()));
+    }
+
+    private static ObjectCollection mergeClusters(List<Cluster<ObjectMaskPlus>> clusters)
+            throws OperationFailedException {
+        return ObjectCollectionFactory.mapFrom(clusters, MergeSpatialClusters::mergeCluster);
+    }
+
+    private static ObjectMask mergeCluster(Cluster<ObjectMaskPlus> cluster)
+            throws OperationFailedException {
+        return ObjectMaskMerger.merge(convert(cluster.getPoints()));
+    }
+
+    private static ObjectCollection convert(Collection<ObjectMaskPlus> objects) {
+        return ObjectCollectionFactory.mapFrom(objects, ObjectMaskPlus::getObject);
+    }
 }

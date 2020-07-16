@@ -1,3 +1,4 @@
+/* (C)2020 */
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 /*
@@ -12,10 +13,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,21 +27,19 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
-
 import ij.ImagePlus;
-import process3d.MinMaxMedian;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
+import process3d.MinMaxMedian;
 
 public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		ImagePlus imp = IJWrap.createImagePlus(chnl);
-		imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-		return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes() );
-	}
+
+    @Override
+    public Channel createFromChnl(Channel chnl) throws CreateException {
+        ImagePlus imp = IJWrap.createImagePlus(chnl);
+        imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
+        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes());
+    }
 }

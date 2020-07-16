@@ -1,3 +1,4 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.ml.bean;
 
 /*-
@@ -12,10 +13,10 @@ package org.anchoranalysis.plugin.ml.bean;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,27 +28,25 @@ package org.anchoranalysis.plugin.ml.bean;
  */
 
 import java.util.List;
-
-import org.anchoranalysis.core.error.CreateException;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.CreateException;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MissingFeaturesUtilities {
-		
-	public static CreateException createExceptionForMissingStrings( List<String> listNames ) {
-		// Then we have at least one missing feature, throw an exception
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append( "The following features referenced in the model are missing:" );
-		sb.append( System.lineSeparator() );
-		
-		for( String featureName : listNames ) {
-			sb.append( featureName );
-			sb.append( System.lineSeparator() );
-		}
 
-		return new CreateException( sb.toString() );		
-	}
+    public static CreateException createExceptionForMissingStrings(List<String> listNames) {
+        // Then we have at least one missing feature, throw an exception
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("The following features referenced in the model are missing:");
+        sb.append(System.lineSeparator());
+
+        for (String featureName : listNames) {
+            sb.append(featureName);
+            sb.append(System.lineSeparator());
+        }
+
+        return new CreateException(sb.toString());
+    }
 }
