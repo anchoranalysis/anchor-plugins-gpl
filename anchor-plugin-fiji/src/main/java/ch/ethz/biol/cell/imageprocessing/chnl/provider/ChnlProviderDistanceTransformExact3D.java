@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -88,13 +88,13 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 				.instance()
 				.get(VoxelDataTypeUnsignedByte.INSTANCE)
 				.create( bvb.getVoxelBox(), res );
-		BinaryChnl binaryChnlIn = new BinaryChnl(chnlIn, bvb.getBinaryValues());
+		Mask binaryChnlIn = new Mask(chnlIn, bvb.getBinaryValues());
 		
 		Channel distanceMap = createDistanceMapForChnl(binaryChnlIn, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes );
 		return distanceMap.getVoxelBox().asByte();
 	}
 	
-	public static Channel createDistanceMapForChnl( BinaryChnl chnl, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
+	public static Channel createDistanceMapForChnl( Mask chnl, boolean suppressZ, double multiplyBy, double multiplyByZRes, boolean createShort, boolean applyRes ) throws CreateException {
 		if( chnl.getBinaryValues().getOnInt()!=255) {
 			throw new CreateException("Binary On must be 255");
 		}
@@ -121,7 +121,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 			Channel chnlOut = createEmptyChnl( createShort, chnl.getDimensions() );
 			
 			for( int z=0; z<chnl.getDimensions().getExtent().getZ(); z++ ) {
-				BinaryChnl chnlSlice = chnl.extractSlice(z) ;
+				Mask chnlSlice = chnl.extractSlice(z) ;
 				Channel distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
 				chnlOut.getVoxelBox().transferPixelsForPlane( z, distSlice.getVoxelBox(), 0, true );
 			}
@@ -139,11 +139,11 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 	}
 	
 	@Override
-	protected Channel createFromMask(BinaryChnl mask) throws CreateException {
+	protected Channel createFromMask(Mask mask) throws CreateException {
 		return createDistanceMapForChnl(mask,suppressZ,multiplyBy,multiplyByZRes,createShort,applyRes);
 	}
 
-	private static Channel createDistanceMapForChnlFromPlugin( BinaryChnl chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) {
+	private static Channel createDistanceMapForChnlFromPlugin( Mask chnl, boolean suppressZ, double multFactor, double multFactorZ, boolean createShort, boolean applyRes ) {
 		
 		// Assumes X and Y have the same resolution
 		

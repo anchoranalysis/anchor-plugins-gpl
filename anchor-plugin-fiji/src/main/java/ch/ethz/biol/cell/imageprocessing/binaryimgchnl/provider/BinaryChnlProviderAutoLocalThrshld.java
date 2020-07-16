@@ -34,7 +34,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -58,7 +58,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Channel chnl) throws CreateException {
+	protected Mask createFromSource(Channel chnl) throws CreateException {
 	
 		chnl = chnl.duplicate();
 		
@@ -85,7 +85,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 			vb.setPixelsForPlane(z, VoxelBufferByte.wrap(arr));
 		}
 	
-		return new BinaryChnl(chnlOut, BinaryValues.getDefault());
+		return new Mask(chnlOut, BinaryValues.getDefault());
 		
 	}
 

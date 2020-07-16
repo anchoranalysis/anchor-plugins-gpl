@@ -2,7 +2,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.FloatBuffer;
 
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
@@ -65,7 +65,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EDT  {
-	public static Channel compute( BinaryChnl chnl, ChannelFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) {
+	public static Channel compute( Mask chnl, ChannelFactorySingleType factory, boolean suppressZ, double multiplyAspectRatio ) {
 		
 		Channel result = factory.createEmptyInitialised( chnl.getDimensions() );
 		
