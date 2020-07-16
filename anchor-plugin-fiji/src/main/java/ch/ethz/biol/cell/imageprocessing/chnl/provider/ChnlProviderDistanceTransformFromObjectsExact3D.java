@@ -72,7 +72,7 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
 		
 		for( ObjectMask object : objects.create() ) {
 			BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
-			VoxelBox<ByteBuffer> vbDist = ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
+			VoxelBox<ByteBuffer> voxelBoxDistance = ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
 				bvb,
 				chnlOut.getDimensions().getRes(),
 				suppressZ,
@@ -82,8 +82,14 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
 				false
 			);
 			
-			BoundingBox bboxSrc = new BoundingBox(vbDist.extent());
-			vbDist.copyPixelsToCheckMask(bboxSrc, vbOut, object.getBoundingBox(), object.getVoxelBox(), object.getBinaryValuesByte());
+			BoundingBox bboxSrc = new BoundingBox(voxelBoxDistance.extent());
+			voxelBoxDistance.copyPixelsToCheckMask(
+				bboxSrc,
+				vbOut,
+				object.getBoundingBox(),
+				object.getVoxelBox(),
+				object.getBinaryValuesByte()
+			);
 		}
 		
 		return chnlOut;

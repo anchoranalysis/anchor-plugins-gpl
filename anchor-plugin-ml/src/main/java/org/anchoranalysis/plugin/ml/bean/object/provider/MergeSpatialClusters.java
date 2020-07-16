@@ -52,7 +52,7 @@ import lombok.Setter;
  * The features passed to DBScanare based on:
  * <ul>
  * <li>Euclidian distance
- * <li>an @{code eps} (max distance for neighborhood connection) where distance is less than {@code maxDist} (calculated on XY resolution)
+ * <li>an @{code eps} (max distance for neighborhood connection) where distance is less than {@code maxDistanceCOG} (calculated on XY resolution)
  * </ul>
  *  
  * @author Owen Feehan
@@ -67,11 +67,11 @@ public class MergeSpatialClusters extends MergeBase {
 	
 	/** The maximum distance allowed between center-of-gravities of objects */
 	@BeanField @Getter @Setter
-	private UnitValueDistance maxDistCOG;			// provides a maximum distance for a single step (eps). This is resolved in XY plane (assuming isotropy)
+	private UnitValueDistance maxDistanceCOG;			// provides a maximum distance for a single step (eps). This is resolved in XY plane (assuming isotropy)
 	
 	/** The maximum distance allowed between the 'distance from contour' values provided from the distanceMap for each point. */
 	@BeanField @Getter @Setter
-	private double maxDistDeltaContour = Double.MAX_VALUE;
+	private double maxDistanceDeltaContour = Double.MAX_VALUE;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -91,8 +91,8 @@ public class MergeSpatialClusters extends MergeBase {
 			0,	// Ensures no object is discarded as "noise"
 			new DistanceCogDistanceMapMeasure(
 				calcResRequired(),
-				maxDistCOG,
-				maxDistDeltaContour
+				maxDistanceCOG,
+				maxDistanceDeltaContour
 			)
 		);
 		

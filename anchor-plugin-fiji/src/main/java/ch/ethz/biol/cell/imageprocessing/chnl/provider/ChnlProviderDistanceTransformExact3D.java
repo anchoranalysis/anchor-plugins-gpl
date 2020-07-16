@@ -106,7 +106,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 		if (chnl.getDimensions().getExtent().getZ() > 1 && !suppressZ ) {
 			
-			double zRelRes = chnl.getDimensions().getRes().getZRelRes(); 
+			double zRelRes = chnl.getDimensions().getRes().getZRelativeResolution(); 
 			if (Double.isNaN(zRelRes)) {
 				throw new CreateException("Z-resolution is NaN");
 			}
@@ -122,8 +122,8 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 			
 			for( int z=0; z<chnl.getDimensions().getExtent().getZ(); z++ ) {
 				Mask chnlSlice = chnl.extractSlice(z) ;
-				Channel distSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
-				chnlOut.getVoxelBox().transferPixelsForPlane( z, distSlice.getVoxelBox(), 0, true );
+				Channel distanceSlice = createDistanceMapForChnlFromPlugin(chnlSlice, true,multiplyBy, multiplyByZRes, createShort, applyRes );
+				chnlOut.getVoxelBox().transferPixelsForPlane( z, distanceSlice.getVoxelBox(), 0, true );
 			}
 			
 			return chnlOut;
@@ -147,7 +147,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		
 		// Assumes X and Y have the same resolution
 		
-		Channel distAsFloat = EDT.compute(
+		Channel distanceAsFloat = EDT.compute(
 			chnl,
 			ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
 			suppressZ,
@@ -155,12 +155,12 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 		);
 		
 		if (applyRes) {
-			distAsFloat.getVoxelBox().any().multiplyBy(multFactor * chnl.getDimensions().getRes().getX() );
+			distanceAsFloat.getVoxelBox().any().multiplyBy(multFactor * chnl.getDimensions().getRes().getX() );
 		} else {
-			distAsFloat.getVoxelBox().any().multiplyBy(multFactor);
+			distanceAsFloat.getVoxelBox().any().multiplyBy(multFactor);
 		}
 
 		ChannelConverter<?> converter = createShort ? new ChannelConverterToUnsignedShort() : new ChannelConverterToUnsignedByte();
-		return converter.convert(distAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+		return converter.convert(distanceAsFloat,ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 	}
 }

@@ -93,15 +93,15 @@ class FactoryOther {
 		ImageDimProvider resProvider,
 		ChnlProvider sourceDistanceMapProvider,
 		UnitValueDistance maxDistanceCOG,
-		double maxDistDeltaContour
+		double maxDistanceDeltaContour
 	) {
 		MergeSpatialClusters merge = new MergeSpatialClusters(); 
 		merge.setObjects(unmergedMinima);
 		merge.setObjectsContainer(container);
 		merge.setDim(resProvider);
 		merge.setDistanceMapProvider(sourceDistanceMapProvider);
-		merge.setMaxDistCOG(maxDistanceCOG);
-		merge.setMaxDistDeltaContour(maxDistDeltaContour);
+		merge.setMaxDistanceCOG(maxDistanceCOG);
+		merge.setMaxDistanceDeltaContour(maxDistanceDeltaContour);
 		return merge;
 	}
 	

@@ -37,6 +37,9 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.util.MathArrays;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 
 	/**
@@ -44,16 +47,9 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private ImageResolution res;
-	private UnitValueDistance maxDist;
-	private double maxDistDeltaContour;
-			
-	public DistanceCogDistanceMapMeasure(ImageResolution res, UnitValueDistance maxDist, double maxDistDeltaContour) {
-		super();
-		this.res = res;
-		this.maxDist = maxDist;
-		this.maxDistDeltaContour = maxDistDeltaContour;
-	}
+	private final ImageResolution res;
+	private final UnitValueDistance maxDistance;
+	private final double maxDistanceDeltaContour;
 
 	@Override
 	public double compute(double[] a, double[] b) {
@@ -61,22 +57,22 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 		try {
 			// The first three indices are the 3D cog
 			// The fourth index is the distance-map value (i.e. distance from the contour)
-			double distCOG = normalisedDistanceCOG(a,b);
+			double distanceCOG = normalisedDistanceCOG(a,b);
 			
 			// The difference in distances-from-the-countour (from the distance map) between the two points
-			double distDeltaDistanceContour = normalisedDistanceDeltaContour(a, b);
+			double distanceDeltaDistanceContour = normalisedDistanceDeltaContour(a, b);
 			
-			return Math.max(distCOG, distDeltaDistanceContour);
+			return Math.max(distanceCOG, distanceDeltaDistanceContour);
 		} catch (OperationFailedException e) {
 			throw new AnchorFriendlyRuntimeException("An exception occurred calculating distances", e);
 		}
 	}
 			
 	private double normalisedDistanceDeltaContour( double[] a, double[] b  ) {
-		double dist = Math.abs( 
+		double distance = Math.abs( 
 			extractContourDistance(a) - extractContourDistance(b)		
 		);
-		return dist/maxDistDeltaContour;
+		return distance/maxDistanceDeltaContour;
 	}
 	
 	
@@ -91,15 +87,15 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	private double normalisedDistanceCOG( double[] a, double[] b ) throws OperationFailedException {
 		
 		// Maximum distance when measured in voxels along the vector between our points 
-		double maxDistVoxels = maxDist.rslv(
+		double maxDistanceVoxels = maxDistance.resolve(
 			Optional.of(res),
 			convert(a),
 			convert(b)
 		);
 		
 		// We measure the voxel distance between the points
-		double distVoxels = MathArrays.distance( extractPoint(a), extractPoint(b) );
-		return distVoxels/maxDistVoxels;
+		double distanceVoxels = MathArrays.distance( extractPoint(a), extractPoint(b) );
+		return distanceVoxels/maxDistanceVoxels;
 	}
 	
 	private static double[] extractPoint( double[] point ) {
