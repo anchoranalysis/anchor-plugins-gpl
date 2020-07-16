@@ -76,7 +76,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
 	}
 	
 	
-	/** Returns a distance value that is <= 1 if the distance between the COGs is less than maxRslv, 
+	/** Returns a distance value that is <= 1 if the distance between the COGs is less than resolved max-distance, 
 	 *   or greater than that otherwise
 	 *   
 	 * @param a

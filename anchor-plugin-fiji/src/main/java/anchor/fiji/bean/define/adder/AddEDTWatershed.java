@@ -206,7 +206,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	}
 		
 	private ChnlProvider channel( String unresolvedID ) {
-		return new ChnlProviderReference( rslvName(unresolvedID) );		
+		return new ChnlProviderReference( resolveName(unresolvedID) );		
 	}
 	
 	private ImageDimProvider dimensions() {
@@ -222,7 +222,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 	}
 	
 	private ObjectCollectionProvider objects( String unresolvedID ) {
-		return new Reference( rslvName(unresolvedID) );		
+		return new Reference( resolveName(unresolvedID) );		
 	}
 	
 	private BinaryChnlProvider inputMask() {
