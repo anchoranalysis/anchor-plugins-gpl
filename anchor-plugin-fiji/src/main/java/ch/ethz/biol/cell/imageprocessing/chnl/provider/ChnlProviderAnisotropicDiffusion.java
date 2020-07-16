@@ -27,6 +27,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+import lombok.Getter;
+import lombok.Setter;
 import net.imglib2.algorithm.pde.PeronaMalikAnisotropicDiffusion;
 import net.imglib2.algorithm.pde.PeronaMalikAnisotropicDiffusion.DiffusionFunction;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -48,16 +50,16 @@ import org.anchoranalysis.image.extent.Extent;
 public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Positive private double kappa;
+    @BeanField @Positive @Getter @Setter private double kappa;
 
-    @BeanField @Positive private double deltat;
+    @BeanField @Positive @Getter @Setter private double deltat;
 
-    @BeanField private boolean do3D;
+    @BeanField @Getter @Setter private boolean do3D;
 
-    @BeanField private int iterations = 30;
+    @BeanField @Getter @Setter private int iterations = 30;
 
-    @BeanField
-    private boolean strongEdgeEnhancer = true; // Enables the StrongEdgeEnhancer diffusion function
+    /** Enables the StrongEdgeEnhancer diffusion function */
+    @BeanField @Getter @Setter private boolean strongEdgeEnhancer = true;
     // END BEAN PROPERTIES
 
     // Assumes XY res are identical
@@ -104,45 +106,5 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
         DiffusionFunction df = createDiffusionFunction();
         return diffusion(chnl, deltat, df, iterations, do3D);
-    }
-
-    public double getKappa() {
-        return kappa;
-    }
-
-    public void setKappa(double kappa) {
-        this.kappa = kappa;
-    }
-
-    public double getDeltat() {
-        return deltat;
-    }
-
-    public void setDeltat(double deltat) {
-        this.deltat = deltat;
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3D) {
-        this.do3D = do3D;
-    }
-
-    public int getIterations() {
-        return iterations;
-    }
-
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
-
-    public boolean isStrongEdgeEnhancer() {
-        return strongEdgeEnhancer;
-    }
-
-    public void setStrongEdgeEnhancer(boolean strongEdgeEnhancer) {
-        this.strongEdgeEnhancer = strongEdgeEnhancer;
     }
 }

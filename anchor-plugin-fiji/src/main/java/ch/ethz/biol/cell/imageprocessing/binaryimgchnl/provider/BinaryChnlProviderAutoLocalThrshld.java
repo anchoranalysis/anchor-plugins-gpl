@@ -31,6 +31,8 @@ import fiji.threshold.Auto_Local_Threshold;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -47,9 +49,9 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 
     // START BEAN PROPERTIES
     // "Bernsen", "Mean", "Median", "MidGrey", "Niblack", "Sauvola"
-    @BeanField private String method = "";
+    @BeanField @Getter @Setter private String method = "";
 
-    @BeanField private int radius = 15;
+    @BeanField @Getter @Setter private int radius = 15;
     // END BEAN PROPERTIES
 
     @Override
@@ -80,21 +82,5 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
         }
 
         return new Mask(chnlOut, BinaryValues.getDefault());
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
     }
 }

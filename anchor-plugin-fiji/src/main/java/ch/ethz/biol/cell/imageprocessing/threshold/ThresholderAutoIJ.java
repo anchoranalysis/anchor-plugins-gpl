@@ -31,6 +31,8 @@ import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
@@ -53,9 +55,9 @@ public class ThresholderAutoIJ extends Thresholder {
      * <p>Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)",
      * "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag", "Triangle", "Yen"
      */
-    @BeanField private String method = "";
+    @BeanField @Getter @Setter private String method = "";
 
-    @BeanField private boolean noBlack = false;
+    @BeanField @Getter @Setter private boolean noBlack = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -81,21 +83,5 @@ public class ThresholderAutoIJ extends Thresholder {
         assert (vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
 
         return new BinaryVoxelBoxByte(vbOut.asByte(), bvOut.createInt());
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public boolean isNoBlack() {
-        return noBlack;
-    }
-
-    public void setNoBlack(boolean noBlack) {
-        this.noBlack = noBlack;
     }
 }
