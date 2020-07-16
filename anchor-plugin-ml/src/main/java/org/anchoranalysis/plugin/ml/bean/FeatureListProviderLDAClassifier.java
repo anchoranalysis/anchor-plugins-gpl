@@ -41,19 +41,21 @@ import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.conditional.IfCondition;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         extends FeatureListProviderReferencedFeatures<T> {
 
+    private static final String LDA_THRESHOLD_KEY = "__ldaThreshold";
+
+    private static final String FEATURE_NAME_SCORE = "ldaScore";
+    private static final String FEATURE_NAME_THRESHOLD = "ldaThreshold";
+    private static final String FEATURE_NAME_CLASSIFIER = "ldaClassifier";
+    
     // START BEAN PROPERTIES
-    @BeanField private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
-
-    private static String ldaThresholdKey = "__ldaThreshold";
-
-    private static String featureNameScore = "ldaScore";
-    private static String featureNameThreshold = "ldaThreshold";
-    private static String featureNameClassifier = "ldaClassifier";
 
     @Override
     public FeatureList<T> create() throws CreateException {
@@ -66,7 +68,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
 
         checkForMissingFeatures(kpv);
 
-        double threshold = kpv.getPropertyAsDouble(ldaThresholdKey);
+        double threshold = kpv.getPropertyAsDouble(LDA_THRESHOLD_KEY);
 
         return FeatureListFactory.from(
                 createScoreFeature(kpv),
@@ -82,7 +84,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         for (String name : kpv.keySet()) {
 
             // Skip the threshold name
-            if (name.equals(ldaThresholdKey)) {
+            if (name.equals(LDA_THRESHOLD_KEY)) {
                 continue;
             }
 
@@ -106,7 +108,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
             for (String name : kpv.keySet()) {
 
                 // Skip the threshold name
-                if (name.equals(ldaThresholdKey)) {
+                if (name.equals(LDA_THRESHOLD_KEY)) {
                     continue;
                 }
 
@@ -122,18 +124,18 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
             throw new CreateException(e);
         }
 
-        sum.setCustomName(featureNameScore);
+        sum.setCustomName(FEATURE_NAME_SCORE);
         return sum;
     }
 
     private Feature<T> createThresholdFeature(double threshold) {
-        return new Constant<>(featureNameThreshold, threshold);
+        return new Constant<>(FEATURE_NAME_THRESHOLD, threshold);
     }
 
     private Feature<T> createClassifierFeature(double threshold) {
         // If we are below the the threshold we output -1
 
-        Reference<T> score = new Reference<>(featureNameScore);
+        Reference<T> score = new Reference<>(FEATURE_NAME_SCORE);
 
         IfCondition<T> featThresh = new IfCondition<>();
         featThresh.setFeatureCondition(score);
@@ -141,15 +143,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         featThresh.setFeatureElse(new Constant<>(0));
         featThresh.setThreshold(new RelationToConstant(new GreaterThanBean(), threshold));
 
-        featThresh.setCustomName(featureNameClassifier);
+        featThresh.setCustomName(FEATURE_NAME_CLASSIFIER);
         return featThresh;
-    }
-
-    public KeyValueParamsProvider getKeyValueParamsProvider() {
-        return keyValueParamsProvider;
-    }
-
-    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-        this.keyValueParamsProvider = keyValueParamsProvider;
     }
 }
