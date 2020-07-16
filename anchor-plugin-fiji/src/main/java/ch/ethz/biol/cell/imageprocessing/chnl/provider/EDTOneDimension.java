@@ -1,4 +1,4 @@
-/* (C)2020 */
+
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.FloatBuffer;
