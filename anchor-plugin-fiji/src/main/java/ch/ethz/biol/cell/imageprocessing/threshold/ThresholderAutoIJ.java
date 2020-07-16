@@ -1,37 +1,33 @@
-package ch.ethz.biol.cell.imageprocessing.threshold;
-
-/*
+/*-
  * #%L
  * anchor-plugin-fiji
  * %%
- * Copyright (C) 2019 F. Hoffmann-La Roche Ltd
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+package ch.ethz.biol.cell.imageprocessing.threshold;
 
 
+import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;
-
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
@@ -44,65 +40,43 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-import fiji.threshold.Auto_Threshold;
-
 public class ThresholderAutoIJ extends Thresholder {
-	
-	// START BEAN PROPERTIES
-	/** 
-	 * One of the following strings to identify ImageJ's thresholding algorithms (or an empty string for the default).
-	 * 
-	 *   Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)", 
-	 *   "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag",
-	 *   "Triangle", "Yen"
-	 **/
-	@BeanField
-	private String method="";	
 
-	@BeanField
-	private boolean noBlack = false;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public BinaryVoxelBox<ByteBuffer> threshold(
-		VoxelBoxWrapper inputBuffer,
-		BinaryValuesByte bvOut,
-		Optional<Histogram> histogram,
-		Optional<ObjectMask> mask
-	) throws OperationFailedException {
-		
-		if (mask.isPresent()) {
-			throw new OperationFailedException("A mask is not supported for this operation");
-		}
-		
-		ImagePlus ip = IJWrap.createImagePlus(inputBuffer);
-		
-		Auto_Threshold at = new Auto_Threshold();
-		
-		at.exec(ip, method, false, noBlack, true, false, false, true);
-			
-		VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus( ip );
-		
-		assert(vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
-		
-		return new BinaryVoxelBoxByte( vbOut.asByte(), bvOut.createInt() );
-	}
+    // START BEAN PROPERTIES
+    /**
+     * One of the following strings to identify ImageJ's thresholding algorithms (or an empty string
+     * for the default).
+     *
+     * <p>Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)",
+     * "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag", "Triangle", "Yen"
+     */
+    @BeanField @Getter @Setter private String method = "";
 
-	public String getMethod() {
-		return method;
-	}
+    @BeanField @Getter @Setter private boolean noBlack = false;
+    // END BEAN PROPERTIES
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+    @Override
+    public BinaryVoxelBox<ByteBuffer> threshold(
+            VoxelBoxWrapper inputBuffer,
+            BinaryValuesByte bvOut,
+            Optional<Histogram> histogram,
+            Optional<ObjectMask> mask)
+            throws OperationFailedException {
 
-	public boolean isNoBlack() {
-		return noBlack;
-	}
+        if (mask.isPresent()) {
+            throw new OperationFailedException("A mask is not supported for this operation");
+        }
 
-	public void setNoBlack(boolean noBlack) {
-		this.noBlack = noBlack;
-	}
+        ImagePlus ip = IJWrap.createImagePlus(inputBuffer);
 
+        Auto_Threshold at = new Auto_Threshold();
 
+        at.exec(ip, method, false, noBlack, true, false, false, true);
+
+        VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus(ip);
+
+        assert (vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
+
+        return new BinaryVoxelBoxByte(vbOut.asByte(), bvOut.createInt());
+    }
 }
