@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,9 +21,10 @@
  */
 package org.anchoranalysis.plugin.ml.bean;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
@@ -41,8 +42,6 @@ import org.anchoranalysis.feature.bean.operator.Sum;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.conditional.IfCondition;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         extends FeatureListProviderReferencedFeatures<T> {
@@ -52,7 +51,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     private static final String FEATURE_NAME_SCORE = "ldaScore";
     private static final String FEATURE_NAME_THRESHOLD = "ldaThreshold";
     private static final String FEATURE_NAME_CLASSIFIER = "ldaClassifier";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
