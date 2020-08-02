@@ -29,7 +29,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -57,7 +57,7 @@ public class MergeSpatialClusters extends MergeBase {
 
     // START BEAN PROPERTIES
     /** A distance map which can also be used for making decisions on merging */
-    @BeanField @Getter @Setter private ChnlProvider distanceMapProvider;
+    @BeanField @Getter @Setter private ChannelProvider distanceMapProvider;
 
     /** The maximum distance allowed between center-of-gravities of objects */
     @BeanField @Getter @Setter

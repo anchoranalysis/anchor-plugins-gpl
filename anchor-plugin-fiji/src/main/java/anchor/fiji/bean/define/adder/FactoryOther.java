@@ -27,8 +27,8 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderSubtractFromC
 import ch.ethz.biol.cell.imageprocessing.dim.provider.ImageDimProviderFromChnl;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
@@ -46,21 +46,21 @@ import org.anchoranalysis.plugin.ml.bean.object.provider.MergeSpatialClusters;
 class FactoryOther {
 
     public static ObjectCollectionProvider connectedComponentsInput(
-            BinaryChnlProvider source, UnitValueVolume minVolumeConnectedComponent) {
+            MaskProvider source, UnitValueVolume minVolumeConnectedComponent) {
         ConnectedComponentsFromMask provider = new ConnectedComponentsFromMask();
         provider.setMinVolume(minVolumeConnectedComponent);
         provider.setBinaryChnl(source);
         return provider;
     }
 
-    public static ImageDimProvider dimsFromChnl(ChnlProvider chnlProvider) {
+    public static ImageDimProvider dimsFromChnl(ChannelProvider chnlProvider) {
         ImageDimProviderFromChnl provider = new ImageDimProviderFromChnl();
         provider.setChnl(chnlProvider);
         return provider;
     }
 
-    public static ChnlProvider distanceTransformBeforeInvert(
-            BinaryChnlProvider source, double distanceTransformMultiplyBy) {
+    public static ChannelProvider distanceTransformBeforeInvert(
+            MaskProvider source, double distanceTransformMultiplyBy) {
         ChnlProviderDistanceTransformExact3D provider = new ChnlProviderDistanceTransformExact3D();
         provider.setCreateShort(true);
         provider.setMultiplyBy(distanceTransformMultiplyBy);
@@ -69,7 +69,7 @@ class FactoryOther {
         return provider;
     }
 
-    public static ChnlProvider distanceTransformAfterInvert(ChnlProvider source) {
+    public static ChannelProvider distanceTransformAfterInvert(ChannelProvider source) {
         ChnlProviderSubtractFromConstant provider = new ChnlProviderSubtractFromConstant();
         provider.setValue(65535);
         provider.setChnl(source);
@@ -80,7 +80,7 @@ class FactoryOther {
             ObjectCollectionProvider unmergedMinima,
             ObjectCollectionProvider container,
             ImageDimProvider resProvider,
-            ChnlProvider sourceDistanceMapProvider,
+            ChannelProvider sourceDistanceMapProvider,
             UnitValueDistance maxDistanceCOG,
             double maxDistanceDeltaContour) {
         MergeSpatialClusters merge = new MergeSpatialClusters();

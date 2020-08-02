@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
@@ -165,8 +165,8 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
         }
     }
 
-    private static ChnlProvider smooth(
-            ChnlProvider src, double distanceTransformSmoothedSigmaMeters) {
+    private static ChannelProvider smooth(
+            ChannelProvider src, double distanceTransformSmoothedSigmaMeters) {
         ChnlProviderBlur provider = new ChnlProviderBlur();
         provider.setStrategy(createBlurStrategy(distanceTransformSmoothedSigmaMeters));
         provider.setChnl(src);
@@ -198,7 +198,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
         addWithName(define, SEEDS, seeds(objects(MINIMA_MERGED), dimensions()));
     }
 
-    private ChnlProvider channel(String unresolvedID) {
+    private ChannelProvider channel(String unresolvedID) {
         return new ChnlProviderReference(resolveName(unresolvedID));
     }
 
@@ -206,7 +206,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
         return dimsFromChnl(channel(DISTANCE_TRANSFORM));
     }
 
-    private ChnlProvider duplicateChnl(String unresolvedID) {
+    private ChannelProvider duplicateChnl(String unresolvedID) {
         ChnlProviderDuplicate dup = new ChnlProviderDuplicate();
         dup.setChnl(channel(unresolvedID));
         return dup;
@@ -216,7 +216,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
         return new Reference(resolveName(unresolvedID));
     }
 
-    private BinaryChnlProvider inputMask() {
+    private MaskProvider inputMask() {
         return new BinaryChnlProviderReference(binaryInputChnlID);
     }
 }

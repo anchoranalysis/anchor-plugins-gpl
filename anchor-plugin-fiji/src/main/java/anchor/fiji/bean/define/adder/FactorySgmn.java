@@ -24,8 +24,8 @@ package anchor.fiji.bean.define.adder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.plugin.image.bean.object.provider.segment.SegmentChannel;
@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong.Water
 class FactorySgmn {
 
     public static ObjectCollectionProvider minimaUnmerged(
-            BinaryChnlProvider mask, ChnlProvider distanceTransform) {
+            MaskProvider mask, ChannelProvider distanceTransform) {
         SegmentChannel provider = new SegmentChannel();
         provider.setMask(mask);
         provider.setChnl(distanceTransform);
@@ -55,7 +55,7 @@ class FactorySgmn {
     public static ObjectCollectionProvider watershedSegment(
             ObjectCollectionProvider sourceObjects,
             ObjectCollectionProvider seeds,
-            ChnlProvider distanceTransform) {
+            ChannelProvider distanceTransform) {
         SegmentWithSeeds provider = new SegmentWithSeeds();
         provider.setObjectsSource(sourceObjects);
         provider.setObjectsSeeds(seeds);
