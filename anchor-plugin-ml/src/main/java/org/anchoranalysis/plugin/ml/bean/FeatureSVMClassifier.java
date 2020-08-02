@@ -8,19 +8,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 package org.anchoranalysis.plugin.ml.bean;
-
 
 import libsvm.svm;
 import libsvm.svm_model;
@@ -29,7 +28,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -63,9 +63,14 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
-        ResultsVector rv = input.calc(FeatureListFactory.wrapReuse(getList()));
+        ResultsVector rv;
+        try {
+            rv = input.calc(FeatureListFactory.wrapReuse(getList()));
+        } catch (NamedFeatureCalculationException e) {
+            throw new FeatureCalculationException(e);
+        }
 
         svm_node[] nodes = convert(rv);
 

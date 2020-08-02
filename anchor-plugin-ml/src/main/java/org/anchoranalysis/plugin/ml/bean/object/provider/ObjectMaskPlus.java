@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -21,11 +21,10 @@
  */
 package org.anchoranalysis.plugin.ml.bean.object.provider;
 
-
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
@@ -54,7 +53,7 @@ class ObjectMaskPlus implements Clusterable {
         try {
             distanceFromContour =
                     IntensityMeanCalculator.calcMeanIntensityObject(distanceMap, object);
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             logger.errorReporter().recordError(ObjectMaskPlus.class, e);
             distanceFromContour = Double.NaN;
         }
