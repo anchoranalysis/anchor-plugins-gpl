@@ -88,10 +88,10 @@ class EDT {
 
         Channel result = factory.createEmptyInitialised(chnl.getDimensions());
 
-        VoxelBox<FloatBuffer> vbResult = result.getVoxelBox().asFloat();
+        VoxelBox<FloatBuffer> vbResult = result.voxels().asFloat();
 
         float zMult = suppressZ ? 1.0f : (float) Math.pow(multiplyAspectRatio, 2);
-        new EDTDimensionZ(chnl.getVoxelBox(), vbResult, zMult).compute();
+        new EDTDimensionZ(chnl.getVoxels(), vbResult, zMult).compute();
         new EDTDimensionY(vbResult, 1.0f).compute();
         new EDTDimensionX(vbResult, 1.0f).compute();
         return result;

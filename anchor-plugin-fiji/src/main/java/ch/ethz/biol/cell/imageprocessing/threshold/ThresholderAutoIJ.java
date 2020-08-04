@@ -59,10 +59,10 @@ public class ThresholderAutoIJ extends Thresholder {
             VoxelBoxWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws OperationFailedException {
 
-        if (mask.isPresent()) {
+        if (objectMask.isPresent()) {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 

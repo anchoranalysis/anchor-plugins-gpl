@@ -34,6 +34,6 @@ public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
         ImagePlus imp = IJWrap.createImagePlus(chnl);
         imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getResolution());
     }
 }

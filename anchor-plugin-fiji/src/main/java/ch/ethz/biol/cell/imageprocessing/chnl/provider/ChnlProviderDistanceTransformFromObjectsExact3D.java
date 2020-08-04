@@ -55,14 +55,14 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
-            BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox().duplicate();
+            BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxels().duplicate();
             VoxelBox<ByteBuffer> voxelBoxDistance =
                     ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
                             bvb,
-                            chnlOut.getDimensions().getRes(),
+                            chnlOut.getDimensions().getResolution(),
                             suppressZ,
                             1.0,
                             1.0,
@@ -74,7 +74,7 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
                     bboxSrc,
                     vbOut,
                     object.getBoundingBox(),
-                    object.getVoxelBox(),
+                    object.getVoxels(),
                     object.getBinaryValuesByte());
         }
 

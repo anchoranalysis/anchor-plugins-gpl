@@ -82,13 +82,13 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
         Channel chnlIn =
                 ChannelFactory.instance()
                         .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                        .create(bvb.getVoxelBox(), res);
-        Mask binaryChnlIn = new Mask(chnlIn, bvb.getBinaryValues());
+                        .create(bvb.getVoxels(), res);
+        Mask mask = new Mask(chnlIn, bvb.getBinaryValues());
 
         Channel distanceMap =
                 createDistanceMapForChnl(
-                        binaryChnlIn, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
-        return distanceMap.getVoxelBox().asByte();
+                        mask, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
+        return distanceMap.voxels().asByte();
     }
 
     public static Channel createDistanceMapForChnl(
@@ -109,7 +109,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
         if (chnl.getDimensions().getExtent().getZ() > 1 && !suppressZ) {
 
-            double zRelRes = chnl.getDimensions().getRes().getZRelativeResolution();
+            double zRelRes = chnl.getDimensions().getResolution().getZRelativeResolution();
             if (Double.isNaN(zRelRes)) {
                 throw new CreateException("Z-resolution is NaN");
             }
@@ -128,8 +128,8 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
                 Channel distanceSlice =
                         createDistanceMapForChnlFromPlugin(
                                 chnlSlice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
-                chnlOut.getVoxelBox()
-                        .transferPixelsForPlane(z, distanceSlice.getVoxelBox(), 0, true);
+                chnlOut.voxels()
+                        .transferPixelsForPlane(z, distanceSlice.voxels(), 0, true);
             }
 
             return chnlOut;
@@ -173,11 +173,11 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
         if (applyRes) {
             distanceAsFloat
-                    .getVoxelBox()
+                    .voxels()
                     .any()
-                    .multiplyBy(multFactor * chnl.getDimensions().getRes().getX());
+                    .multiplyBy(multFactor * chnl.getDimensions().getResolution().getX());
         } else {
-            distanceAsFloat.getVoxelBox().any().multiplyBy(multFactor);
+            distanceAsFloat.voxels().any().multiplyBy(multFactor);
         }
 
         ChannelConverter<?> converter =

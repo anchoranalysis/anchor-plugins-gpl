@@ -30,7 +30,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.IJWrap;
@@ -60,7 +59,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
                         .createEmptyUninitialised(
                                 chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vb = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnlOut.voxels().asByte();
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
@@ -75,6 +74,6 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
             vb.setPixelsForPlane(z, VoxelBufferByte.wrap(arr));
         }
 
-        return new Mask(chnlOut, BinaryValues.getDefault());
+        return new Mask(chnlOut);
     }
 }

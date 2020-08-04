@@ -31,7 +31,7 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
 /**
- * Caches some properties of object mask, and acts as an input to the clustering algorithm.
+ * Caches some properties of object-mask, and acts as an input to the clustering algorithm.
  *
  * <p>The properties are:
  *

@@ -65,12 +65,12 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
         Extent e = chnl.getDimensions().getExtent();
         try {
             if (do3D) {
-                Img img = ImgLib2Wrap.wrap(chnl.getVoxelBox());
+                Img img = ImgLib2Wrap.wrap(chnl.voxels());
                 doDiffusion(img, deltat, df, iterations);
             } else {
 
                 for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-                    Img img = ImgLib2Wrap.wrap(chnl.getVoxelBox().any().getPixelsForPlane(z), e);
+                    Img img = ImgLib2Wrap.wrap(chnl.voxels().any().getPixelsForPlane(z), e);
                     doDiffusion(img, deltat, df, iterations);
                 }
             }
