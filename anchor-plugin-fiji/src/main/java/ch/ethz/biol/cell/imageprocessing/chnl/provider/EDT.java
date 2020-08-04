@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * An Euclidian Distance transform derived from Fiji_Plugins.jar in Imagej
@@ -88,7 +88,7 @@ class EDT {
 
         Channel result = factory.createEmptyInitialised(chnl.getDimensions());
 
-        VoxelBox<FloatBuffer> vbResult = result.voxels().asFloat();
+        Voxels<FloatBuffer> vbResult = result.voxels().asFloat();
 
         float zMult = suppressZ ? 1.0f : (float) Math.pow(multiplyAspectRatio, 2);
         new EDTDimensionZ(chnl.getVoxels(), vbResult, zMult).compute();

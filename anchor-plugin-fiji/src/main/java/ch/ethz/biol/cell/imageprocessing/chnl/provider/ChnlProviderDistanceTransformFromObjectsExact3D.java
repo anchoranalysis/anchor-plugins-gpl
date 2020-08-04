@@ -27,13 +27,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Euclidian distance transform from ImageJ
@@ -55,13 +55,13 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
-            BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxels().duplicate();
-            VoxelBox<ByteBuffer> voxelBoxDistance =
-                    ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxelBox(
-                            bvb,
+            BinaryVoxels<ByteBuffer> voxels = object.binaryVoxels().duplicate();
+            Voxels<ByteBuffer> voxelsDistance =
+                    ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxels(
+                            voxels,
                             chnlOut.getDimensions().getResolution(),
                             suppressZ,
                             1.0,
@@ -69,8 +69,8 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
                             createShort,
                             false);
 
-            BoundingBox bboxSrc = new BoundingBox(voxelBoxDistance.extent());
-            voxelBoxDistance.copyPixelsToCheckMask(
+            BoundingBox bboxSrc = new BoundingBox(voxelsDistance.extent());
+            voxelsDistance.copyPixelsToCheckMask(
                     bboxSrc,
                     vbOut,
                     object.getBoundingBox(),

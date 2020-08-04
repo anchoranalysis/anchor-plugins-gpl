@@ -27,7 +27,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -70,8 +70,8 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
     // END PROPERTIES
 
     // We can also change a binary voxel buffer
-    public static VoxelBox<ByteBuffer> createDistanceMapForVoxelBox(
-            BinaryVoxelBox<ByteBuffer> bvb,
+    public static Voxels<ByteBuffer> createDistanceMapForVoxels(
+            BinaryVoxels<ByteBuffer> bvb,
             ImageResolution res,
             boolean suppressZ,
             double multiplyBy,

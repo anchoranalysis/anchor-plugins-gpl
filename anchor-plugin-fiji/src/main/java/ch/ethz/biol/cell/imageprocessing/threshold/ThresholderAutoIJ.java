@@ -31,12 +31,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ThresholderAutoIJ extends Thresholder {
@@ -55,8 +55,8 @@ public class ThresholderAutoIJ extends Thresholder {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> threshold(
-            VoxelBoxWrapper inputBuffer,
+    public BinaryVoxels<ByteBuffer> threshold(
+            VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -72,10 +72,10 @@ public class ThresholderAutoIJ extends Thresholder {
 
         at.exec(ip, method, false, noBlack, true, false, false, true);
 
-        VoxelBoxWrapper vbOut = IJWrap.voxelBoxFromImagePlus(ip);
+        VoxelsWrapper vbOut = IJWrap.voxelsFromImagePlus(ip);
 
         assert (vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
 
-        return new BinaryVoxelBoxByte(vbOut.asByte(), bvOut.createInt());
+        return BinaryVoxelsFactory.reuseByte(vbOut.asByte(), bvOut.createInt());
     }
 }

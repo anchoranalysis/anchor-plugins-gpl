@@ -29,16 +29,16 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 
     @Override
-    public VoxelBoxWrapper reconstruction(
-            VoxelBoxWrapper mask, VoxelBoxWrapper marker, Optional<ObjectMask> containingMask)
+    public VoxelsWrapper reconstruction(
+            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask)
             throws OperationFailedException {
 
         if (containingMask.isPresent()) {
@@ -50,22 +50,22 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
             throw new OperationFailedException("Only unsigned byte supported for marker image");
         }
 
-        VoxelBox<ByteBuffer> markerCast = marker.asByte();
-        VoxelBox<ByteBuffer> maskCast = mask.asByte();
+        Voxels<ByteBuffer> markerCast = marker.asByte();
+        Voxels<ByteBuffer> maskCast = mask.asByte();
 
         // We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want
         // reconstruction by Erosion
         markerCast.subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
         mask.subtractFromMaxValue();
 
-        VoxelBox<ByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
+        Voxels<ByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
         ret.subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
 
-        return new VoxelBoxWrapper(ret);
+        return new VoxelsWrapper(ret);
     }
 
-    private VoxelBox<ByteBuffer> reconstructionByDilation(
-            VoxelBox<ByteBuffer> maskVb, VoxelBox<ByteBuffer> markerVb) {
+    private Voxels<ByteBuffer> reconstructionByDilation(
+            Voxels<ByteBuffer> maskVb, Voxels<ByteBuffer> markerVb) {
 
         ImageProcessor processorMask = IJWrap.imageProcessorByte(maskVb.getPlaneAccess(), 0);
         ImageProcessor processorMarker = IJWrap.imageProcessorByte(markerVb.getPlaneAccess(), 0);
@@ -77,6 +77,6 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
         Object[] ret = gr.exec(ipMaskImage, ipMarkerImage, "recon", true, false);
 
         ImagePlus ipRecon = (ImagePlus) ret[1];
-        return IJWrap.voxelBoxFromImagePlus(ipRecon).asByte();
+        return IJWrap.voxelsFromImagePlus(ipRecon).asByte();
     }
 }

@@ -24,11 +24,11 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 abstract class EDTOneDimension extends EDTDimensionBase {
 
-    private VoxelBox<FloatBuffer> stack;
+    private Voxels<FloatBuffer> stack;
     private FloatBuffer slice;
     private int offset;
     private int lastOffset;
@@ -36,7 +36,7 @@ abstract class EDTOneDimension extends EDTDimensionBase {
     private int columnStride;
     private int sliceIndex;
 
-    public EDTOneDimension(VoxelBox<FloatBuffer> out, boolean iterateX) {
+    public EDTOneDimension(Voxels<FloatBuffer> out, boolean iterateX) {
         super(iterateX ? out.extent().getX() : out.extent().getY());
         stack = out;
 
