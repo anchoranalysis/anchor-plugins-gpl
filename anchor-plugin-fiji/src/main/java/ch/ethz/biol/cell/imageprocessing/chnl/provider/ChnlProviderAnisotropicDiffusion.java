@@ -62,15 +62,15 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
             Channel chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D)
             throws CreateException {
 
-        Extent e = chnl.getDimensions().getExtent();
+        Extent e = chnl.dimensions().extent();
         try {
             if (do3D) {
                 Img img = ImgLib2Wrap.wrap(chnl.voxels());
                 doDiffusion(img, deltat, df, iterations);
             } else {
 
-                for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-                    Img img = ImgLib2Wrap.wrap(chnl.voxels().any().getPixelsForPlane(z), e);
+                for (int z = 0; z < chnl.dimensions().z(); z++) {
+                    Img img = ImgLib2Wrap.wrap(chnl.voxels().any().slice(z), e);
                     doDiffusion(img, deltat, df, iterations);
                 }
             }

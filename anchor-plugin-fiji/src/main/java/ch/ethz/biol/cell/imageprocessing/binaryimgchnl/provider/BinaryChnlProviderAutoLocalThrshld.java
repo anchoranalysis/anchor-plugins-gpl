@@ -57,13 +57,13 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyUninitialised(
-                                chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                                chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
-        Voxels<ByteBuffer> vb = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> voxels = chnlOut.voxels().asByte();
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
             ImagePlus ip = IJWrap.createImagePlus(stack.extractSlice(z), false);
 
             Object[] ret = at.exec(ip, method, radius, 0, 0, true);
@@ -71,7 +71,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 
             ImageProcessor processor = ipOut.getImageStack().getProcessor(1);
             byte[] arr = (byte[]) processor.getPixels();
-            vb.setPixelsForPlane(z, VoxelBufferByte.wrap(arr));
+            voxels.updateSlice(z, VoxelBufferByte.wrap(arr));
         }
 
         return new Mask(chnlOut);

@@ -37,15 +37,15 @@ abstract class EDTOneDimension extends EDTDimensionBase {
     private int sliceIndex;
 
     public EDTOneDimension(Voxels<FloatBuffer> out, boolean iterateX) {
-        super(iterateX ? out.extent().getX() : out.extent().getY());
+        super(iterateX ? out.extent().x() : out.extent().y());
         stack = out;
 
         Extent e = out.extent();
 
-        columnStride = iterateX ? 1 : e.getX();
-        rowStride = iterateX ? e.getX() : 1;
-        offset = e.getVolumeXY();
-        lastOffset = rowStride * (iterateX ? e.getY() : e.getX());
+        columnStride = iterateX ? 1 : e.x();
+        rowStride = iterateX ? e.x() : 1;
+        offset = e.volumeXY();
+        lastOffset = rowStride * (iterateX ? e.y() : e.x());
         sliceIndex = -1;
     }
 
@@ -56,9 +56,9 @@ abstract class EDTOneDimension extends EDTDimensionBase {
     public final boolean nextRow() {
         offset += rowStride;
         if (offset >= lastOffset) {
-            if (++sliceIndex >= stack.extent().getZ()) return false;
+            if (++sliceIndex >= stack.extent().z()) return false;
             offset = 0;
-            slice = stack.getPixelsForPlane(sliceIndex).buffer();
+            slice = stack.slice(sliceIndex).buffer();
         }
         return true;
     }

@@ -81,19 +81,19 @@ import org.anchoranalysis.image.voxel.Voxels;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EDT {
     public static Channel compute(
-            Mask chnl,
+            Mask mask,
             ChannelFactorySingleType factory,
             boolean suppressZ,
             double multiplyAspectRatio) {
 
-        Channel result = factory.createEmptyInitialised(chnl.getDimensions());
+        Channel result = factory.createEmptyInitialised(mask.dimensions());
 
-        Voxels<FloatBuffer> vbResult = result.voxels().asFloat();
+        Voxels<FloatBuffer> voxelsResult = result.voxels().asFloat();
 
         float zMult = suppressZ ? 1.0f : (float) Math.pow(multiplyAspectRatio, 2);
-        new EDTDimensionZ(chnl.getVoxels(), vbResult, zMult).compute();
-        new EDTDimensionY(vbResult, 1.0f).compute();
-        new EDTDimensionX(vbResult, 1.0f).compute();
+        new EDTDimensionZ(mask.voxels(), voxelsResult, zMult).compute();
+        new EDTDimensionY(voxelsResult, 1.0f).compute();
+        new EDTDimensionX(voxelsResult, 1.0f).compute();
         return result;
     }
 }

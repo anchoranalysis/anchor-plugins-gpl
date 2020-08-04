@@ -72,10 +72,10 @@ public class ThresholderAutoIJ extends Thresholder {
 
         at.exec(ip, method, false, noBlack, true, false, false, true);
 
-        VoxelsWrapper vbOut = IJWrap.voxelsFromImagePlus(ip);
+        VoxelsWrapper voxelsOut = IJWrap.voxelsFromImagePlus(ip);
 
-        assert (vbOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
+        assert (voxelsOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
 
-        return BinaryVoxelsFactory.reuseByte(vbOut.asByte(), bvOut.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut.asByte(), bvOut.createInt());
     }
 }

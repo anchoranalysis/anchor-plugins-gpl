@@ -37,19 +37,19 @@ class EDTDimensionZ extends EDTDimensionBase {
 
     public EDTDimensionZ(
             Voxels<ByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
-        super(in.extent().getZ());
+        super(in.extent().z());
 
         this.multiplyConstant = multiplyConstant;
 
-        int d = in.extent().getZ();
+        int d = in.extent().z();
 
-        bufferXYSize = in.extent().getVolumeXY();
+        bufferXYSize = in.extent().volumeXY();
 
         inSlice = new byte[d][];
         outSlice = new float[d][];
         for (int i = 0; i < d; i++) {
-            inSlice[i] = (byte[]) in.getPixelsForPlane(i).buffer().array();
-            outSlice[i] = (float[]) out.getPixelsForPlane(i).buffer().array();
+            inSlice[i] = (byte[]) in.slice(i).buffer().array();
+            outSlice[i] = (float[]) out.slice(i).buffer().array();
         }
         offset = -1;
     }

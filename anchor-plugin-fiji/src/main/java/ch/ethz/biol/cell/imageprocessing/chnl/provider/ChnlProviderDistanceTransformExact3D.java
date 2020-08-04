@@ -82,34 +82,34 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
         Channel chnlIn =
                 ChannelFactory.instance()
                         .get(VoxelDataTypeUnsignedByte.INSTANCE)
-                        .create(bvb.getVoxels(), res);
-        Mask mask = new Mask(chnlIn, bvb.getBinaryValues());
+                        .create(bvb.voxels(), res);
+        Mask mask = new Mask(chnlIn, bvb.binaryValues());
 
         Channel distanceMap =
-                createDistanceMapForChnl(
+                createDistanceMapForMask(
                         mask, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
         return distanceMap.voxels().asByte();
     }
 
-    public static Channel createDistanceMapForChnl(
-            Mask chnl,
+    public static Channel createDistanceMapForMask(
+            Mask mask,
             boolean suppressZ,
             double multiplyBy,
             double multiplyByZRes,
             boolean createShort,
             boolean applyRes)
             throws CreateException {
-        if (chnl.getBinaryValues().getOnInt() != 255) {
+        if (mask.binaryValues().getOnInt() != 255) {
             throw new CreateException("Binary On must be 255");
         }
 
-        if (chnl.getBinaryValues().getOffInt() != 0) {
+        if (mask.binaryValues().getOffInt() != 0) {
             throw new CreateException("Binary Off must be 0");
         }
 
-        if (chnl.getDimensions().getExtent().getZ() > 1 && !suppressZ) {
+        if (mask.dimensions().extent().z() > 1 && !suppressZ) {
 
-            double zRelRes = chnl.getDimensions().getResolution().getZRelativeResolution();
+            double zRelRes = mask.dimensions().resolution().getZRelativeResolution();
             if (Double.isNaN(zRelRes)) {
                 throw new CreateException("Z-resolution is NaN");
             }
@@ -121,13 +121,13 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
         if (suppressZ) {
 
-            Channel chnlOut = createEmptyChnl(createShort, chnl.getDimensions());
+            Channel chnlOut = createEmptyChnl(createShort, mask.dimensions());
 
-            for (int z = 0; z < chnl.getDimensions().getExtent().getZ(); z++) {
-                Mask chnlSlice = chnl.extractSlice(z);
+            for (int z = 0; z < mask.dimensions().extent().z(); z++) {
+                Mask slice = mask.extractSlice(z);
                 Channel distanceSlice =
                         createDistanceMapForChnlFromPlugin(
-                                chnlSlice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
+                                slice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
                 chnlOut.voxels()
                         .transferPixelsForPlane(z, distanceSlice.voxels(), 0, true);
             }
@@ -136,7 +136,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
         } else {
             return createDistanceMapForChnlFromPlugin(
-                    chnl, false, multiplyBy, multiplyByZRes, createShort, applyRes);
+                    mask, false, multiplyBy, multiplyByZRes, createShort, applyRes);
         }
     }
 
@@ -150,12 +150,12 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
     @Override
     protected Channel createFromMask(Mask mask) throws CreateException {
-        return createDistanceMapForChnl(
+        return createDistanceMapForMask(
                 mask, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
     }
 
     private static Channel createDistanceMapForChnlFromPlugin(
-            Mask chnl,
+            Mask mask,
             boolean suppressZ,
             double multFactor,
             double multFactorZ,
@@ -166,7 +166,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
 
         Channel distanceAsFloat =
                 EDT.compute(
-                        chnl,
+                        mask,
                         ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
                         suppressZ,
                         multFactorZ);
@@ -175,7 +175,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
             distanceAsFloat
                     .voxels()
                     .any()
-                    .multiplyBy(multFactor * chnl.getDimensions().getResolution().getX());
+                    .multiplyBy(multFactor * mask.dimensions().resolution().x());
         } else {
             distanceAsFloat.voxels().any().multiplyBy(multFactor);
         }
