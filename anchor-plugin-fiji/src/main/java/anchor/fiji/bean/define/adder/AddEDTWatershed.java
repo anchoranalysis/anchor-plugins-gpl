@@ -194,7 +194,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
                         maxDistanceBetweenMinima,
                         maxDistanceDeltaContour));
 
-        addWithName(define, SEEDS, seeds(objects(MINIMA_MERGED), dimensions()));
+        addWithName(define, SEEDS, seeds(objects(MINIMA_MERGED)));
     }
 
     private ChannelProvider channel(String unresolvedID) {
@@ -202,7 +202,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
     }
 
     private ImageDimProvider dimensions() {
-        return dimsFromChnl(channel(DISTANCE_TRANSFORM));
+        return dimensionsFromChannel(channel(DISTANCE_TRANSFORM));
     }
 
     private ChannelProvider duplicateChnl(String unresolvedID) {

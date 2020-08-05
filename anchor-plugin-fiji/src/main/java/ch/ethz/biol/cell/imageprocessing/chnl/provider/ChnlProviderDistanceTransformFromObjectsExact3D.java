@@ -50,11 +50,11 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
     // END PROPERTIES
 
     @Override
-    protected Channel createFromDim(ImageDimensions dim) throws CreateException {
+    protected Channel createFromDim(ImageDimensions dimensions) throws CreateException {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
@@ -69,9 +69,9 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
                             createShort,
                             false);
 
-            BoundingBox bboxSrc = new BoundingBox(voxelsDistance.extent());
+            BoundingBox boxSrc = new BoundingBox(voxelsDistance.extent());
             voxelsDistance.copyPixelsToCheckMask(
-                    bboxSrc,
+                    boxSrc,
                     voxelsOut,
                     object.boundingBox(),
                     object.voxels(),

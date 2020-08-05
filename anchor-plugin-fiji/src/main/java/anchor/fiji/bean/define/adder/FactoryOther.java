@@ -52,7 +52,7 @@ class FactoryOther {
         return provider;
     }
 
-    public static ImageDimProvider dimsFromChnl(ChannelProvider chnlProvider) {
+    public static ImageDimProvider dimensionsFromChannel(ChannelProvider chnlProvider) {
         ImageDimProviderFromChnl provider = new ImageDimProviderFromChnl();
         provider.setChnl(chnlProvider);
         return provider;
@@ -78,14 +78,14 @@ class FactoryOther {
     public static ObjectCollectionProvider mergeMinima(
             ObjectCollectionProvider unmergedMinima,
             ObjectCollectionProvider container,
-            ImageDimProvider resProvider,
+            ImageDimProvider dimensionsProvider,
             ChannelProvider sourceDistanceMapProvider,
             UnitValueDistance maxDistanceCOG,
             double maxDistanceDeltaContour) {
         MergeSpatialClusters merge = new MergeSpatialClusters();
         merge.setObjects(unmergedMinima);
         merge.setObjectsContainer(container);
-        merge.setDim(resProvider);
+        merge.setDimensions(dimensionsProvider);
         merge.setDistanceMapProvider(sourceDistanceMapProvider);
         merge.setMaxDistanceCOG(maxDistanceCOG);
         merge.setMaxDistanceDeltaContour(maxDistanceDeltaContour);
@@ -93,10 +93,9 @@ class FactoryOther {
     }
 
     public static ObjectCollectionProvider seeds(
-            ObjectCollectionProvider mergedMinima, ImageDimProvider dimProvider) {
+            ObjectCollectionProvider mergedMinima) {
         DrawLineAlongConvexHull provider = new DrawLineAlongConvexHull();
         provider.setObjects(mergedMinima);
-        provider.setDim(dimProvider);
         return provider;
     }
 }
