@@ -78,8 +78,6 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
         svm.svm_predict_values(model, nodes, arrPredictValues);
         double predictValue = arrPredictValues[0];
 
-        assert (!Double.isNaN(predictValue));
-
         if (direction) {
             return predictValue;
         } else {
