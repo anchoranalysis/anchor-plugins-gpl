@@ -92,8 +92,7 @@ class FactoryOther {
         return merge;
     }
 
-    public static ObjectCollectionProvider seeds(
-            ObjectCollectionProvider mergedMinima) {
+    public static ObjectCollectionProvider seeds(ObjectCollectionProvider mergedMinima) {
         DrawLineAlongConvexHull provider = new DrawLineAlongConvexHull();
         provider.setObjects(mergedMinima);
         return provider;

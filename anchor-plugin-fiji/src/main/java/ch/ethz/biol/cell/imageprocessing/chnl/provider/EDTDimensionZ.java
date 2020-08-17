@@ -24,8 +24,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.voxel.Voxels;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.Voxels;
 
 class EDTDimensionZ extends EDTDimensionBase {
     private byte[][] inSlice;
@@ -35,8 +35,7 @@ class EDTDimensionZ extends EDTDimensionBase {
 
     @Getter private float multiplyConstant;
 
-    public EDTDimensionZ(
-            Voxels<ByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
+    public EDTDimensionZ(Voxels<ByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
         super(in.extent().z());
 
         this.multiplyConstant = multiplyConstant;

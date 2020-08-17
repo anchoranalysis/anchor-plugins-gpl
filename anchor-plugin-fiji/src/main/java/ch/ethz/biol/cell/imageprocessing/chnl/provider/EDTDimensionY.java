@@ -23,8 +23,8 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.voxel.Voxels;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.Voxels;
 
 class EDTDimensionY extends EDTOneDimension {
 

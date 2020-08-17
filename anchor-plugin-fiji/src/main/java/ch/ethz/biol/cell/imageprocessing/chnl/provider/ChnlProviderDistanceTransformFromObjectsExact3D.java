@@ -52,9 +52,8 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
     protected Channel createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
         Channel out =
-                ChannelFactory.instance()
-                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+
         Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
@@ -65,33 +64,36 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
     }
 
     /**
-     * Performs a distance-transform on an individual object, and copies the output to voxels for all objects.
-     * 
+     * Performs a distance-transform on an individual object, and copies the output to voxels for
+     * all objects.
+     *
      * @param object the object to copy
      * @param resolution the image-resolution
      * @param destination voxels into which
      * @throws CreateException
      */
-    private void copyObjectToOutput(ObjectMask object, ImageResolution resolution, Voxels<ByteBuffer> destination) throws CreateException {
+    private void copyObjectToOutput(
+            ObjectMask object, ImageResolution resolution, Voxels<ByteBuffer> destination)
+            throws CreateException {
 
         Voxels<ByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
-        
+
         ObjectMask objectAtOrigin = object.shiftToOrigin();
-        
-        voxelsDistance.extracter().objectCopyTo(
-                objectAtOrigin,
-                destination,
-                object.boundingBox());
+
+        voxelsDistance.extracter().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
     }
-    
-    private Voxels<ByteBuffer> distanceTransformForObject(ObjectMask object, ImageResolution resolution) throws CreateException {
+
+    private Voxels<ByteBuffer> distanceTransformForObject(
+            ObjectMask object, ImageResolution resolution) throws CreateException {
         return ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxels(
-                        object.binaryVoxels().duplicate(),  // TODO duplicated presumably because the voxel-buffer is consumed?
-                        resolution,
-                        suppressZ,
-                        1.0,
-                        1.0,
-                        createShort,
-                        false);
+                object.binaryVoxels()
+                        .duplicate(), // TODO duplicated presumably because the voxel-buffer is
+                // consumed?
+                resolution,
+                suppressZ,
+                1.0,
+                1.0,
+                createShort,
+                false);
     }
 }
