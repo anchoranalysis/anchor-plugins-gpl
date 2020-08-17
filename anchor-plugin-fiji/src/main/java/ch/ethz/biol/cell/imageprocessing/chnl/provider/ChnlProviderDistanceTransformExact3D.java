@@ -129,7 +129,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
                         createDistanceMapForChnlFromPlugin(
                                 slice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
                 chnlOut.voxels()
-                        .transferPixelsForPlane(z, distanceSlice.voxels(), 0, true);
+                        .transferSlice(z, distanceSlice.voxels(), 0, true);
             }
 
             return chnlOut;
@@ -170,20 +170,22 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
                         ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
                         suppressZ,
                         multFactorZ);
-
-        if (applyRes) {
-            distanceAsFloat
-                    .voxels()
-                    .any()
-                    .multiplyBy(multFactor * mask.dimensions().resolution().x());
-        } else {
-            distanceAsFloat.voxels().any().multiplyBy(multFactor);
-        }
-
+        
+        double factor = multiplactionFactor(multFactor,applyRes,mask);
+        distanceAsFloat.arithmetic().multiplyBy(factor);
+        
         ChannelConverter<?> converter =
                 createShort
                         ? new ChannelConverterToUnsignedShort()
                         : new ChannelConverterToUnsignedByte();
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+    }
+    
+    private static double multiplactionFactor(double multFactor, boolean applyRes, Mask mask) {
+        if (applyRes) {
+            return multFactor * mask.dimensions().resolution().x();
+        } else {
+            return multFactor;
+        }
     }
 }

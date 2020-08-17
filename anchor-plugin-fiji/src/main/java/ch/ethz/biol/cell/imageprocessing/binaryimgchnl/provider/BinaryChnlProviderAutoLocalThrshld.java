@@ -71,7 +71,7 @@ public class BinaryChnlProviderAutoLocalThrshld extends BinaryChnlProviderChnlSo
 
             ImageProcessor processor = ipOut.getImageStack().getProcessor(1);
             byte[] arr = (byte[]) processor.getPixels();
-            voxels.updateSlice(z, VoxelBufferByte.wrap(arr));
+            voxels.replaceSlice(z, VoxelBufferByte.wrap(arr));
         }
 
         return new Mask(chnlOut);

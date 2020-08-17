@@ -48,8 +48,8 @@ class EDTDimensionZ extends EDTDimensionBase {
         inSlice = new byte[d][];
         outSlice = new float[d][];
         for (int i = 0; i < d; i++) {
-            inSlice[i] = (byte[]) in.slice(i).buffer().array();
-            outSlice[i] = (float[]) out.slice(i).buffer().array();
+            inSlice[i] = (byte[]) in.sliceBuffer(i).array();
+            outSlice[i] = (float[]) out.sliceBuffer(i).array();
         }
         offset = -1;
     }

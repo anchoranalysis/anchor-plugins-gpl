@@ -58,7 +58,7 @@ abstract class EDTOneDimension extends EDTDimensionBase {
         if (offset >= lastOffset) {
             if (++sliceIndex >= stack.extent().z()) return false;
             offset = 0;
-            slice = stack.slice(sliceIndex).buffer();
+            slice = stack.sliceBuffer(sliceIndex);
         }
         return true;
     }

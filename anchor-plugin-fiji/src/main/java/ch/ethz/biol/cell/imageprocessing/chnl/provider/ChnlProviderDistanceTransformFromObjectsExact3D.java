@@ -27,11 +27,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -50,34 +49,49 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
     // END PROPERTIES
 
     @Override
-    protected Channel createFromDim(ImageDimensions dimensions) throws CreateException {
+    protected Channel createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
-        Channel chnlOut =
+        Channel out =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
+        
+        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
-            BinaryVoxels<ByteBuffer> voxels = object.binaryVoxels().duplicate();
-            Voxels<ByteBuffer> voxelsDistance =
-                    ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxels(
-                            voxels,
-                            chnlOut.dimensions().resolution(),
-                            suppressZ,
-                            1.0,
-                            1.0,
-                            createShort,
-                            false);
-
-            BoundingBox boxSrc = new BoundingBox(voxelsDistance.extent());
-            voxelsDistance.copyPixelsToCheckMask(
-                    boxSrc,
-                    voxelsOut,
-                    object.boundingBox(),
-                    object.voxels(),
-                    object.binaryValuesByte());
+            copyObjectToOutput(object, dimensions.resolution(), voxelsOut);
         }
 
-        return chnlOut;
+        return out;
+    }
+
+    /**
+     * Performs a distance-transform on an individual object, and copies the output to voxels for all objects.
+     * 
+     * @param object the object to copy
+     * @param resolution the image-resolution
+     * @param destination voxels into which
+     * @throws CreateException
+     */
+    private void copyObjectToOutput(ObjectMask object, ImageResolution resolution, Voxels<ByteBuffer> destination) throws CreateException {
+
+        Voxels<ByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
+        
+        ObjectMask objectAtOrigin = object.shiftToOrigin();
+        
+        voxelsDistance.extracter().objectCopyTo(
+                objectAtOrigin,
+                destination,
+                object.boundingBox());
+    }
+    
+    private Voxels<ByteBuffer> distanceTransformForObject(ObjectMask object, ImageResolution resolution) throws CreateException {
+        return ChnlProviderDistanceTransformExact3D.createDistanceMapForVoxels(
+                        object.binaryVoxels().duplicate(),  // TODO duplicated presumably because the voxel-buffer is consumed?
+                        resolution,
+                        suppressZ,
+                        1.0,
+                        1.0,
+                        createShort,
+                        false);
     }
 }

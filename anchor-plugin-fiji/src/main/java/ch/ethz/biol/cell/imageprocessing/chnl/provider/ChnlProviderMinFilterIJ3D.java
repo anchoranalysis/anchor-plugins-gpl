@@ -31,9 +31,9 @@ import process3d.MinMaxMedian;
 public class ChnlProviderMinFilterIJ3D extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        ImagePlus imp = IJWrap.createImagePlus(chnl);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        ImagePlus imp = IJWrap.createImagePlus(channel);
         imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-        return IJWrap.chnlFromImagePlus(imp, chnl.dimensions().resolution());
+        return IJWrap.chnlFromImagePlus(imp, channel.dimensions().resolution());
     }
 }

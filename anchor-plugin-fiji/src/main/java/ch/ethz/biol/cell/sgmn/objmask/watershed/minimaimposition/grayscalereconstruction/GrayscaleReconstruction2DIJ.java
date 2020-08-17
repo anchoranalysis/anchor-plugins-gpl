@@ -55,11 +55,11 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
 
         // We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want
         // reconstruction by Erosion
-        markerCast.subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
+        markerCast.arithmetic().subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
         mask.subtractFromMaxValue();
 
         Voxels<ByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
-        ret.subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
+        ret.arithmetic().subtractFrom(VoxelDataTypeUnsignedByte.MAX_VALUE_INT);
 
         return new VoxelsWrapper(ret);
     }
@@ -67,8 +67,8 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
     private Voxels<ByteBuffer> reconstructionByDilation(
             Voxels<ByteBuffer> maskVb, Voxels<ByteBuffer> markerVb) {
 
-        ImageProcessor processorMask = IJWrap.imageProcessorByte(maskVb.getPlaneAccess(), 0);
-        ImageProcessor processorMarker = IJWrap.imageProcessorByte(markerVb.getPlaneAccess(), 0);
+        ImageProcessor processorMask = IJWrap.imageProcessorByte(maskVb.slices(), 0);
+        ImageProcessor processorMarker = IJWrap.imageProcessorByte(markerVb.slices(), 0);
 
         ImagePlus ipMaskImage = new ImagePlus("mask", processorMask);
         ImagePlus ipMarkerImage = new ImagePlus("marker", processorMarker);
