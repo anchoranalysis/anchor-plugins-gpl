@@ -145,7 +145,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
                 createShort
                         ? VoxelDataTypeUnsignedShort.INSTANCE
                         : VoxelDataTypeUnsignedByte.INSTANCE;
-        return ChannelFactory.instance().createEmptyUninitialised(dims, dataType);
+        return ChannelFactory.instance().createUninitialised(dims, dataType);
     }
 
     @Override

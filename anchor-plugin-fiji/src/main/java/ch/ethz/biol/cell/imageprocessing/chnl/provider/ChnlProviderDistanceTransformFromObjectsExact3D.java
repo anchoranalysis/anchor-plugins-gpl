@@ -53,7 +53,7 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
 
         Channel out =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         
         Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
