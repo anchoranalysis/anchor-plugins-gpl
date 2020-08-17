@@ -24,7 +24,7 @@ package org.anchoranalysis.plugin.ml.bean.object.provider;
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
@@ -52,7 +52,7 @@ class ObjectMaskPlus implements Clusterable {
         double distanceFromContour;
         try {
             distanceFromContour =
-                    IntensityMeanCalculator.calcMeanIntensityObject(distanceMap, object);
+                    IntensityMeanCalculator.calculateMeanIntensityObject(distanceMap, object);
         } catch (FeatureCalculationException e) {
             logger.errorReporter().recordError(ObjectMaskPlus.class, e);
             distanceFromContour = Double.NaN;

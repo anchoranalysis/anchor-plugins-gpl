@@ -90,7 +90,7 @@ public class MergeSpatialClusters extends MergeBase {
                         1.0, // Maximum distance allowed to merge points
                         0, // Ensures no object is discarded as "noise"
                         new DistanceCogDistanceMapMeasure(
-                                calcResRequired(), maxDistanceCOG, maxDistanceDeltaContour));
+                                resolutionRequired(), maxDistanceCOG, maxDistanceDeltaContour));
 
         try {
             Channel distanceMap = distanceMapProvider.create();
