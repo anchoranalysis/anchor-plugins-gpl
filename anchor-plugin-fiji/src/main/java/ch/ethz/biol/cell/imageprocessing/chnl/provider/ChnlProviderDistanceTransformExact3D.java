@@ -38,9 +38,9 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 /**
  * Euclidian Distance Transform from ImageJ that works on 2D as well as 3D z-stacks.
@@ -81,7 +81,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
             throws CreateException {
         Channel chnlIn =
                 ChannelFactory.instance()
-                        .get(VoxelDataTypeUnsignedByte.INSTANCE)
+                        .get(UnsignedByte.INSTANCE)
                         .create(bvb.voxels(), res);
         Mask mask = new Mask(chnlIn, bvb.binaryValues());
 
@@ -142,8 +142,8 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
     private static Channel createEmptyChnl(boolean createShort, ImageDimensions dims) {
         VoxelDataType dataType =
                 createShort
-                        ? VoxelDataTypeUnsignedShort.INSTANCE
-                        : VoxelDataTypeUnsignedByte.INSTANCE;
+                        ? UnsignedShort.INSTANCE
+                        : UnsignedByte.INSTANCE;
         return ChannelFactory.instance().createUninitialised(dims, dataType);
     }
 
@@ -166,7 +166,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
         Channel distanceAsFloat =
                 EDT.compute(
                         mask,
-                        ChannelFactory.instance().get(VoxelDataTypeFloat.INSTANCE),
+                        ChannelFactory.instance().get(Float.INSTANCE),
                         suppressZ,
                         multFactorZ);
 

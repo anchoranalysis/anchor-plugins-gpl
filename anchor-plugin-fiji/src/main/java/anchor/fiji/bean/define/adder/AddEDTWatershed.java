@@ -23,8 +23,6 @@ package anchor.fiji.bean.define.adder;
 
 import static anchor.fiji.bean.define.adder.FactoryOther.*;
 import static anchor.fiji.bean.define.adder.FactorySgmn.*;
-
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderBlur;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderDuplicate;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
@@ -43,7 +41,6 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
-import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 
 /**
  * Performs a Watershed on an EDT transform by bundling together several other beans
@@ -212,10 +209,10 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
     }
 
     private ObjectCollectionProvider objects(String unresolvedID) {
-        return new Reference(resolveName(unresolvedID));
+        return new org.anchoranalysis.plugin.image.bean.object.provider.Reference(resolveName(unresolvedID));
     }
 
     private MaskProvider inputMask() {
-        return new BinaryChnlProviderReference(binaryInputChnlID);
+        return new org.anchoranalysis.plugin.image.bean.mask.provider.Reference(binaryInputChnlID);
     }
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ThresholderAutoIJ extends Thresholder {
 
@@ -74,7 +74,7 @@ public class ThresholderAutoIJ extends Thresholder {
 
         VoxelsWrapper voxelsOut = IJWrap.voxelsFromImagePlus(ip);
 
-        assert (voxelsOut.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE));
+        assert (voxelsOut.getVoxelDataType().equals(UnsignedByte.INSTANCE));
 
         return BinaryVoxelsFactory.reuseByte(voxelsOut.asByte(), bvOut.createInt());
     }

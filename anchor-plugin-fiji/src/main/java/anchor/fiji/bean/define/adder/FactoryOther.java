@@ -48,7 +48,7 @@ class FactoryOther {
             MaskProvider source, UnitValueVolume minVolumeConnectedComponent) {
         ConnectedComponentsFromMask provider = new ConnectedComponentsFromMask();
         provider.setMinVolume(minVolumeConnectedComponent);
-        provider.setBinaryChnl(source);
+        provider.setMask(source);
         return provider;
     }
 

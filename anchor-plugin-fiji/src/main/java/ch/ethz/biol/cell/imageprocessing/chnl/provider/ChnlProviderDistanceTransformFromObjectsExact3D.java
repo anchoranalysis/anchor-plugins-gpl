@@ -33,7 +33,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 // Euclidian distance transform from ImageJ
 //
@@ -52,7 +52,7 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
     protected Channel createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
         Channel out =
-                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, UnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
