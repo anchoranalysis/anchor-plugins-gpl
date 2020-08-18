@@ -107,7 +107,7 @@ public class ChnlProviderDistanceTransformExact3D extends ChnlProviderMask {
             throw new CreateException("Binary Off must be 0");
         }
 
-        if (mask.dimensions().extent().z() > 1 && !suppressZ) {
+        if (mask.extent().z() > 1 && !suppressZ) {
 
             double zRelRes = mask.dimensions().resolution().getZRelativeResolution();
             if (Double.isNaN(zRelRes)) {

@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.extent.Extent;
 
 /**
  * Perona-Malik Anisotropic Diffusion
@@ -59,23 +58,21 @@ public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
     // Assumes XY res are identical
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static Channel diffusion(
-            Channel chnl, double deltat, DiffusionFunction df, int iterations, boolean do3D)
+            Channel channel, double deltat, DiffusionFunction df, int iterations, boolean do3D)
             throws CreateException {
 
-        Extent extent = chnl.dimensions().extent();
         try {
             if (do3D) {
-                Img img = ImgLib2Wrap.wrap(chnl.voxels());
+                Img img = ImgLib2Wrap.wrap(channel.voxels());
                 doDiffusion(img, deltat, df, iterations);
             } else {
-
-                for (int z = 0; z < chnl.dimensions().z(); z++) {
-                    Img img = ImgLib2Wrap.wrap(chnl.voxels().slice(z), extent);
+                channel.extent().iterateOverZ( z-> {
+                    Img img = ImgLib2Wrap.wrap(channel.voxels().slice(z), channel.extent());
                     doDiffusion(img, deltat, df, iterations);
-                }
+                });
             }
 
-            return chnl;
+            return channel;
         } catch (IncompatibleTypeException e1) {
             throw new CreateException(e1);
         }

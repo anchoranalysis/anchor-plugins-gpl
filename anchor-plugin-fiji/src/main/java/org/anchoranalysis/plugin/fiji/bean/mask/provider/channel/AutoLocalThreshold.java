@@ -67,7 +67,7 @@ public class AutoLocalThreshold extends FromChannelBase {
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
-        chnl.dimensions().extent().iterateOverZ( z-> {
+        chnl.extent().iterateOverZ( z-> {
             VoxelBufferByte thresholded = thresholdSlice(stack.extractSlice(z), at);
             out.voxels().replaceSlice(z, thresholded );
         });
