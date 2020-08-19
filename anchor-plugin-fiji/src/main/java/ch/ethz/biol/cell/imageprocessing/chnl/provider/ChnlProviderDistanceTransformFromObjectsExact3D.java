@@ -80,7 +80,7 @@ public class ChnlProviderDistanceTransformFromObjectsExact3D extends ChnlProvide
 
         ObjectMask objectAtOrigin = object.shiftToOrigin();
 
-        voxelsDistance.extracter().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
+        voxelsDistance.extract().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
     }
 
     private Voxels<ByteBuffer> distanceTransformForObject(
