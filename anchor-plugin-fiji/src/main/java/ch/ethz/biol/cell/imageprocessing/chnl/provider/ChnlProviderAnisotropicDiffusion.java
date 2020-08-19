@@ -31,7 +31,7 @@ import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.convert.ImgLib2Wrap;
  *
  * @author Owen Feehan
  */
-public class ChnlProviderAnisotropicDiffusion extends ChnlProviderOne {
+public class ChnlProviderAnisotropicDiffusion extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Positive @Getter @Setter private double kappa;
