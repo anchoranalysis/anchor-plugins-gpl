@@ -55,19 +55,19 @@ public class AutoLocalThreshold extends FromChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromSource(Channel chnl) throws CreateException {
+    protected Mask createFromSource(Channel channel) throws CreateException {
 
         // TODO is this duplication needed?
-        chnl = chnl.duplicate();
+        channel = channel.duplicate();
 
-        Stack stack = new Stack(chnl);
+        Stack stack = new Stack(channel);
 
         // The default binary values for OFF (0) and ON (255) match the output from the plugin
-        Mask out = MaskFactory.createMaskOff(chnl.dimensions(), BinaryValues.getDefault());
+        Mask out = MaskFactory.createMaskOff(channel.dimensions(), BinaryValues.getDefault());
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
-        chnl.extent().iterateOverZ( z-> {
+        channel.extent().iterateOverZ( z-> {
             VoxelBufferByte thresholded = thresholdSlice(stack.extractSlice(z), at);
             out.voxels().replaceSlice(z, thresholded );
         });

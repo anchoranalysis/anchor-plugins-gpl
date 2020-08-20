@@ -52,9 +52,9 @@ class FactoryOther {
         return provider;
     }
 
-    public static DimensionsProvider dimensionsFromChannel(ChannelProvider chnlProvider) {
+    public static DimensionsProvider dimensionsFromChannel(ChannelProvider channelProvider) {
         FromChannel provider = new FromChannel();
-        provider.setChnl(chnlProvider);
+        provider.setChannel(channelProvider);
         return provider;
     }
 
@@ -71,7 +71,7 @@ class FactoryOther {
     public static ChannelProvider distanceTransformAfterInvert(ChannelProvider source) {
         SubtractFromConstant provider = new SubtractFromConstant();
         provider.setValue(65535);
-        provider.setChnl(source);
+        provider.setChannel(source);
         return provider;
     }
 

@@ -62,9 +62,9 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 
     private static final String CONNECTED_INPUT = "objsInputConnected";
-    private static final String DISTANCE_TRANSFORM = "chnlDistance";
-    private static final String DISTANCE_TRANSFORM_SMOOTH = "chnlDistanceSmooth";
-    private static final String DISTANCE_TRANSFORM_BEFORE_INVERT = "chnlDistanceBeforeInvert";
+    private static final String DISTANCE_TRANSFORM = "channelDistance";
+    private static final String DISTANCE_TRANSFORM_SMOOTH = "channelDistanceSmooth";
+    private static final String DISTANCE_TRANSFORM_BEFORE_INVERT = "channelDistanceBeforeInvert";
     private static final String MINIMA_UNMERGED =
             "objsMinimaUnmerged"; // Minima have not yet been 'merged' together
     private static final String MINIMA_MERGED =
@@ -74,7 +74,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
 
     // START BEAN PROPERTIES
     /** The ID of the binary input mask that determines the region of the watershed */
-    @BeanField @Getter @Setter private String binaryInputChnlID;
+    @BeanField @Getter @Setter private String binaryInputChannelID;
 
     @BeanField @Getter @Setter
     private UnitValueVolume minVolumeConnectedComponent = new UnitValueVolumeVoxels(1);
@@ -139,14 +139,14 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
                     define,
                     DISTANCE_TRANSFORM_SMOOTH,
                     smooth(
-                            duplicateChnl(DISTANCE_TRANSFORM_BEFORE_INVERT),
+                            duplicateChannel(DISTANCE_TRANSFORM_BEFORE_INVERT),
                             distanceTransformSmoothSigmaMeters));
         }
 
         addWithName(
                 define,
                 DISTANCE_TRANSFORM,
-                distanceTransformAfterInvert(duplicateChnl(sourceForInversion())));
+                distanceTransformAfterInvert(duplicateChannel(sourceForInversion())));
     }
 
     private boolean isDistanceTransformSmoothed() {
@@ -165,7 +165,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
             ChannelProvider src, double distanceTransformSmoothedSigmaMeters) {
         Blur provider = new Blur();
         provider.setStrategy(createBlurStrategy(distanceTransformSmoothedSigmaMeters));
-        provider.setChnl(src);
+        provider.setChannel(src);
         return provider;
     }
 
@@ -202,9 +202,9 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
         return dimensionsFromChannel(channel(DISTANCE_TRANSFORM));
     }
 
-    private ChannelProvider duplicateChnl(String unresolvedID) {
+    private ChannelProvider duplicateChannel(String unresolvedID) {
         Duplicate dup = new Duplicate();
-        dup.setChnl(channel(unresolvedID));
+        dup.setChannel(channel(unresolvedID));
         return dup;
     }
 
@@ -213,6 +213,6 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
     }
 
     private MaskProvider inputMask() {
-        return ReferenceFactory.mask(binaryInputChnlID);
+        return ReferenceFactory.mask(binaryInputChannelID);
     }
 }

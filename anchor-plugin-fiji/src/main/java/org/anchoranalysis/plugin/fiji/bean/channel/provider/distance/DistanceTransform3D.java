@@ -122,17 +122,17 @@ public class DistanceTransform3D extends FromMaskBase {
 
         if (suppressZ) {
 
-            Channel chnlOut = createEmptyChnl(createShort, mask.dimensions());
+            Channel channelOut = createEmptyChannel(createShort, mask.dimensions());
 
             for (int z = 0; z < mask.dimensions().extent().z(); z++) {
                 Mask slice = mask.extractSlice(z);
                 Channel distanceSlice =
                         createDistanceMapForChannelFromPlugin(
                                 slice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
-                chnlOut.voxels().transferSlice(z, distanceSlice.voxels(), 0, true);
+                channelOut.voxels().transferSlice(z, distanceSlice.voxels(), 0, true);
             }
 
-            return chnlOut;
+            return channelOut;
 
         } else {
             return createDistanceMapForChannelFromPlugin(
@@ -140,7 +140,7 @@ public class DistanceTransform3D extends FromMaskBase {
         }
     }
 
-    private static Channel createEmptyChnl(boolean createShort, Dimensions dims) {
+    private static Channel createEmptyChannel(boolean createShort, Dimensions dims) {
         VoxelDataType dataType =
                 createShort
                         ? UnsignedShortVoxelType.INSTANCE

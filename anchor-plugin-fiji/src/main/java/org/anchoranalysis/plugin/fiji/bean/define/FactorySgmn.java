@@ -46,7 +46,7 @@ class FactorySgmn {
             MaskProvider mask, ChannelProvider distanceTransform) {
         SegmentChannel provider = new SegmentChannel();
         provider.setMask(mask);
-        provider.setChnl(distanceTransform);
+        provider.setChannel(distanceTransform);
         provider.setSgmn(watershedSgmnForMinima());
         return provider;
     }
@@ -58,7 +58,7 @@ class FactorySgmn {
         SegmentWithSeeds provider = new SegmentWithSeeds();
         provider.setObjectsSource(sourceObjects);
         provider.setObjectsSeeds(seeds);
-        provider.setChnl(distanceTransform);
+        provider.setChannel(distanceTransform);
         provider.setSgmn(watershedSgmnForSegments());
         return provider;
     }
