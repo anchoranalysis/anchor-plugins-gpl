@@ -28,7 +28,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.util.MathArrays;
 
@@ -38,7 +38,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private final ImageResolution res;
+    private final Resolution res;
     private final UnitValueDistance maxDistance;
     private final double maxDistanceDeltaContour;
 
