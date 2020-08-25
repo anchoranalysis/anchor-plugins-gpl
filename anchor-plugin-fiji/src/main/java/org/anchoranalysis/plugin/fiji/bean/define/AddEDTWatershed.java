@@ -21,10 +21,11 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.define;
 
-import lombok.Getter;
-import lombok.Setter;
 import static org.anchoranalysis.plugin.fiji.bean.define.FactoryOther.*;
 import static org.anchoranalysis.plugin.fiji.bean.define.FactorySgmn.*;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;

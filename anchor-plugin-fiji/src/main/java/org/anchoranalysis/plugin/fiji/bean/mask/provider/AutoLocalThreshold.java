@@ -39,11 +39,10 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
  * Applies local thresholding algorithm using Fiji's {link Auto_Local_Threshold} plugin
- * 
- * <p>The thresholding procedure it applied to each slice independently.
- * 
- * @author Owen Feehan
  *
+ * <p>The thresholding procedure it applied to each slice independently.
+ *
+ * @author Owen Feehan
  */
 public class AutoLocalThreshold extends FromChannelBase {
 
@@ -67,14 +66,16 @@ public class AutoLocalThreshold extends FromChannelBase {
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
-        channel.extent().iterateOverZ( z-> {
-            VoxelBufferByte thresholded = thresholdSlice(stack.extractSlice(z), at);
-            out.voxels().replaceSlice(z, thresholded );
-        });
+        channel.extent()
+                .iterateOverZ(
+                        z -> {
+                            VoxelBufferByte thresholded = thresholdSlice(stack.extractSlice(z), at);
+                            out.voxels().replaceSlice(z, thresholded);
+                        });
 
         return out;
     }
-    
+
     private VoxelBufferByte thresholdSlice(Stack slice, Auto_Local_Threshold at) {
         ImagePlus imagePlus = IJWrap.createImagePlus(slice, false);
 

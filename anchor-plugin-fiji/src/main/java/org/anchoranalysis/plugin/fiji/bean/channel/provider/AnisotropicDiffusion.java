@@ -66,10 +66,14 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
                 Img img = ImgLib2Wrap.wrap(channel.voxels());
                 doDiffusion(img, deltat, df, iterations);
             } else {
-                channel.extent().iterateOverZ( z-> {
-                    Img img = ImgLib2Wrap.wrap(channel.voxels().slice(z), channel.extent());
-                    doDiffusion(img, deltat, df, iterations);
-                });
+                channel.extent()
+                        .iterateOverZ(
+                                z -> {
+                                    Img img =
+                                            ImgLib2Wrap.wrap(
+                                                    channel.voxels().slice(z), channel.extent());
+                                    doDiffusion(img, deltat, df, iterations);
+                                });
             }
 
             return channel;

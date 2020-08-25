@@ -190,9 +190,7 @@ public class FeatureListProviderSVMClassifier
         }
     }
 
-    /**
-     * Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise
-     */
+    /** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise */
     private Optional<Feature<FeatureInput>> getOrAddToMissing(
             String featureName,
             FirstSecondOrderStatistic stat,

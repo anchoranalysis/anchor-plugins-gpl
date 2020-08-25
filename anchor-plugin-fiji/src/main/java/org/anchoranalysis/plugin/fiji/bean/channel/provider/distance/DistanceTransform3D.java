@@ -37,11 +37,11 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.plugin.image.bean.channel.provider.mask.FromMaskBase;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.plugin.image.bean.channel.provider.mask.FromMaskBase;
 
 /**
  * Euclidian Distance Transform from ImageJ that works on 2D as well as 3D z-stacks.
@@ -142,9 +142,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
     private static Channel createEmptyChannel(boolean createShort, Dimensions dims) {
         VoxelDataType dataType =
-                createShort
-                        ? UnsignedShortVoxelType.INSTANCE
-                        : UnsignedByteVoxelType.INSTANCE;
+                createShort ? UnsignedShortVoxelType.INSTANCE : UnsignedByteVoxelType.INSTANCE;
         return ChannelFactory.instance().createUninitialised(dims, dataType);
     }
 
@@ -181,7 +179,8 @@ public class DistanceTransform3D extends FromMaskBase {
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
-    private static double multiplicationFactor(double multFactor, boolean applyResolution, Mask mask) {
+    private static double multiplicationFactor(
+            double multFactor, boolean applyResolution, Mask mask) {
         if (applyResolution) {
             return multFactor * mask.dimensions().resolution().x();
         } else {

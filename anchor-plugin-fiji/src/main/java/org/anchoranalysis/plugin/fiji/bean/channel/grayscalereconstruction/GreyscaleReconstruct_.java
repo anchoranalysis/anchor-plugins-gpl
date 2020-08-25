@@ -54,10 +54,10 @@ import ij.process.*;
  * <p>v2.1 4/5/2009 4-connected option, fixed skipping empty extreme of histogram v2.2 24/5/2009
  * speed up due to BinaryReconstruct
  */
-class GreyscaleReconstruct_ implements PlugIn {  // NOSONAR
+class GreyscaleReconstruct_ implements PlugIn { // NOSONAR
     /** Ask for parameters and then execute. */
     @Override
-    public void run(String arg) {  // NOSONAR
+    public void run(String arg) { // NOSONAR
 
         if (IJ.versionLessThan("1.37f")) return;
         int[] wList = WindowManager.getIDList();
@@ -69,13 +69,13 @@ class GreyscaleReconstruct_ implements PlugIn {  // NOSONAR
         String[] titles = new String[wList.length];
         for (int i = 0, k = 0; i < wList.length; i++) {
             ImagePlus imp = WindowManager.getImage(wList[i]);
-            if (null != imp) titles[k++] = imp.getTitle();  // NOSONAR
+            if (null != imp) titles[k++] = imp.getTitle(); // NOSONAR
         }
         // 1 - Obtain the currently active image if necessary:
         // Erm... no.
 
         // 2 - Ask for parameters:
-        boolean createWindow = true, connect4 = false;  // NOSONAR
+        boolean createWindow = true, connect4 = false; // NOSONAR
         GenericDialog gd = new GenericDialog("Greyscale Reconstruction");
         gd.addMessage("Greyscale Reconstruction v 2.2");
         gd.addChoice("mask i1:", titles, titles[0]);
@@ -130,10 +130,10 @@ class GreyscaleReconstruct_ implements PlugIn {  // NOSONAR
      *     image; just returns it.
      */
     @SuppressWarnings("unused")
-    public Object[] exec(  // NOSONAR
+    public Object[] exec( // NOSONAR
             ImagePlus imp1,
             ImagePlus imp2,
-            String new_name,  // NOSONAR
+            String new_name, // NOSONAR
             boolean createWindow,
             boolean connect4) { // NOSONAR
 
@@ -148,8 +148,8 @@ class GreyscaleReconstruct_ implements PlugIn {  // NOSONAR
         ImagePlus imp3, imp4, imp5; // NOSONAR
         ImageStatistics stats;
         int i, j, x, y, size; // NOSONAR
-        byte b_0 = (byte) (0 & 0xff);  // NOSONAR
-        byte b_255 = (byte) (255 & 0xff);  // NOSONAR
+        byte b_0 = (byte) (0 & 0xff); // NOSONAR
+        byte b_255 = (byte) (255 & 0xff); // NOSONAR
         IJ.showStatus("Greyscale Reconstruction...");
 
         // 1 - Perform the magic
@@ -201,7 +201,7 @@ class GreyscaleReconstruct_ implements PlugIn {  // NOSONAR
                  * Careful! the exec method of BinaryReconstruct does not check whether the images
                  * are binary !!
                  */
-                Object[] result =  // NOSONAR
+                Object[] result = // NOSONAR
                         br.exec(
                                 imp4, imp5, null, false, true,
                                 connect4); // the result is returned in imp5 if createWindow is

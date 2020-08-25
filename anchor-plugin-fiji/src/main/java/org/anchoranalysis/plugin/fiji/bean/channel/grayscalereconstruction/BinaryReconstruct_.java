@@ -64,10 +64,10 @@ import ij.process.*;
  * image, white particles, connect4 if (null != result) { String name = (String) result[0];
  * ImagePlus recons = (ImagePlus) result[1]; }
  */
-class BinaryReconstruct_ implements PlugIn {  // NOSONAR
+class BinaryReconstruct_ implements PlugIn { // NOSONAR
     /** Ask for parameters and then execute. */
     @Override
-    public void run(String arg) {  // NOSONAR
+    public void run(String arg) { // NOSONAR
 
         if (IJ.versionLessThan("1.37f")) return;
         int[] wList = WindowManager.getIDList();
@@ -79,13 +79,13 @@ class BinaryReconstruct_ implements PlugIn {  // NOSONAR
         String[] titles = new String[wList.length];
         for (int i = 0, k = 0; i < wList.length; i++) {
             ImagePlus imp = WindowManager.getImage(wList[i]);
-            if (null != imp) titles[k++] = imp.getTitle();  // NOSONAR
+            if (null != imp) titles[k++] = imp.getTitle(); // NOSONAR
         }
         // 1 - Obtain the currently active image if necessary:
 
         // 2 - Ask for parameters:
         boolean createWindow = true,
-                whiteParticles = Prefs.blackBackground,  // NOSONAR
+                whiteParticles = Prefs.blackBackground, // NOSONAR
                 connect4 = false; // NOSONAR
         GenericDialog gd = new GenericDialog("Binary Reconstruction");
         gd.addMessage("Binary Reconstruction v 2.2");
@@ -154,17 +154,17 @@ class BinaryReconstruct_ implements PlugIn {  // NOSONAR
      *     Does NOT show the new, image; just returns it.
      */
     @SuppressWarnings("unused")
-    public Object[] exec(  // NOSONAR
+    public Object[] exec( // NOSONAR
             ImagePlus imp1,
             ImagePlus imp2,
-            String new_name,  // NOSONAR
+            String new_name, // NOSONAR
             boolean createWindow,
             boolean whiteParticles,
             boolean connect4) { // NOSONAR
 
         // 0 - Check validity of parameters
-        if (null == imp1) return null;  // NOSONAR
-        if (null == imp2) return null;  // NOSONAR
+        if (null == imp1) return null; // NOSONAR
+        if (null == imp2) return null; // NOSONAR
         if (null == new_name) new_name = imp2.getTitle();
 
         int width = imp1.getWidth();
@@ -216,7 +216,7 @@ class BinaryReconstruct_ implements PlugIn {  // NOSONAR
                 for (x = 0; x < width; x++) {
                     pointer = offset + x;
                     if ((seed[pointer] & 0xff) == foreground) {
-                        if ((res[pointer] & 0xff) == 127) ff.fill(x, y);  // NOSONAR
+                        if ((res[pointer] & 0xff) == 127) ff.fill(x, y); // NOSONAR
                     }
                 }
             }
@@ -226,7 +226,7 @@ class BinaryReconstruct_ implements PlugIn {  // NOSONAR
                 for (x = 0; x < width; x++) {
                     pointer = offset + x;
                     if ((seed[pointer] & 0xff) == foreground) {
-                        if ((res[pointer] & 0xff) == 127) ff.fill8(x, y);  // NOSONAR
+                        if ((res[pointer] & 0xff) == 127) ff.fill8(x, y); // NOSONAR
                     }
                 }
             }

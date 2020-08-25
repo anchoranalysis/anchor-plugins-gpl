@@ -37,13 +37,12 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromDimensionsBase;
 
 /**
- * Like {@link DistanceTransform3D} but applies the distance transform seperately
- * for each object in a collection.
- * 
- * <p>A new channel is always created i.e. the input channel is unchanged.
- * 
- * @author Owen Feehan
+ * Like {@link DistanceTransform3D} but applies the distance transform seperately for each object in
+ * a collection.
  *
+ * <p>A new channel is always created i.e. the input channel is unchanged.
+ *
+ * @author Owen Feehan
  */
 public class DistanceTransformForEachObject3D extends FromDimensionsBase {
 
@@ -58,8 +57,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
     @Override
     protected Channel createFromDimensions(Dimensions dimensions) throws CreateException {
 
-        Channel out =
-                ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
+        Channel out = ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
         Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
@@ -90,11 +88,12 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
         voxelsDistance.extract().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
     }
 
-    private Voxels<ByteBuffer> distanceTransformForObject(
-            ObjectMask object, Resolution resolution) throws CreateException {
+    private Voxels<ByteBuffer> distanceTransformForObject(ObjectMask object, Resolution resolution)
+            throws CreateException {
         return DistanceTransform3D.createDistanceMapForVoxels(
                 object.binaryVoxels()
-                        .duplicate(), // TODO duplicated presumably because the voxel-buffer is consumed?
+                        .duplicate(), // TODO duplicated presumably because the voxel-buffer is
+                // consumed?
                 resolution,
                 suppressZ,
                 1.0,
