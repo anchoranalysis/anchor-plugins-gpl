@@ -22,7 +22,7 @@
 package org.anchoranalysis.plugin.fiji.bean.define;
 
 import static org.anchoranalysis.plugin.fiji.bean.define.FactoryOther.*;
-import static org.anchoranalysis.plugin.fiji.bean.define.FactorySgmn.*;
+import static org.anchoranalysis.plugin.fiji.bean.define.SegmentFactory.*;
 
 import lombok.Getter;
 import lombok.Setter;

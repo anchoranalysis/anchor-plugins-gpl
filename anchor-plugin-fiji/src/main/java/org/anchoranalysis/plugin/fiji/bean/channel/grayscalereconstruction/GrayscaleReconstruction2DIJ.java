@@ -31,7 +31,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 

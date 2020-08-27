@@ -29,25 +29,25 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.plugin.image.bean.object.provider.segment.SegmentChannel;
 import org.anchoranalysis.plugin.image.bean.object.provider.segment.SegmentWithSeeds;
-import org.anchoranalysis.plugin.image.bean.object.segment.ImposeMinima;
-import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.MinimaImpositionGrayscaleReconstruction;
-import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
-import org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong.WatershedYeong;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.ImposeMinima;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.MinimaImpositionGrayscaleReconstruction;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionRobinson;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong.WatershedYeong;
 
 /**
- * Beans related to segmentation
+ * Provides segmentations wrapped in a {@link ObjectCollectionProvider}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FactorySgmn {
+class SegmentFactory {
 
     public static ObjectCollectionProvider minimaUnmerged(
             MaskProvider mask, ChannelProvider distanceTransform) {
         SegmentChannel provider = new SegmentChannel();
         provider.setMask(mask);
         provider.setChannel(distanceTransform);
-        provider.setSgmn(watershedSgmnForMinima());
+        provider.setSegment(watershedForMinima());
         return provider;
     }
 
@@ -59,18 +59,17 @@ class FactorySgmn {
         provider.setObjectsSource(sourceObjects);
         provider.setObjectsSeeds(seeds);
         provider.setChannel(distanceTransform);
-        provider.setSgmn(watershedSgmnForSegments());
+        provider.setSegment(watershedForSegments());
         return provider;
     }
 
-    private static SegmentChannelIntoObjects watershedSgmnForMinima() {
-        WatershedYeong sgmn = new WatershedYeong();
-        sgmn.setExitWithMinima(true);
-        return sgmn;
+    private static SegmentChannelIntoObjects watershedForMinima() {
+        WatershedYeong segment = new WatershedYeong();
+        segment.setExitWithMinima(true);
+        return segment;
     }
 
-    private static SegmentChannelIntoObjects watershedSgmnForSegments() {
-
+    private static SegmentChannelIntoObjects watershedForSegments() {
         ImposeMinima impose = new ImposeMinima();
         impose.setSegment(new WatershedYeong());
         impose.setMinimaImposition(minimaImposion());
