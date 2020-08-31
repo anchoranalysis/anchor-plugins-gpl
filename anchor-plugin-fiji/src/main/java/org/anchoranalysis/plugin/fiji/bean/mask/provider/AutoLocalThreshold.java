@@ -26,15 +26,17 @@ import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import lombok.Getter;
 import lombok.Setter;
+import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
@@ -69,20 +71,20 @@ public class AutoLocalThreshold extends FromChannelBase {
         channel.extent()
                 .iterateOverZ(
                         z -> {
-                            VoxelBufferByte thresholded = thresholdSlice(stack.extractSlice(z), at);
+                            VoxelBuffer<ByteBuffer> thresholded = thresholdSlice(stack.extractSlice(z), at);
                             out.voxels().replaceSlice(z, thresholded);
                         });
 
         return out;
     }
 
-    private VoxelBufferByte thresholdSlice(Stack slice, Auto_Local_Threshold at) {
-        ImagePlus imagePlus = IJWrap.createImagePlus(slice, false);
+    private VoxelBuffer<ByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) {
+        ImagePlus imagePlus = ConvertToImagePlus.from(slice, false);
 
         Object[] ret = at.exec(imagePlus, method, radius, 0, 0, true);
-        ImagePlus ipOut = (ImagePlus) ret[0];
+        ImagePlus imageOut = (ImagePlus) ret[0];
 
-        ImageProcessor processor = ipOut.getImageStack().getProcessor(1);
-        return VoxelBufferByte.wrap((byte[]) processor.getPixels());
+        ImageProcessor processor = imageOut.getImageStack().getProcessor(1);
+        return ConvertToVoxelBuffer.asByte(processor);
     }
 }

@@ -25,15 +25,16 @@ import ij.ImagePlus;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.IJWrap;
+import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
+import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import process3d.MinMaxMedian;
 
 public class MinimumFilter extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ImagePlus imp = IJWrap.createImagePlus(channel);
+        ImagePlus imp = ConvertToImagePlus.from(channel);
         imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-        return IJWrap.channelFromImagePlus(imp, channel.dimensions().resolution());
+        return ConvertFromImagePlus.toChannel(imp, channel.dimensions().resolution());
     }
 }

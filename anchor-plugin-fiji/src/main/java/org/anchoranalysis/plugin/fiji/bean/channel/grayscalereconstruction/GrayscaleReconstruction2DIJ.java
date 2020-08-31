@@ -26,11 +26,12 @@ import ij.process.ImageProcessor;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
+import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
@@ -64,18 +65,18 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
     }
 
     private Voxels<ByteBuffer> reconstructionByDilation(
-            Voxels<ByteBuffer> maskVb, Voxels<ByteBuffer> markerVb) {
+            Voxels<ByteBuffer> mask, Voxels<ByteBuffer> marker) {
 
-        ImageProcessor processorMask = IJWrap.imageProcessorByte(maskVb.slices(), 0);
-        ImageProcessor processorMarker = IJWrap.imageProcessorByte(markerVb.slices(), 0);
+        ImageProcessor processorMask = ConvertToImageProcessor.fromByte(mask.slices(), 0);
+        ImageProcessor processorMarker = ConvertToImageProcessor.fromByte(marker.slices(), 0);
 
-        ImagePlus ipMaskImage = new ImagePlus("mask", processorMask);
-        ImagePlus ipMarkerImage = new ImagePlus("marker", processorMarker);
+        ImagePlus imageMask = new ImagePlus("mask", processorMask);
+        ImagePlus imageMarker = new ImagePlus("marker", processorMarker);
 
         GreyscaleReconstruct_ gr = new GreyscaleReconstruct_();
-        Object[] ret = gr.exec(ipMaskImage, ipMarkerImage, "recon", true, false);
+        Object[] ret = gr.exec(imageMask, imageMarker, "recon", true, false);
 
         ImagePlus ipRecon = (ImagePlus) ret[1];
-        return IJWrap.voxelsFromImagePlus(ipRecon).asByte();
+        return ConvertFromImagePlus.toVoxels(ipRecon).asByte();
     }
 }

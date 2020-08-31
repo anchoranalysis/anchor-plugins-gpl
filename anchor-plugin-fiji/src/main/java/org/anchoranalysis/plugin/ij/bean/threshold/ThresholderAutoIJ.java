@@ -33,11 +33,12 @@ import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
+import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 
 public class ThresholderAutoIJ extends Thresholder {
 
@@ -57,7 +58,7 @@ public class ThresholderAutoIJ extends Thresholder {
     @Override
     public BinaryVoxels<ByteBuffer> threshold(
             VoxelsWrapper inputBuffer,
-            BinaryValuesByte bvOut,
+            BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
@@ -66,16 +67,21 @@ public class ThresholderAutoIJ extends Thresholder {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 
-        ImagePlus ip = IJWrap.createImagePlus(inputBuffer);
+        ImagePlus image = ConvertToImagePlus.from(inputBuffer);
 
         Auto_Threshold at = new Auto_Threshold();
+        at.exec(image, method, false, noBlack, true, false, false, true);
 
-        at.exec(ip, method, false, noBlack, true, false, false, true);
+        return convertToBinary(image, binaryValues);
+    }
+    
+    private static BinaryVoxels<ByteBuffer> convertToBinary(ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
+        VoxelsWrapper thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);
 
-        VoxelsWrapper voxelsOut = IJWrap.voxelsFromImagePlus(ip);
+        if (!thresholdedVoxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+            throw new OperationFailedException("The threshold operation returned a data-type that is not unsigned 8-bit");
+        }
 
-        assert (voxelsOut.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE));
-
-        return BinaryVoxelsFactory.reuseByte(voxelsOut.asByte(), bvOut.createInt());
+        return BinaryVoxelsFactory.reuseByte(thresholdedVoxels.asByte(), binaryValues.createInt());
     }
 }
