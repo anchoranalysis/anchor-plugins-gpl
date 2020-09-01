@@ -22,7 +22,6 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.grayscalereconstruction;
 
 import ij.ImagePlus;
-import ij.process.ImageProcessor;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -31,7 +30,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
-import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
+import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
@@ -67,11 +66,8 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
     private Voxels<ByteBuffer> reconstructionByDilation(
             Voxels<ByteBuffer> mask, Voxels<ByteBuffer> marker) {
 
-        ImageProcessor processorMask = ConvertToImageProcessor.fromByte(mask.slices(), 0);
-        ImageProcessor processorMarker = ConvertToImageProcessor.fromByte(marker.slices(), 0);
-
-        ImagePlus imageMask = new ImagePlus("mask", processorMask);
-        ImagePlus imageMarker = new ImagePlus("marker", processorMarker);
+        ImagePlus imageMask = ConvertToImagePlus.fromSlice(mask, 0, "mask");
+        ImagePlus imageMarker = ConvertToImagePlus.fromSlice(marker, 0, "marker");
 
         GreyscaleReconstruct_ gr = new GreyscaleReconstruct_();
         Object[] ret = gr.exec(imageMask, imageMarker, "recon", true, false);
