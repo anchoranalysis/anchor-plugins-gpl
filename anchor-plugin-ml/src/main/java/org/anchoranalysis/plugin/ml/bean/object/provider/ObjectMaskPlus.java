@@ -24,14 +24,14 @@ package org.anchoranalysis.plugin.ml.bean.object.provider;
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
 /**
- * Caches some properties of object mask, and acts as an input to the clustering algorithm.
+ * Caches some properties of object-mask, and acts as an input to the clustering algorithm.
  *
  * <p>The properties are:
  *
@@ -52,7 +52,7 @@ class ObjectMaskPlus implements Clusterable {
         double distanceFromContour;
         try {
             distanceFromContour =
-                    IntensityMeanCalculator.calcMeanIntensityObject(distanceMap, object);
+                    IntensityMeanCalculator.calculateMeanIntensityObject(distanceMap, object);
         } catch (FeatureCalculationException e) {
             logger.errorReporter().recordError(ObjectMaskPlus.class, e);
             distanceFromContour = Double.NaN;
@@ -68,9 +68,9 @@ class ObjectMaskPlus implements Clusterable {
 
     private static double[] arrayFrom(Point3d point, double distanceFromContour) {
         double[] arr = new double[4];
-        arr[0] = point.getX();
-        arr[1] = point.getY();
-        arr[2] = point.getZ();
+        arr[0] = point.x();
+        arr[1] = point.y();
+        arr[2] = point.z();
         arr[3] = distanceFromContour;
         return arr;
     }

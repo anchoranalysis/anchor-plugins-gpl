@@ -53,13 +53,13 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     private static final String FEATURE_NAME_CLASSIFIER = "ldaClassifier";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private KeyValueParamsProvider params;
     // END BEAN PROPERTIES
 
     @Override
     public FeatureList<T> create() throws CreateException {
 
-        KeyValueParams kpv = keyValueParamsProvider.create();
+        KeyValueParams kpv = params.create();
 
         if (kpv == null) {
             throw new CreateException("Cannot find KeyValueParams for LDA Model");

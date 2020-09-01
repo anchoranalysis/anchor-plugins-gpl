@@ -32,9 +32,9 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
@@ -90,7 +90,7 @@ public class MergeSpatialClusters extends MergeBase {
                         1.0, // Maximum distance allowed to merge points
                         0, // Ensures no object is discarded as "noise"
                         new DistanceCogDistanceMapMeasure(
-                                calcResRequired(), maxDistanceCOG, maxDistanceDeltaContour));
+                                resolutionRequired(), maxDistanceCOG, maxDistanceDeltaContour));
 
         try {
             Channel distanceMap = distanceMapProvider.create();

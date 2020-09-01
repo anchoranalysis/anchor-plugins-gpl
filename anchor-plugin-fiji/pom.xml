@@ -57,7 +57,7 @@
 	  transitivitely included via this link -->
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-ij</artifactId>
+	  <artifactId>anchor-plugin-imagej</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
   

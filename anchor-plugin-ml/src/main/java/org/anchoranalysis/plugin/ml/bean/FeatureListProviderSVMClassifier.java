@@ -36,7 +36,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -191,11 +190,7 @@ public class FeatureListProviderSVMClassifier
         }
     }
 
-    /**
-     * Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise
-     *
-     * @throws GetOperationFailedException
-     */
+    /** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise */
     private Optional<Feature<FeatureInput>> getOrAddToMissing(
             String featureName,
             FirstSecondOrderStatistic stat,
