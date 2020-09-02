@@ -38,7 +38,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
     /** */
     private static final long serialVersionUID = 1L;
 
-    private final Resolution res;
+    private final Resolution resolution;
     private final UnitValueDistance maxDistance;
     private final double maxDistanceDeltaContour;
 
@@ -48,7 +48,7 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
         try {
             // The first three indices are the 3D cog
             // The fourth index is the distance-map value (i.e. distance from the contour)
-            double distanceCOG = normalisedDistanceCOG(a, b);
+            double distanceCOG = normalisedDistanceCenterOfGravity(a, b);
 
             // The difference in distances-from-the-countour (from the distance map) between the two
             // points
@@ -75,10 +75,10 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
      * @return
      * @throws OperationFailedException
      */
-    private double normalisedDistanceCOG(double[] a, double[] b) throws OperationFailedException {
+    private double normalisedDistanceCenterOfGravity(double[] a, double[] b) throws OperationFailedException {
 
         // Maximum distance when measured in voxels along the vector between our points
-        double maxDistanceVoxels = maxDistance.resolve(Optional.of(res), convert(a), convert(b));
+        double maxDistanceVoxels = maxDistance.resolve(Optional.of(resolution.unitConvert()), convert(a), convert(b));
 
         // We measure the voxel distance between the points
         double distanceVoxels = MathArrays.distance(extractPoint(a), extractPoint(b));

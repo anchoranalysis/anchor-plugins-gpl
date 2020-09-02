@@ -30,8 +30,8 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
+import org.anchoranalysis.image.channel.converter.ToUnsignedShort;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -73,7 +73,7 @@ public class DistanceTransform3D extends FromMaskBase {
     // We can also change a binary voxel buffer
     public static Voxels<ByteBuffer> createDistanceMapForVoxels(
             BinaryVoxels<ByteBuffer> bvb,
-            Resolution res,
+            Resolution resolution,
             boolean suppressZ,
             double multiplyBy,
             double multiplyByZRes,
@@ -83,7 +83,7 @@ public class DistanceTransform3D extends FromMaskBase {
         Channel channel =
                 ChannelFactory.instance()
                         .get(UnsignedByteVoxelType.INSTANCE)
-                        .create(bvb.voxels(), res);
+                        .create(bvb.voxels(), resolution);
         Mask mask = new Mask(channel, bvb.binaryValues());
 
         Channel distanceMap =
@@ -110,7 +110,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
         if (mask.extent().z() > 1 && !suppressZ) {
 
-            double zRelRes = mask.dimensions().resolution().getZRelativeResolution();
+            double zRelRes = mask.resolution().zRelative();
             if (Double.isNaN(zRelRes)) {
                 throw new CreateException("Z-resolution is NaN");
             }
@@ -174,15 +174,15 @@ public class DistanceTransform3D extends FromMaskBase {
 
         ChannelConverter<?> converter =
                 createShort
-                        ? new ChannelConverterToUnsignedShort()
-                        : new ChannelConverterToUnsignedByte();
+                        ? new ToUnsignedShort()
+                        : new ToUnsignedByte();
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
     private static double multiplicationFactor(
             double multFactor, boolean applyResolution, Mask mask) {
         if (applyResolution) {
-            return multFactor * mask.dimensions().resolution().x();
+            return multFactor * mask.resolution().x();
         } else {
             return multFactor;
         }

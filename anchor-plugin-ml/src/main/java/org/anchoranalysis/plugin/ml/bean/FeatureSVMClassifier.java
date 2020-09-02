@@ -67,7 +67,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
         ResultsVector rv;
         try {
-            rv = input.calc(FeatureListFactory.wrapReuse(getList()));
+            rv = input.calculate(FeatureListFactory.wrapReuse(getList()));
         } catch (NamedFeatureCalculateException e) {
             throw new FeatureCalculationException(e);
         }

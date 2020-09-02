@@ -33,8 +33,8 @@ public class MinimumFilter extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ImagePlus imp = ConvertToImagePlus.from(channel);
-        imp = MinMaxMedian.convolve(imp, MinMaxMedian.MINIMUM);
-        return ConvertFromImagePlus.toChannel(imp, channel.dimensions().resolution());
+        ImagePlus image = ConvertToImagePlus.from(channel);
+        ImagePlus convolved = MinMaxMedian.convolve(image, MinMaxMedian.MINIMUM);
+        return ConvertFromImagePlus.toChannel(convolved, channel.resolution());
     }
 }
