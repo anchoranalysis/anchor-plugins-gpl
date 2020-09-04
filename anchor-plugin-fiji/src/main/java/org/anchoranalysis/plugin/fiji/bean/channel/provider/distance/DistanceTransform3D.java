@@ -21,7 +21,7 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -71,8 +71,8 @@ public class DistanceTransform3D extends FromMaskBase {
     // END PROPERTIES
 
     // We can also change a binary voxel buffer
-    public static Voxels<ByteBuffer> createDistanceMapForVoxels(
-            BinaryVoxels<ByteBuffer> bvb,
+    public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             Resolution resolution,
             boolean suppressZ,
             double multiplyBy,

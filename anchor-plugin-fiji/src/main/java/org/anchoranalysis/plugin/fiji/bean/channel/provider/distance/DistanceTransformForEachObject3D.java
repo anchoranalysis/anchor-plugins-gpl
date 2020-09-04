@@ -21,7 +21,7 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -59,7 +59,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
 
         Channel out = ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
-        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
             copyObjectToOutput(object, dimensions.resolution(), voxelsOut);
@@ -78,17 +78,17 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
      * @throws CreateException
      */
     private void copyObjectToOutput(
-            ObjectMask object, Resolution resolution, Voxels<ByteBuffer> destination)
+            ObjectMask object, Resolution resolution, Voxels<UnsignedByteBuffer> destination)
             throws CreateException {
 
-        Voxels<ByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
+        Voxels<UnsignedByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
 
         ObjectMask objectAtOrigin = object.shiftToOrigin();
 
         voxelsDistance.extract().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
     }
 
-    private Voxels<ByteBuffer> distanceTransformForObject(ObjectMask object, Resolution resolution)
+    private Voxels<UnsignedByteBuffer> distanceTransformForObject(ObjectMask object, Resolution resolution)
             throws CreateException {
         return DistanceTransform3D.createDistanceMapForVoxels(
                 object.binaryVoxels()

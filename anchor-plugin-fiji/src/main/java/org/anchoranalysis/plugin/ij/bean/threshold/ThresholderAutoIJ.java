@@ -23,7 +23,7 @@ package org.anchoranalysis.plugin.ij.bean.threshold;
 
 import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +56,7 @@ public class ThresholderAutoIJ extends Thresholder {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxels<ByteBuffer> threshold(
+    public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsWrapper inputBuffer,
             BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,
@@ -75,7 +75,7 @@ public class ThresholderAutoIJ extends Thresholder {
         return convertToBinary(image, binaryValues);
     }
     
-    private static BinaryVoxels<ByteBuffer> convertToBinary(ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
+    private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
         VoxelsWrapper thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);
 
         if (!thresholdedVoxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
