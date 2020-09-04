@@ -31,7 +31,7 @@ import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.RepeatUtilities;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
@@ -86,7 +86,7 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
 
     private <T extends RealType<T>> void doDiffusion(
             Img<T> image, DiffusionFunction diffusionFunction) {
-        RepeatUtilities.repeat(iterations, ()-> PeronaMalikAnisotropicDiffusion.inFloatInPlace(image, deltat, diffusionFunction));
+        FunctionalIterate.repeat(iterations, ()-> PeronaMalikAnisotropicDiffusion.inFloatInPlace(image, deltat, diffusionFunction));
     }
 
     private DiffusionFunction createDiffusionFunction() {
