@@ -23,7 +23,6 @@ package org.anchoranalysis.plugin.ij.bean.threshold;
 
 import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +32,7 @@ import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -74,12 +74,14 @@ public class ThresholderAutoIJ extends Thresholder {
 
         return convertToBinary(image, binaryValues);
     }
-    
-    private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
+
+    private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(
+            ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
         VoxelsWrapper thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);
 
         if (!thresholdedVoxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            throw new OperationFailedException("The threshold operation returned a data-type that is not unsigned 8-bit");
+            throw new OperationFailedException(
+                    "The threshold operation returned a data-type that is not unsigned 8-bit");
         }
 
         return BinaryVoxelsFactory.reuseByte(thresholdedVoxels.asByte(), binaryValues.createInt());

@@ -75,10 +75,12 @@ class DistanceCogDistanceMapMeasure implements DistanceMeasure {
      * @return
      * @throws OperationFailedException
      */
-    private double normalisedDistanceCenterOfGravity(double[] a, double[] b) throws OperationFailedException {
+    private double normalisedDistanceCenterOfGravity(double[] a, double[] b)
+            throws OperationFailedException {
 
         // Maximum distance when measured in voxels along the vector between our points
-        double maxDistanceVoxels = maxDistance.resolve(Optional.of(resolution.unitConvert()), convert(a), convert(b));
+        double maxDistanceVoxels =
+                maxDistance.resolve(Optional.of(resolution.unitConvert()), convert(a), convert(b));
 
         // We measure the voxel distance between the points
         double distanceVoxels = MathArrays.distance(extractPoint(a), extractPoint(b));

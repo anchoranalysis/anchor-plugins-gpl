@@ -33,7 +33,7 @@ abstract class EDTDimensionBase {
      * envelope.
      */
 
-    private int k;  // NOSONAR
+    private int k; // NOSONAR
     private float[] f, z; // NOSONAR
     private int[] y;
 
@@ -50,10 +50,10 @@ abstract class EDTDimensionBase {
         y[0] = -1;
         z[0] = Float.MAX_VALUE;
         k = 0;
-        float fx, s;    // NOSONAR
+        float fx, s; // NOSONAR
         for (int x = 0; x < width; x++) {
             fx = get(x);
-            for (; ; ) {    // NOSONAR
+            for (; ; ) { // NOSONAR
                 // calculate the intersection
                 s = ((fx + x * x) - (f[k] + y[k] * y[k])) / 2 / (x - y[k]);
                 if (s > z[k]) break;

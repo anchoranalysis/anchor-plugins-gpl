@@ -21,7 +21,6 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -30,10 +29,11 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ToUnsignedShort;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -172,10 +172,7 @@ public class DistanceTransform3D extends FromMaskBase {
         double factor = multiplicationFactor(multFactor, applyRes, mask);
         distanceAsFloat.arithmetic().multiplyBy(factor);
 
-        ChannelConverter<?> converter =
-                createShort
-                        ? new ToUnsignedShort()
-                        : new ToUnsignedByte();
+        ChannelConverter<?> converter = createShort ? new ToUnsignedShort() : new ToUnsignedByte();
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 

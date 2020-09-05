@@ -60,10 +60,11 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
     public Channel createFromChannel(Channel channel) throws CreateException {
         return diffusion(channel, createDiffusionFunction());
     }
-    
+
     // Assumes XY res are identical
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private Channel diffusion(Channel channel, DiffusionFunction diffusionFunction) throws CreateException {
+    private Channel diffusion(Channel channel, DiffusionFunction diffusionFunction)
+            throws CreateException {
 
         try {
             if (do3D) {
@@ -86,7 +87,11 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
 
     private <T extends RealType<T>> void doDiffusion(
             Img<T> image, DiffusionFunction diffusionFunction) {
-        FunctionalIterate.repeat(iterations, ()-> PeronaMalikAnisotropicDiffusion.inFloatInPlace(image, deltat, diffusionFunction));
+        FunctionalIterate.repeat(
+                iterations,
+                () ->
+                        PeronaMalikAnisotropicDiffusion.inFloatInPlace(
+                                image, deltat, diffusionFunction));
     }
 
     private DiffusionFunction createDiffusionFunction() {

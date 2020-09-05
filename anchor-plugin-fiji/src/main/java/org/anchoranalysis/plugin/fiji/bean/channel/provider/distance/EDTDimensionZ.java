@@ -22,9 +22,9 @@
 
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.FloatBuffer;
 import lombok.Getter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 class EDTDimensionZ extends EDTDimensionBase {
@@ -35,7 +35,8 @@ class EDTDimensionZ extends EDTDimensionBase {
 
     @Getter private float multiplyConstant;
 
-    public EDTDimensionZ(Voxels<UnsignedByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
+    public EDTDimensionZ(
+            Voxels<UnsignedByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
         super(in.extent().z());
 
         this.multiplyConstant = multiplyConstant;
