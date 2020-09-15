@@ -21,7 +21,6 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -29,6 +28,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -59,7 +59,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
 
         Channel out = ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
-        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
         for (ObjectMask object : objects.create()) {
             copyObjectToOutput(object, dimensions.resolution(), voxelsOut);
@@ -78,18 +78,18 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
      * @throws CreateException
      */
     private void copyObjectToOutput(
-            ObjectMask object, Resolution resolution, Voxels<ByteBuffer> destination)
+            ObjectMask object, Resolution resolution, Voxels<UnsignedByteBuffer> destination)
             throws CreateException {
 
-        Voxels<ByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
+        Voxels<UnsignedByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
 
         ObjectMask objectAtOrigin = object.shiftToOrigin();
 
         voxelsDistance.extract().objectCopyTo(objectAtOrigin, destination, object.boundingBox());
     }
 
-    private Voxels<ByteBuffer> distanceTransformForObject(ObjectMask object, Resolution resolution)
-            throws CreateException {
+    private Voxels<UnsignedByteBuffer> distanceTransformForObject(
+            ObjectMask object, Resolution resolution) throws CreateException {
         return DistanceTransform3D.createDistanceMapForVoxels(
                 object.binaryVoxels()
                         .duplicate(), // TODO duplicated presumably because the voxel-buffer is

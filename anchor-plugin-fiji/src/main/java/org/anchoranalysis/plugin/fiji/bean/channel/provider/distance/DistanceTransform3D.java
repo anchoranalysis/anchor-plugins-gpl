@@ -21,7 +21,6 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -29,11 +28,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -71,9 +71,9 @@ public class DistanceTransform3D extends FromMaskBase {
     // END PROPERTIES
 
     // We can also change a binary voxel buffer
-    public static Voxels<ByteBuffer> createDistanceMapForVoxels(
-            BinaryVoxels<ByteBuffer> bvb,
-            Resolution res,
+    public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
+            BinaryVoxels<UnsignedByteBuffer> bvb,
+            Resolution resolution,
             boolean suppressZ,
             double multiplyBy,
             double multiplyByZRes,
@@ -83,7 +83,7 @@ public class DistanceTransform3D extends FromMaskBase {
         Channel channel =
                 ChannelFactory.instance()
                         .get(UnsignedByteVoxelType.INSTANCE)
-                        .create(bvb.voxels(), res);
+                        .create(bvb.voxels(), resolution);
         Mask mask = new Mask(channel, bvb.binaryValues());
 
         Channel distanceMap =
@@ -110,7 +110,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
         if (mask.extent().z() > 1 && !suppressZ) {
 
-            double zRelRes = mask.dimensions().resolution().getZRelativeResolution();
+            double zRelRes = mask.resolution().zRelative();
             if (Double.isNaN(zRelRes)) {
                 throw new CreateException("Z-resolution is NaN");
             }
@@ -172,17 +172,14 @@ public class DistanceTransform3D extends FromMaskBase {
         double factor = multiplicationFactor(multFactor, applyRes, mask);
         distanceAsFloat.arithmetic().multiplyBy(factor);
 
-        ChannelConverter<?> converter =
-                createShort
-                        ? new ChannelConverterToUnsignedShort()
-                        : new ChannelConverterToUnsignedByte();
+        ChannelConverter<?> converter = createShort ? new ToUnsignedShort() : new ToUnsignedByte();
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
     private static double multiplicationFactor(
             double multFactor, boolean applyResolution, Mask mask) {
         if (applyResolution) {
-            return multFactor * mask.dimensions().resolution().x();
+            return multFactor * mask.resolution().x();
         } else {
             return multFactor;
         }

@@ -31,9 +31,10 @@ import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ImgLib2Wrap;
+import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
 
 /**
  * Perona-Malik Anisotropic Diffusion
@@ -55,24 +56,26 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
     @BeanField @Getter @Setter private boolean strongEdgeEnhancer = true;
     // END BEAN PROPERTIES
 
+    @Override
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return diffusion(channel, createDiffusionFunction());
+    }
+
     // Assumes XY res are identical
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static Channel diffusion(
-            Channel channel, double deltat, DiffusionFunction df, int iterations, boolean do3D)
+    private Channel diffusion(Channel channel, DiffusionFunction diffusionFunction)
             throws CreateException {
 
         try {
             if (do3D) {
-                Img img = ImgLib2Wrap.wrap(channel.voxels());
-                doDiffusion(img, deltat, df, iterations);
+                Img image = ConvertToImg.from(channel.voxels());
+                doDiffusion(image, diffusionFunction);
             } else {
                 channel.extent()
                         .iterateOverZ(
                                 z -> {
-                                    Img img =
-                                            ImgLib2Wrap.wrap(
-                                                    channel.voxels().slice(z), channel.extent());
-                                    doDiffusion(img, deltat, df, iterations);
+                                    Img image = ConvertToImg.fromSlice(channel.voxels(), z);
+                                    doDiffusion(image, diffusionFunction);
                                 });
             }
 
@@ -82,11 +85,13 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
         }
     }
 
-    private static <T extends RealType<T>> void doDiffusion(
-            Img<T> img, double deltat, DiffusionFunction df, int iterations) {
-        for (int i = 0; i < iterations; i++) {
-            PeronaMalikAnisotropicDiffusion.inFloatInPlace(img, deltat, df);
-        }
+    private <T extends RealType<T>> void doDiffusion(
+            Img<T> image, DiffusionFunction diffusionFunction) {
+        FunctionalIterate.repeat(
+                iterations,
+                () ->
+                        PeronaMalikAnisotropicDiffusion.inFloatInPlace(
+                                image, deltat, diffusionFunction));
     }
 
     private DiffusionFunction createDiffusionFunction() {
@@ -95,11 +100,5 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
         } else {
             return new PeronaMalikAnisotropicDiffusion.WideRegionEnhancer(kappa);
         }
-    }
-
-    @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
-        DiffusionFunction df = createDiffusionFunction();
-        return diffusion(channel, deltat, df, iterations, do3D);
     }
 }

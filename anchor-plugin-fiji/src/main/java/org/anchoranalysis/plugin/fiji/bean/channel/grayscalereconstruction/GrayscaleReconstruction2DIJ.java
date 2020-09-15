@@ -22,9 +22,9 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.grayscalereconstruction;
 
 import ij.ImagePlus;
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -49,22 +49,22 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
             throw new OperationFailedException("Only unsigned byte supported for marker image");
         }
 
-        Voxels<ByteBuffer> markerCast = marker.asByte();
-        Voxels<ByteBuffer> maskCast = mask.asByte();
+        Voxels<UnsignedByteBuffer> markerCast = marker.asByte();
+        Voxels<UnsignedByteBuffer> maskCast = mask.asByte();
 
         // We flip everything because the IJ plugin is reconstruction by Dilation, whereas we want
         // reconstruction by Erosion
         markerCast.arithmetic().subtractFrom(UnsignedByteVoxelType.MAX_VALUE_INT);
         mask.subtractFromMaxValue();
 
-        Voxels<ByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
+        Voxels<UnsignedByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
         ret.arithmetic().subtractFrom(UnsignedByteVoxelType.MAX_VALUE_INT);
 
         return new VoxelsWrapper(ret);
     }
 
-    private Voxels<ByteBuffer> reconstructionByDilation(
-            Voxels<ByteBuffer> mask, Voxels<ByteBuffer> marker) {
+    private Voxels<UnsignedByteBuffer> reconstructionByDilation(
+            Voxels<UnsignedByteBuffer> mask, Voxels<UnsignedByteBuffer> marker) {
 
         ImagePlus imageMask = ConvertToImagePlus.fromSlice(mask, 0, "mask");
         ImagePlus imageMarker = ConvertToImagePlus.fromSlice(marker, 0, "marker");

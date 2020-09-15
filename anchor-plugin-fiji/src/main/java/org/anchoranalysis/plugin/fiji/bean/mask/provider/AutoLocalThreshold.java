@@ -26,13 +26,13 @@ import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import lombok.Getter;
 import lombok.Setter;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
@@ -71,14 +71,15 @@ public class AutoLocalThreshold extends FromChannelBase {
         channel.extent()
                 .iterateOverZ(
                         z -> {
-                            VoxelBuffer<ByteBuffer> thresholded = thresholdSlice(stack.extractSlice(z), at);
+                            VoxelBuffer<UnsignedByteBuffer> thresholded =
+                                    thresholdSlice(stack.extractSlice(z), at);
                             out.voxels().replaceSlice(z, thresholded);
                         });
 
         return out;
     }
 
-    private VoxelBuffer<ByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) {
+    private VoxelBuffer<UnsignedByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) {
         ImagePlus imagePlus = ConvertToImagePlus.from(slice, false);
 
         Object[] ret = at.exec(imagePlus, method, radius, 0, 0, true);

@@ -44,7 +44,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
     private svm_model model;
 
     /**
-     * Indicates the direction of the decision-making value. If TRUE, the decision-value should be
+     * Indicates the direction of the decision-making value. If true, the decision-value should be
      * >0 for Label 1. If false, it's the opposite.
      */
     private boolean direction;
@@ -67,7 +67,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
         ResultsVector rv;
         try {
-            rv = input.calc(FeatureListFactory.wrapReuse(getList()));
+            rv = input.calculate(FeatureListFactory.wrapReuse(getList()));
         } catch (NamedFeatureCalculateException e) {
             throw new FeatureCalculationException(e);
         }
