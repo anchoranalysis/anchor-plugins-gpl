@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromDimensionsBase;
 
 /**
- * Like {@link DistanceTransform3D} but applies the distance transform seperately for each object in
+ * Like {@link DistanceTransform3D} but applies the distance transform separately for each object in
  * a collection.
  *
  * <p>A new channel is always created i.e. the input channel is unchanged.
