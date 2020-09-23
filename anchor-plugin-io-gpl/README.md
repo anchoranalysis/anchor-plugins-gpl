@@ -1,6 +1,6 @@
-# anchor-plugin-fiji
+# anchor-plugin-io-gpl
 
-GPL-ed plugins from <a href="https://fiji.sc/">Fiji</a> or <a href="https://imagej.nih.gov/ij/>ImageJ</a> which must be kept separated from [anchor-plugin-imagej](https://github.com/anchoranalysis/anchor-plugins/tree/master/anchor-plugin-imagej).
+Adds <a href="https://www.openmicroscopy.org/bio-formats/">Bio-Formats</a> GPL classes.
 
 ## What is Anchor?
 

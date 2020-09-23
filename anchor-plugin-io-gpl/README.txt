@@ -1,1 +1,0 @@
-This plugin simply adds the bioformats-gpl plugins
