@@ -1,6 +1,6 @@
 # anchor-plugin-fiji
 
-GPL-ed plugins from <a href="https://fiji.sc/">Fiji</a> or <a href="https://imagej.nih.gov/ij/>ImageJ</a> which must be kept separated from [anchor-plugin-imagej](https://github.com/anchoranalysis/anchor-plugins/tree/master/anchor-plugin-imagej).
+GPL-ed plugins from [Fiji](https://fiji.sc/) or [ImageJ](https://imagej.nih.gov/ij/) which must be kept separated from [anchor-plugin-imagej](https://github.com/anchoranalysis/anchor-plugins/tree/master/anchor-plugin-imagej).
 
 ## What is Anchor?
 

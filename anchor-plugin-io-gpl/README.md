@@ -1,6 +1,6 @@
 # anchor-plugin-io-gpl
 
-Adds <a href="https://www.openmicroscopy.org/bio-formats/">Bio-Formats</a> GPL classes.
+Adds [Bio-Formats](https://www.openmicroscopy.org/bio-formats/) GPL classes.
 
 ## What is Anchor?
 
