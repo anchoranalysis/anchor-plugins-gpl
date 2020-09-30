@@ -34,7 +34,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic.Subtract
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.FromChannel;
 import org.anchoranalysis.plugin.image.bean.object.provider.connected.ConnectedComponentsFromMask;
 import org.anchoranalysis.plugin.imagej.bean.object.provider.DrawLineAlongConvexHull;
-import org.anchoranalysis.plugin.ml.bean.object.provider.MergeSpatialClusters;
+import org.anchoranalysis.plugin.ml.bean.cluster.MergeSpatialClusters;
 
 /**
  * Beans related to non-segmentation

@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.anchoranalysis.plugin.ml.bean.object.provider;
+package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import java.util.Arrays;
 import java.util.Optional;
