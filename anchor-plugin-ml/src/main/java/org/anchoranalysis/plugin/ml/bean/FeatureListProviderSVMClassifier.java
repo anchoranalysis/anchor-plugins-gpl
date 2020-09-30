@@ -52,8 +52,7 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 
-public class FeatureListProviderSVMClassifier
-        extends ReferencedFeatures<FeatureInput> {
+public class FeatureListProviderSVMClassifier extends ReferencedFeatures<FeatureInput> {
 
     private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 
