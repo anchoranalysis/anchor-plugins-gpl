@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.bean.list.ReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
+import org.anchoranalysis.io.bean.path.provider.FilePathProvider;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
