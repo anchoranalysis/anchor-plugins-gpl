@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.anchoranalysis.plugin.ij.bean.threshold;
+package org.anchoranalysis.plugin.fiji.bean.threshold;
 
 import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;

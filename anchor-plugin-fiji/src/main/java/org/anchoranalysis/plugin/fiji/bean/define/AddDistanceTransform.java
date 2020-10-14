@@ -60,7 +60,7 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
  *
  * @author Owen Feehan
  */
-public class AddEDTWatershed extends DefineAdderWithPrefixBean {
+public class AddDistanceTransform extends DefineAdderWithPrefixBean {
 
     private static final String CONNECTED_INPUT = "objsInputConnected";
     private static final String DISTANCE_TRANSFORM = "channelDistance";
