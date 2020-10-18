@@ -24,8 +24,8 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import java.nio.FloatBuffer;
 import lombok.Getter;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class EDTDimensionZ extends EDTDimensionBase {
     private byte[][] inSlice;

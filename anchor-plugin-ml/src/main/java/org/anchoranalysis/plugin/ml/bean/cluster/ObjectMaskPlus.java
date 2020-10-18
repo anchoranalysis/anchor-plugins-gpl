@@ -22,12 +22,12 @@
 package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import lombok.Getter;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
+import org.anchoranalysis.spatial.point.Point3d;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
 /**
