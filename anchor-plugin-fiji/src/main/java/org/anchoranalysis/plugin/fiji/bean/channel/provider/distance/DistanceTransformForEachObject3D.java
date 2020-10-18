@@ -21,9 +21,9 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -79,7 +79,9 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
      * @throws CreateException
      */
     private void copyObjectToOutput(
-            ObjectMask object, Optional<Resolution> resolution, Voxels<UnsignedByteBuffer> destination)
+            ObjectMask object,
+            Optional<Resolution> resolution,
+            Voxels<UnsignedByteBuffer> destination)
             throws CreateException {
 
         Voxels<UnsignedByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);

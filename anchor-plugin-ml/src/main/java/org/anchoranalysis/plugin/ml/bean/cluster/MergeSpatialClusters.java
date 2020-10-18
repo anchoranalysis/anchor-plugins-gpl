@@ -40,7 +40,8 @@ import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
 /**
- * Merges spatially-adjacent objects using the <a href="https://en.wikipedia.org/wiki/DBSCAN">DBScan</a> clustering algorithm.
+ * Merges spatially-adjacent objects using the <a
+ * href="https://en.wikipedia.org/wiki/DBSCAN">DBScan</a> clustering algorithm.
  *
  * <p>The features passed to DBSCAN are based on:
  *
