@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
  * Perona-Malik Anisotropic Diffusion

@@ -23,21 +23,22 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromDimensionsBase;
 
 /**
- * Like {@link DistanceTransform3D} but applies the distance transform seperately for each object in
+ * Like {@link DistanceTransform3D} but applies the distance transform separately for each object in
  * a collection.
  *
  * <p>A new channel is always created i.e. the input channel is unchanged.
@@ -78,7 +79,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
      * @throws CreateException
      */
     private void copyObjectToOutput(
-            ObjectMask object, Resolution resolution, Voxels<UnsignedByteBuffer> destination)
+            ObjectMask object, Optional<Resolution> resolution, Voxels<UnsignedByteBuffer> destination)
             throws CreateException {
 
         Voxels<UnsignedByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
@@ -89,7 +90,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
     }
 
     private Voxels<UnsignedByteBuffer> distanceTransformForObject(
-            ObjectMask object, Resolution resolution) throws CreateException {
+            ObjectMask object, Optional<Resolution> resolution) throws CreateException {
         return DistanceTransform3D.createDistanceMapForVoxels(
                 object.binaryVoxels()
                         .duplicate(), // TODO duplicated presumably because the voxel-buffer is

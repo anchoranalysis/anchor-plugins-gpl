@@ -24,7 +24,7 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider;
 import ij.ImagePlus;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import process3d.MinMaxMedian;

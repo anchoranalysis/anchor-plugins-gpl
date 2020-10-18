@@ -19,16 +19,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.anchoranalysis.plugin.ml.bean.object.provider;
+package org.anchoranalysis.plugin.ml.bean.cluster;
 
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.spatial.point.Point3d;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.util.MathArrays;
 

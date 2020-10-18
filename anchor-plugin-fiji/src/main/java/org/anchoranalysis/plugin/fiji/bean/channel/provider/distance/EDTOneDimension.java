@@ -23,8 +23,8 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.spatial.extent.Extent;
 
 abstract class EDTOneDimension extends EDTDimensionBase {
 

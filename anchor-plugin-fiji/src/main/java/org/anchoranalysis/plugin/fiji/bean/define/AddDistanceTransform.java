@@ -35,8 +35,8 @@ import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 import org.anchoranalysis.plugin.image.bean.channel.provider.Duplicate;
@@ -60,7 +60,7 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
  *
  * @author Owen Feehan
  */
-public class AddEDTWatershed extends DefineAdderWithPrefixBean {
+public class AddDistanceTransform extends DefineAdderWithPrefixBean {
 
     private static final String CONNECTED_INPUT = "objsInputConnected";
     private static final String DISTANCE_TRANSFORM = "channelDistance";
@@ -78,7 +78,7 @@ public class AddEDTWatershed extends DefineAdderWithPrefixBean {
     @BeanField @Getter @Setter private String binaryInputChannelID;
 
     @BeanField @Getter @Setter
-    private UnitValueVolume minVolumeConnectedComponent = new UnitValueVolumeVoxels(1);
+    private UnitValueVolume minVolumeConnectedComponent = new VolumeVoxels(1);
 
     /** Multiplies the distance transform by this factor to make it more meaningful in a short */
     @BeanField @Getter @Setter private double distanceTransformMultiplyBy = 1.0;

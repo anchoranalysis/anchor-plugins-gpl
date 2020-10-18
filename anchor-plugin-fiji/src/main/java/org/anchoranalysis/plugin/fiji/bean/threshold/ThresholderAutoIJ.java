@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.anchoranalysis.plugin.ij.bean.threshold;
+package org.anchoranalysis.plugin.fiji.bean.threshold;
 
 import fiji.threshold.Auto_Threshold;
 import ij.ImagePlus;
@@ -29,16 +29,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.math.histogram.Histogram;
 
 public class ThresholderAutoIJ extends Thresholder {
 

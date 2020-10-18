@@ -28,13 +28,13 @@ import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.plugin.fiji.bean.channel.provider.distance.DistanceTransform3D;
 import org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic.SubtractFromConstant;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.FromChannel;
 import org.anchoranalysis.plugin.image.bean.object.provider.connected.ConnectedComponentsFromMask;
 import org.anchoranalysis.plugin.imagej.bean.object.provider.DrawLineAlongConvexHull;
-import org.anchoranalysis.plugin.ml.bean.object.provider.MergeSpatialClusters;
+import org.anchoranalysis.plugin.ml.bean.cluster.MergeSpatialClusters;
 
 /**
  * Beans related to non-segmentation

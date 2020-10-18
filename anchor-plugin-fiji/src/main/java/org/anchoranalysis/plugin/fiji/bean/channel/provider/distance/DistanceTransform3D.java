@@ -23,20 +23,21 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
-import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -63,17 +64,16 @@ public class DistanceTransform3D extends FromMaskBase {
 
     @BeanField @Getter @Setter private double multiplyBy = 1.0;
 
-    @BeanField @Getter @Setter private double multiplyByZRes = 1.0;
-
     @BeanField @Getter @Setter private boolean createShort = false;
 
-    @BeanField @Getter @Setter private boolean applyRes = false;
+    /** Multiples the values by the x-resolution, if it exists. */
+    @BeanField @Getter @Setter private boolean applyResolution = false;
     // END PROPERTIES
 
     // We can also change a binary voxel buffer
     public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
             BinaryVoxels<UnsignedByteBuffer> bvb,
-            Resolution resolution,
+            Optional<Resolution> resolution,
             boolean suppressZ,
             double multiplyBy,
             double multiplyByZRes,
@@ -108,16 +108,9 @@ public class DistanceTransform3D extends FromMaskBase {
             throw new CreateException("Binary Off must be 0");
         }
 
-        if (mask.extent().z() > 1 && !suppressZ) {
-
-            double zRelRes = mask.resolution().zRelative();
-            if (Double.isNaN(zRelRes)) {
-                throw new CreateException("Z-resolution is NaN");
-            }
-
-            if (zRelRes == 0) {
-                throw new CreateException("Z-resolution is 0");
-            }
+        // Performs some checks on the z-resolution, if it exits
+        if (mask.resolution().isPresent() && mask.extent().z() > 1 && !suppressZ) {
+            checkZResolution(mask.resolution().get());  // NOSONAR
         }
 
         if (suppressZ) {
@@ -149,7 +142,7 @@ public class DistanceTransform3D extends FromMaskBase {
     @Override
     protected Channel createFromMask(Mask mask) throws CreateException {
         return createDistanceMapForMask(
-                mask, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
+                mask, suppressZ, multiplyBy, 1, createShort, applyResolution);
     }
 
     private static Channel createDistanceMapForChannelFromPlugin(
@@ -178,10 +171,21 @@ public class DistanceTransform3D extends FromMaskBase {
 
     private static double multiplicationFactor(
             double multFactor, boolean applyResolution, Mask mask) {
-        if (applyResolution) {
-            return multFactor * mask.resolution().x();
+        if (applyResolution && mask.resolution().isPresent()) {
+            return multFactor * mask.resolution().get().x();    // NOSONAR
         } else {
             return multFactor;
+        }
+    }
+    
+    private static void checkZResolution(Resolution resolution) throws CreateException {
+        double zRelRes = resolution.zRelative();
+        if (Double.isNaN(zRelRes)) {
+            throw new CreateException("Z-resolution is NaN");
+        }
+
+        if (zRelRes == 0) {
+            throw new CreateException("Z-resolution is 0");
         }
     }
 }

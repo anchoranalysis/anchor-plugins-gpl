@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.anchoranalysis.plugin.ml.bean;
+package org.anchoranalysis.plugin.ml.bean.classifier;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,19 +41,18 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.bean.list.FeatureListProviderReferencedFeatures;
+import org.anchoranalysis.feature.bean.list.ReferencedFeatures;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.bean.filepath.provider.FilePathProvider;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.bean.path.provider.FilePathProvider;
+import org.anchoranalysis.io.input.csv.CSVReaderByLine;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
 
-public class FeatureListProviderSVMClassifier
-        extends FeatureListProviderReferencedFeatures<FeatureInput> {
+public class FeatureListProviderSVMClassifier extends ReferencedFeatures<FeatureInput> {
 
     private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 
