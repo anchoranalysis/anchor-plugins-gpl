@@ -22,7 +22,7 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.provider;
 
 import ij.ImagePlus;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;

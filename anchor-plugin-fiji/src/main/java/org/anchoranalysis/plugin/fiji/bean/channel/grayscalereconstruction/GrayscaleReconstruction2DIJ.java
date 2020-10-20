@@ -23,7 +23,7 @@ package org.anchoranalysis.plugin.fiji.bean.channel.grayscalereconstruction;
 
 import ij.ImagePlus;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
