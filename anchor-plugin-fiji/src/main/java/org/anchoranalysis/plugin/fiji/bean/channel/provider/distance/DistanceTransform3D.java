@@ -166,9 +166,7 @@ public class DistanceTransform3D extends FromMaskBase {
         distanceAsFloat.arithmetic().multiplyBy(factor);
 
         ChannelConverter<?> converter = createShort ? new ToUnsignedShort() : new ToUnsignedByte();
-        Channel converted = converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
-        
-        return converted;
+        return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
     private static double multiplicationFactor(
