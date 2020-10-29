@@ -41,19 +41,19 @@ import org.anchoranalysis.feature.results.ResultsVector;
 class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
     // What we take in
-    private svm_model model;
+    private final svm_model model;
 
     /**
      * Indicates the direction of the decision-making value. If true, the decision-value should be
      * >0 for Label 1. If false, it's the opposite.
      */
-    private boolean direction;
+    private final boolean direction;
 
     public FeatureSVMClassifier(svm_model model, FeatureList<T> featureList, boolean direction) {
         super();
         this.model = model;
-        setList(featureList);
         this.direction = direction;
+        setList(featureList);
     }
 
     @Override
@@ -65,19 +65,19 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        ResultsVector rv;
+        ResultsVector results;
         try {
-            rv = input.calculate(FeatureListFactory.wrapReuse(getList()));
+            results = input.calculate(FeatureListFactory.wrapReuse(getList()));
         } catch (NamedFeatureCalculateException e) {
             throw new FeatureCalculationException(e);
         }
 
-        svm_node[] nodes = convert(rv);
-
+        svm_node[] nodes = convert(results);
+        
         double[] arrPredictValues = new double[1];
         svm.svm_predict_values(model, nodes, arrPredictValues);
         double predictValue = arrPredictValues[0];
-
+        
         if (direction) {
             return predictValue;
         } else {
@@ -85,14 +85,14 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
         }
     }
 
-    private svm_node[] convert(ResultsVector rv) {
+    private static svm_node[] convert(ResultsVector results) {
 
-        svm_node[] out = new svm_node[rv.length()];
+        svm_node[] out = new svm_node[results.length()];
 
-        for (int i = 0; i < rv.length(); i++) {
+        for (int i = 0; i < results.length(); i++) {
             out[i] = new svm_node();
             out[i].index = i + 1;
-            out[i].value = rv.get(i);
+            out[i].value = results.get(i);
         }
 
         return out;
