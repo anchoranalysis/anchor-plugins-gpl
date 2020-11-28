@@ -73,11 +73,11 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
         }
 
         svm_node[] nodes = convert(results);
-        
+
         double[] arrPredictValues = new double[1];
         svm.svm_predict_values(model, nodes, arrPredictValues);
         double predictValue = arrPredictValues[0];
-        
+
         if (direction) {
             return predictValue;
         } else {
