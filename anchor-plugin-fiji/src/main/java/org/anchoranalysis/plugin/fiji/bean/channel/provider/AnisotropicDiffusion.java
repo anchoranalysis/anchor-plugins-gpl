@@ -30,7 +30,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;

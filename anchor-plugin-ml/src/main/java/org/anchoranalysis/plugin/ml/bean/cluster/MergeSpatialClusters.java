@@ -26,21 +26,22 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeBase;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
 /**
- * Merges spatially-adjacent objects using the <a href="https://en.wikipedia.org/wiki/DBSCAN">DBScan</a> clustering algorithm.
+ * Merges spatially-adjacent objects using the <a
+ * href="https://en.wikipedia.org/wiki/DBSCAN">DBScan</a> clustering algorithm.
  *
  * <p>The features passed to DBSCAN are based on:
  *

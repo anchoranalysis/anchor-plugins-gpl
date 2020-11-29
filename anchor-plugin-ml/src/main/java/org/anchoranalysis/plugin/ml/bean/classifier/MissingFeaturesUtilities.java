@@ -24,7 +24,7 @@ package org.anchoranalysis.plugin.ml.bean.classifier;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MissingFeaturesUtilities {

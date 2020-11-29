@@ -21,11 +21,11 @@
  */
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
@@ -72,7 +72,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
     // We can also change a binary voxel buffer
     public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             Optional<Resolution> resolution,
             boolean suppressZ,
             double multiplyBy,
@@ -83,8 +83,8 @@ public class DistanceTransform3D extends FromMaskBase {
         Channel channel =
                 ChannelFactory.instance()
                         .get(UnsignedByteVoxelType.INSTANCE)
-                        .create(bvb.voxels(), resolution);
-        Mask mask = new Mask(channel, bvb.binaryValues());
+                        .create(binaryValues.voxels(), resolution);
+        Mask mask = new Mask(channel, binaryValues.binaryValues());
 
         Channel distanceMap =
                 createDistanceMapForMask(
@@ -110,7 +110,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
         // Performs some checks on the z-resolution, if it exits
         if (mask.resolution().isPresent() && mask.extent().z() > 1 && !suppressZ) {
-            checkZResolution(mask.resolution().get());  // NOSONAR
+            checkZResolution(mask.resolution().get()); // NOSONAR
         }
 
         if (suppressZ) {
@@ -172,12 +172,12 @@ public class DistanceTransform3D extends FromMaskBase {
     private static double multiplicationFactor(
             double multFactor, boolean applyResolution, Mask mask) {
         if (applyResolution && mask.resolution().isPresent()) {
-            return multFactor * mask.resolution().get().x();    // NOSONAR
+            return multFactor * mask.resolution().get().x(); // NOSONAR
         } else {
             return multFactor;
         }
     }
-    
+
     private static void checkZResolution(Resolution resolution) throws CreateException {
         double zRelRes = resolution.zRelative();
         if (Double.isNaN(zRelRes)) {
