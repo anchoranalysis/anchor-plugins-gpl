@@ -80,6 +80,13 @@
 		  <layout>default</layout>
 		</repository>
 		
+		<repository>
+			<id>imagej</id>
+			<name>ImageJ repository</name>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+
+
    	</repositories>
 	
     <build>
