@@ -16,7 +16,7 @@ on:
       - dev
 
 jobs:
-  Test on Linux with JDK 8:
+  test_Linux_JDK_8:
 
     runs-on: ubuntu-latest
 
@@ -53,7 +53,7 @@ jobs:
         fail_if_no_tests: false
         check_name: Test Report - Linux JDK 8
  
-  Test on Windows with JDK 8:
+  test_Windows_JDK_8:
 
     runs-on: windows-latest
 
@@ -90,7 +90,7 @@ jobs:
         fail_if_no_tests: false
         check_name: Test Report - Windows JDK 8
    
-  Test on MacOS with JDK 8::
+  test_MacOS_JDK_8:
 
     runs-on: macos-latest
 
