@@ -26,14 +26,35 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-  
-    	<scm>
-		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</connection>
-		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</developerConnection>
-		<url>https://git@bitbucket.org/anchorimageanalysis/anchor-plugins-gpl.git</url>
-	  <tag>anchor-parent-0.0.1</tag>
-  </scm>
     
+		<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
+	repository in GitHub Packages. Overrides settings that already are inherited from anchor-pom. -->
+	<distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins-gpl/</url>
+        </repository>
+	  <snapshotRepository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins-gpl/</url>
+        </snapshotRepository>
+	</distributionManagement>
+	
+	<!-- For tagging releases. -->
+  	<scm>
+		<connection>scm:git:git@github.com:anchoranalysis/anchor-plugins-gpl.git</connection>
+		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor-plugins-gpl.git</developerConnection>
+		<url>https://github.com/anchoranalysis/anchor-plugins-gpl</url>
+		<tag>anchor-parent-0.0.1</tag>
+	</scm>
+	
+	<!-- For connecting to SonarCloud. -->
+	<properties>
+	  <sonar.projectKey>anchoranalysis_anchor-plugins-gpl</sonar.projectKey>
+	</properties>
+	
     <modules>
         <module>anchor-plugin-io-gpl</module>
         <module>anchor-plugin-fiji</module>
@@ -53,19 +74,19 @@
 			<updatePolicy>always</updatePolicy>
 			<checksumPolicy>warn</checksumPolicy>
 		  </snapshots>
-		  <id>anchor</id>
-		   <name>anchor</name>
-		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <id>github</id>
+		   <name>GitHub anchor Apache Maven Packages</name>
+		   <url>https://maven.pkg.github.com/anchoranalysis/anchor</url>
 		  <layout>default</layout>
 		</repository>
 		
-		<!-- this should be mirrored from artifactory but it doesnt seem to always work so leave it here as a backup !-->
 		<repository>
 			<id>imagej</id>
 			<name>ImageJ repository</name>
 			<url>http://maven.imagej.net/content/groups/public</url>
 		</repository>
-		
+
+
    	</repositories>
 	
     <build>
