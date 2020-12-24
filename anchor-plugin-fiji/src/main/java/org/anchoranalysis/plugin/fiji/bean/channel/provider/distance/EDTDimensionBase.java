@@ -37,7 +37,7 @@ abstract class EDTDimensionBase {
     private float[] f, z; // NOSONAR
     private int[] y;
 
-    public EDTDimensionBase(int rowWidth) {
+    protected EDTDimensionBase(int rowWidth) {
         width = rowWidth;
         f = new float[width + 1];
         z = new float[width + 1];

@@ -36,7 +36,7 @@ abstract class EDTOneDimension extends EDTDimensionBase {
     private int columnStride;
     private int sliceIndex;
 
-    public EDTOneDimension(Voxels<FloatBuffer> out, boolean iterateX) {
+    protected EDTOneDimension(Voxels<FloatBuffer> out, boolean iterateX) {
         super(iterateX ? out.extent().x() : out.extent().y());
         stack = out;
 
