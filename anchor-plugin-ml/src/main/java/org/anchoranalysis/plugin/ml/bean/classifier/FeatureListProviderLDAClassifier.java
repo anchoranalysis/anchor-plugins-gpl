@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -59,7 +59,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     @Override
     public FeatureList<T> create() throws CreateException {
 
-        KeyValueParams kpv = params.create();
+        Dictionary kpv = params.create();
 
         if (kpv == null) {
             throw new CreateException("Cannot find KeyValueParams for LDA Model");
@@ -67,7 +67,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
 
         checkForMissingFeatures(kpv);
 
-        double threshold = kpv.getPropertyAsDouble(LDA_THRESHOLD_KEY);
+        double threshold = kpv.getAsDouble(LDA_THRESHOLD_KEY);
 
         return FeatureListFactory.from(
                 createScoreFeature(kpv),
@@ -75,12 +75,12 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 createClassifierFeature(threshold));
     }
 
-    private void checkForMissingFeatures(KeyValueParams kpv) throws CreateException {
+    private void checkForMissingFeatures(Dictionary kpv) throws CreateException {
 
         List<String> list = new ArrayList<>();
 
         // For now let's just check all the feature are present
-        for (String name : kpv.keySet()) {
+        for (String name : kpv.keys()) {
 
             // Skip the threshold name
             if (name.equals(LDA_THRESHOLD_KEY)) {
@@ -97,14 +97,14 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         }
     }
 
-    private Feature<T> createScoreFeature(KeyValueParams kpv) throws CreateException {
+    private Feature<T> createScoreFeature(Dictionary kpv) throws CreateException {
 
         Sum<T> sum = new Sum<>();
         sum.setIgnoreNaN(true);
 
         try {
             // For now let's just check all the feature are present
-            for (String name : kpv.keySet()) {
+            for (String name : kpv.keys()) {
 
                 // Skip the threshold name
                 if (name.equals(LDA_THRESHOLD_KEY)) {
@@ -116,7 +116,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                                 .getSharedFeatureSet()
                                 .getException(name)
                                 .downcast();
-                sum.getList().add(new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name)));
+                sum.getList().add(new MultiplyByConstant<>(feature, kpv.getAsDouble(name)));
             }
 
         } catch (NamedProviderGetException e) {
