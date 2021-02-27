@@ -26,7 +26,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.exception.CreateException;
@@ -53,7 +53,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     private static final String FEATURE_NAME_CLASSIFIER = "ldaClassifier";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider params;
     // END BEAN PROPERTIES
 
     @Override
@@ -87,7 +87,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 continue;
             }
 
-            if (getInitializationParameters().getSharedFeatureSet().keys().contains(name)) {
+            if (getInitialization().getSharedFeatures().keys().contains(name)) {
                 list.add(name);
             }
         }
@@ -112,8 +112,8 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 }
 
                 Feature<T> feature =
-                        getInitializationParameters()
-                                .getSharedFeatureSet()
+                        getInitialization()
+                                .getSharedFeatures()
                                 .getException(name)
                                 .downcast();
                 sum.getList().add(new MultiplyByConstant<>(feature, kpv.getAsDouble(name)));

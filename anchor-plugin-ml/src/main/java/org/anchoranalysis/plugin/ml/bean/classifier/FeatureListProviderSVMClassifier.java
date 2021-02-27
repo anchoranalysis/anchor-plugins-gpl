@@ -149,7 +149,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
             List<FirstSecondOrderStatistic> listStats = readScale(filePathScale);
 
             return listFromNames(
-                    featureNames, getInitializationParameters().getSharedFeatureSet(), listStats);
+                    featureNames, getInitialization().getSharedFeatures(), listStats);
         } catch (CSVReaderException | IOException e) {
             throw new OperationFailedException(e);
         }
