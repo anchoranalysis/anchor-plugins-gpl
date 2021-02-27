@@ -26,12 +26,12 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -53,41 +53,37 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     private static final String FEATURE_NAME_CLASSIFIER = "ldaClassifier";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
     public FeatureList<T> create() throws CreateException {
 
-        KeyValueParams kpv = params.create();
+        Dictionary dictionaryCreated = dictionary.create();
 
-        if (kpv == null) {
-            throw new CreateException("Cannot find KeyValueParams for LDA Model");
-        }
+        checkForMissingFeatures(dictionaryCreated);
 
-        checkForMissingFeatures(kpv);
-
-        double threshold = kpv.getPropertyAsDouble(LDA_THRESHOLD_KEY);
+        double threshold = dictionaryCreated.getAsDouble(LDA_THRESHOLD_KEY);
 
         return FeatureListFactory.from(
-                createScoreFeature(kpv),
+                createScoreFeature(dictionaryCreated),
                 createThresholdFeature(threshold),
                 createClassifierFeature(threshold));
     }
 
-    private void checkForMissingFeatures(KeyValueParams kpv) throws CreateException {
+    private void checkForMissingFeatures(Dictionary dictionary) throws CreateException {
 
         List<String> list = new ArrayList<>();
 
         // For now let's just check all the feature are present
-        for (String name : kpv.keySet()) {
+        for (String name : dictionary.keys()) {
 
             // Skip the threshold name
             if (name.equals(LDA_THRESHOLD_KEY)) {
                 continue;
             }
 
-            if (getInitializationParameters().getSharedFeatureSet().keys().contains(name)) {
+            if (getInitialization().getSharedFeatures().keys().contains(name)) {
                 list.add(name);
             }
         }
@@ -97,14 +93,14 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         }
     }
 
-    private Feature<T> createScoreFeature(KeyValueParams kpv) throws CreateException {
+    private Feature<T> createScoreFeature(Dictionary dictionary) throws CreateException {
 
         Sum<T> sum = new Sum<>();
         sum.setIgnoreNaN(true);
 
         try {
             // For now let's just check all the feature are present
-            for (String name : kpv.keySet()) {
+            for (String name : dictionary.keys()) {
 
                 // Skip the threshold name
                 if (name.equals(LDA_THRESHOLD_KEY)) {
@@ -112,11 +108,8 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 }
 
                 Feature<T> feature =
-                        getInitializationParameters()
-                                .getSharedFeatureSet()
-                                .getException(name)
-                                .downcast();
-                sum.getList().add(new MultiplyByConstant<>(feature, kpv.getPropertyAsDouble(name)));
+                        getInitialization().getSharedFeatures().getException(name).downcast();
+                sum.getList().add(new MultiplyByConstant<>(feature, dictionary.getAsDouble(name)));
             }
 
         } catch (NamedProviderGetException e) {
@@ -136,13 +129,13 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
 
         Reference<T> score = new Reference<>(FEATURE_NAME_SCORE);
 
-        IfCondition<T> featThresh = new IfCondition<>();
-        featThresh.setFeatureCondition(score);
-        featThresh.setItem(new Constant<>(1));
-        featThresh.setFeatureElse(new Constant<>(0));
-        featThresh.setThreshold(new RelationToConstant(new GreaterThanBean(), threshold));
+        IfCondition<T> featureThreshold = new IfCondition<>();
+        featureThreshold.setFeatureCondition(score);
+        featureThreshold.setItem(new Constant<>(1));
+        featureThreshold.setFeatureElse(new Constant<>(0));
+        featureThreshold.setThreshold(new RelationToConstant(new GreaterThanBean(), threshold));
 
-        featThresh.setCustomName(FEATURE_NAME_CLASSIFIER);
-        return featThresh;
+        featureThreshold.setCustomName(FEATURE_NAME_CLASSIFIER);
+        return featureThreshold;
     }
 }
