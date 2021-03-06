@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
@@ -79,13 +80,17 @@ public class AutoLocalThreshold extends FromChannelBase {
         return out;
     }
 
-    private VoxelBuffer<UnsignedByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) {
-        ImagePlus imagePlus = ConvertToImagePlus.from(slice, false);
-
-        Object[] ret = at.exec(imagePlus, method, radius, 0, 0, true);
-        ImagePlus imageOut = (ImagePlus) ret[0];
-
-        ImageProcessor processor = imageOut.getImageStack().getProcessor(1);
-        return ConvertToVoxelBuffer.asByte(processor);
+    private VoxelBuffer<UnsignedByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) throws CreateException {
+        try {
+            ImagePlus imagePlus = ConvertToImagePlus.from(slice, false);
+    
+            Object[] ret = at.exec(imagePlus, method, radius, 0, 0, true);
+            ImagePlus imageOut = (ImagePlus) ret[0];
+    
+            ImageProcessor processor = imageOut.getImageStack().getProcessor(1);
+            return ConvertToVoxelBuffer.asByte(processor);
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
     }
 }

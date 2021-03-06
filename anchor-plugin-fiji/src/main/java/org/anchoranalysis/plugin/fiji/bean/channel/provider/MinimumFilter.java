@@ -27,14 +27,19 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import process3d.MinMaxMedian;
 
 public class MinimumFilter extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ImagePlus image = ConvertToImagePlus.from(channel);
-        ImagePlus convolved = MinMaxMedian.convolve(image, MinMaxMedian.MINIMUM);
-        return ConvertFromImagePlus.toChannel(convolved, channel.resolution());
+        try {
+            ImagePlus image = ConvertToImagePlus.from(channel);
+            ImagePlus convolved = MinMaxMedian.convolve(image, MinMaxMedian.MINIMUM);
+            return ConvertFromImagePlus.toChannel(convolved, channel.resolution());
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
     }
 }
