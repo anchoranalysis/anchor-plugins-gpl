@@ -80,13 +80,14 @@ public class AutoLocalThreshold extends FromChannelBase {
         return out;
     }
 
-    private VoxelBuffer<UnsignedByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at) throws CreateException {
+    private VoxelBuffer<UnsignedByteBuffer> thresholdSlice(Stack slice, Auto_Local_Threshold at)
+            throws CreateException {
         try {
             ImagePlus imagePlus = ConvertToImagePlus.from(slice, false);
-    
+
             Object[] ret = at.exec(imagePlus, method, radius, 0, 0, true);
             ImagePlus imageOut = (ImagePlus) ret[0];
-    
+
             ImageProcessor processor = imageOut.getImageStack().getProcessor(1);
             return ConvertToVoxelBuffer.asByte(processor);
         } catch (ImageJConversionException e) {

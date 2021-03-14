@@ -76,10 +76,10 @@ public class ThresholderAutoIJ extends Thresholder {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private void applyThreshold(ImagePlus image) {
         Auto_Threshold at = new Auto_Threshold();
-        at.exec(image, method, false, noBlack, true, false, false, true);        
+        at.exec(image, method, false, noBlack, true, false, false, true);
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(
