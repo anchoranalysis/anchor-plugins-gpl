@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class ThresholderAutoIJ extends Thresholder {
@@ -67,12 +68,18 @@ public class ThresholderAutoIJ extends Thresholder {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 
-        ImagePlus image = ConvertToImagePlus.from(inputBuffer);
+        try {
+            ImagePlus image = ConvertToImagePlus.from(inputBuffer);
+            applyThreshold(image);
+            return convertToBinary(image, binaryValues);
+        } catch (ImageJConversionException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 
+    private void applyThreshold(ImagePlus image) {
         Auto_Threshold at = new Auto_Threshold();
         at.exec(image, method, false, noBlack, true, false, false, true);
-
-        return convertToBinary(image, binaryValues);
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(
