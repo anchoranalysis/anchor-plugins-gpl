@@ -72,7 +72,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
     // We can also change a binary voxel buffer
     public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
-            BinaryVoxels<UnsignedByteBuffer> binaryValues,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             Optional<Resolution> resolution,
             boolean suppressZ,
             double multiplyBy,
@@ -83,8 +83,8 @@ public class DistanceTransform3D extends FromMaskBase {
         Channel channel =
                 ChannelFactory.instance()
                         .get(UnsignedByteVoxelType.INSTANCE)
-                        .create(binaryValues.voxels(), resolution);
-        Mask mask = new Mask(channel, binaryValues.binaryValues());
+                        .create(voxels.voxels(), resolution);
+        Mask mask = new Mask(channel, voxels.binaryValues());
 
         Channel distanceMap =
                 createDistanceMapForMask(
