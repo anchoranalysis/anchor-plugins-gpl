@@ -84,16 +84,16 @@ class EDT {
             Mask mask,
             ChannelFactorySingleType factory,
             boolean suppressZ,
-            double multiplyAspectRatio) {
+            float[] multiplyDimensions) {
 
         Channel result = factory.createEmptyInitialised(mask.dimensions());
 
         Voxels<FloatBuffer> voxelsResult = result.voxels().asFloat();
 
-        float zMult = suppressZ ? 1.0f : (float) Math.pow(multiplyAspectRatio, 2);
+        float zMult = suppressZ ? 1.0f : multiplyDimensions[2];
         new EDTDimensionZ(mask.voxels(), voxelsResult, zMult).compute();
-        new EDTDimensionY(voxelsResult, 1.0f).compute();
-        new EDTDimensionX(voxelsResult, 1.0f).compute();
+        new EDTDimensionY(voxelsResult, multiplyDimensions[1]).compute();
+        new EDTDimensionX(voxelsResult, multiplyDimensions[0]).compute();
         return result;
     }
 }

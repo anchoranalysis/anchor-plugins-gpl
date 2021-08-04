@@ -126,6 +126,13 @@
 	  <version>2.0.1</version>
 	</dependency>
 	
+  	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-test-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	  <scope>test</scope>
+	 </dependency>	
+	
 	</dependencies> 
 	
 	

@@ -23,7 +23,7 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 abstract class EDTDimensionBase {
-    private int width;
+    private int extent;
     /*
      * parabola k is defined by y[k] (v in the paper)
      * and f[k] (f(v[k]) in the paper): (y, f) is the
@@ -37,21 +37,35 @@ abstract class EDTDimensionBase {
     private float[] f, z; // NOSONAR
     private int[] y;
 
-    protected EDTDimensionBase(int rowWidth) {
-        width = rowWidth;
-        f = new float[width + 1];
-        z = new float[width + 1];
-        y = new int[width + 1];
+    protected EDTDimensionBase(int extent) {
+        this.extent = extent;
+        f = new float[extent + 1];
+        z = new float[extent + 1];
+        y = new int[extent + 1];
     }
 
-    public final void computeRow() {
+    public final void compute() {
+        while (nextRow()) {
+            computeRow();
+        }
+    }
+
+    protected abstract float get(int column);
+
+    protected abstract void set(int column, float value);
+
+    protected abstract float getMultiplyConstant();
+    
+    protected abstract boolean nextRow();
+    
+    private final void computeRow() {
         // calculate the parabolae ("lower envelope")
         f[0] = Float.MAX_VALUE;
         y[0] = -1;
         z[0] = Float.MAX_VALUE;
         k = 0;
         float fx, s; // NOSONAR
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < extent; x++) {
             fx = get(x);
             for (; ; ) { // NOSONAR
                 // calculate the intersection
@@ -67,25 +81,11 @@ abstract class EDTDimensionBase {
         z[++k] = Float.MAX_VALUE;
         // calculate g(x)
         int i = 0;
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < extent; x++) {
             while (z[i + 1] < x) {
                 i++;
             }
             set(x, getMultiplyConstant() * (x - y[i]) * (x - y[i]) + f[i]);
         }
     }
-
-    public abstract float get(int column);
-
-    public abstract void set(int column, float value);
-
-    public abstract float getMultiplyConstant();
-
-    public final void compute() {
-        while (nextRow()) {
-            computeRow();
-        }
-    }
-
-    public abstract boolean nextRow();
 }

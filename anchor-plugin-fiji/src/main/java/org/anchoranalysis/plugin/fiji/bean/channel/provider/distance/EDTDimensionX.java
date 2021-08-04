@@ -35,7 +35,7 @@ class EDTDimensionX extends EDTOneDimension {
         this.multiplyConstant = multiplyConstant;
     }
 
-    public final void set(int x, float value) {
-        putIntoPuffer(x, (float) Math.sqrt(value));
+    protected final void set(int x, float value) {
+        putIntoBuffer(x, (float) Math.sqrt(value));
     }
 }

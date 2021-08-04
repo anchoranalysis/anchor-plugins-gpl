@@ -49,11 +49,11 @@ abstract class EDTOneDimension extends EDTDimensionBase {
         sliceIndex = -1;
     }
 
-    public final float get(int x) {
+    protected final float get(int x) {
         return slice.get(x * columnStride + offset);
     }
 
-    public final boolean nextRow() {
+    protected final boolean nextRow() {
         offset += rowStride;
         if (offset >= lastOffset) {
             if (++sliceIndex >= stack.extent().z()) return false;
@@ -63,7 +63,7 @@ abstract class EDTOneDimension extends EDTDimensionBase {
         return true;
     }
 
-    protected void putIntoPuffer(int x, float value) {
+    protected void putIntoBuffer(int x, float value) {
         slice.put(x * columnStride + offset, value);
     }
 }
