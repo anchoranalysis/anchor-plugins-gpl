@@ -93,15 +93,16 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
 
     private Voxels<UnsignedByteBuffer> distanceTransformForObject(
             ObjectMask object, Optional<Resolution> resolution) throws CreateException {
-        return DistanceTransform3D.createDistanceMapForVoxels(
+        
+        DistanceTransform3D transform = new DistanceTransform3D();
+        transform.setSuppressZ(suppressZ);
+        transform.setCreateShort(createShort);
+
+        return transform.createDistanceMapForVoxels(
                 object.binaryVoxels()
                         .duplicate(), // TODO duplicated presumably because the voxel-buffer is
                 // consumed?
                 resolution,
-                suppressZ,
-                1.0,
-                1.0,
-                createShort,
-                false);
+                1.0f);
     }
 }

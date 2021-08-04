@@ -59,7 +59,7 @@ class FactoryOther {
     }
 
     public static ChannelProvider distanceTransformBeforeInvert(
-            MaskProvider source, double distanceTransformMultiplyBy) {
+            MaskProvider source, float distanceTransformMultiplyBy) {
         DistanceTransform3D provider = new DistanceTransform3D();
         provider.setCreateShort(true);
         provider.setMultiplyBy(distanceTransformMultiplyBy);

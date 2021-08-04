@@ -22,6 +22,7 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import java.util.Optional;
+import java.util.function.ToDoubleFunction;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -54,6 +55,9 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.FromMaskBase;
  *
  * <p>The plugin uses aspect ratio (relative distance between z and xy slices) in its distance
  * calculations.
+ * 
+ * <p>As a simplification, when resolution is used, the XY plane is multipled by the average
+ * of the x and y dimensions.
  *
  * @author Owen Feehan
  */
@@ -62,23 +66,28 @@ public class DistanceTransform3D extends FromMaskBase {
     // START PROPERTIES
     @BeanField @Getter @Setter private boolean suppressZ = false;
 
-    @BeanField @Getter @Setter private double multiplyBy = 1.0;
+    @BeanField @Getter @Setter private float multiplyBy = 1.0f;
 
     @BeanField @Getter @Setter private boolean createShort = false;
 
     /** Multiples the values by the x-resolution, if it exists. */
     @BeanField @Getter @Setter private boolean applyResolution = false;
+    
+    /** If the z-resolution is undefined, the z dimenion is ignored. */
+    @BeanField @Getter @Setter private boolean ignoreZIfNaN = true;
     // END PROPERTIES
 
+    @Override
+    protected Channel createFromMask(Mask mask) throws CreateException {
+        return createDistanceMapForMask(
+                mask, 1);
+    }
+    
     // We can also change a binary voxel buffer
-    public static Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
+    public Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             Optional<Resolution> resolution,
-            boolean suppressZ,
-            double multiplyBy,
-            double multiplyByZRes,
-            boolean createShort,
-            boolean applyRes)
+            float multiplyByZRes)
             throws CreateException {
         Channel channel =
                 ChannelFactory.instance()
@@ -88,17 +97,13 @@ public class DistanceTransform3D extends FromMaskBase {
 
         Channel distanceMap =
                 createDistanceMapForMask(
-                        mask, suppressZ, multiplyBy, multiplyByZRes, createShort, applyRes);
+                        mask, multiplyByZRes);
         return distanceMap.voxels().asByte();
     }
 
-    public static Channel createDistanceMapForMask(
+    private Channel createDistanceMapForMask(
             Mask mask,
-            boolean suppressZ,
-            double multiplyBy,
-            double multiplyByZRes,
-            boolean createShort,
-            boolean applyRes)
+            float multiplyByZRes)
             throws CreateException {
         if (mask.binaryValues().getOnInt() != 255) {
             throw new CreateException("Binary On must be 255");
@@ -108,28 +113,38 @@ public class DistanceTransform3D extends FromMaskBase {
             throw new CreateException("Binary Off must be 0");
         }
 
-        // Performs some checks on the z-resolution, if it exits
+        // Performs some checks on the z-resolution, if it exists
         if (mask.resolution().isPresent() && mask.extent().z() > 1 && !suppressZ) {
             checkZResolution(mask.resolution().get()); // NOSONAR
         }
+        
+        boolean excludeZDimension = suppressZ || hasNanZResolution(mask.resolution()); 
 
-        if (suppressZ) {
+        if (excludeZDimension) {
 
             Channel channelOut = createEmptyChannel(createShort, mask.dimensions());
 
             for (int z = 0; z < mask.dimensions().extent().z(); z++) {
                 Mask slice = mask.extractSlice(z);
                 Channel distanceSlice =
-                        createDistanceMapForChannelFromPlugin(
-                                slice, true, multiplyBy, multiplyByZRes, createShort, applyRes);
+                        createDistanceMapFromPlugin(
+                                slice, true, multiplyBy, multiplyByZRes, createShort, applyResolution);
                 channelOut.voxels().transferSlice(z, distanceSlice.voxels(), 0, true);
             }
 
             return channelOut;
 
         } else {
-            return createDistanceMapForChannelFromPlugin(
-                    mask, false, multiplyBy, multiplyByZRes, createShort, applyRes);
+            return createDistanceMapFromPlugin(
+                    mask, false, multiplyBy, multiplyByZRes, createShort, applyResolution);
+        }
+    }
+        
+    private static boolean hasNanZResolution(Optional<Resolution> resolution) {
+        if (resolution.isPresent()) {
+              return Double.isNaN(resolution.get().z());
+        } else {
+              return false;
         }
     }
 
@@ -138,54 +153,49 @@ public class DistanceTransform3D extends FromMaskBase {
                 createShort ? UnsignedShortVoxelType.INSTANCE : UnsignedByteVoxelType.INSTANCE;
         return ChannelFactory.instance().createUninitialised(dims, dataType);
     }
-
-    @Override
-    protected Channel createFromMask(Mask mask) throws CreateException {
-        return createDistanceMapForMask(
-                mask, suppressZ, multiplyBy, 1, createShort, applyResolution);
-    }
-
-    private static Channel createDistanceMapForChannelFromPlugin(
+    
+    private static Channel createDistanceMapFromPlugin(
             Mask mask,
             boolean suppressZ,
-            double multFactor,
-            double multFactorZ,
+            float multFactor,
+            float multFactorZ,
             boolean createShort,
-            boolean applyRes) {
-
-        // Assumes X and Y have the same resolution
-
+            boolean applyResolution) {
+        
+        float[] multipliers = new float[]{
+            multiplicationFactor(multFactor, applyResolution, mask, Resolution::x),
+            multiplicationFactor(multFactor, applyResolution, mask, Resolution::y),
+            multiplicationFactor(multFactorZ, applyResolution, mask, Resolution::z)
+        };
+        
         Channel distanceAsFloat =
                 EDT.compute(
                         mask,
                         ChannelFactory.instance().get(FloatVoxelType.INSTANCE),
                         suppressZ,
-                        multFactorZ);
-
-        double factor = multiplicationFactor(multFactor, applyRes, mask);
-        distanceAsFloat.arithmetic().multiplyBy(factor);
+                        multipliers);
 
         ChannelConverter<?> converter = createShort ? new ToUnsignedShort() : new ToUnsignedByte();
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
-    private static double multiplicationFactor(
-            double multFactor, boolean applyResolution, Mask mask) {
-        if (applyResolution && mask.resolution().isPresent()) {
-            return multFactor * mask.resolution().get().x(); // NOSONAR
-        } else {
-            return multFactor;
-        }
-    }
-
-    private static void checkZResolution(Resolution resolution) throws CreateException {
+    private void checkZResolution(Resolution resolution) throws CreateException {
         double zRelRes = resolution.zRelative();
-        if (Double.isNaN(zRelRes)) {
+        if (!ignoreZIfNaN && Double.isNaN(zRelRes)) {
             throw new CreateException("Z-resolution is NaN");
         }
 
         if (zRelRes == 0) {
             throw new CreateException("Z-resolution is 0");
+        }
+    }
+
+    private static float multiplicationFactor(
+            float multFactor, boolean applyResolution, Mask mask, ToDoubleFunction<Resolution> extractFromResolution) {
+        if (applyResolution && mask.resolution().isPresent()) {
+            return (float)(multFactor * extractFromResolution.applyAsDouble(mask.resolution().get()));   // NOSONAR
+        } else {
+            return multFactor;
         }
     }
 }

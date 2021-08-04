@@ -81,7 +81,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     private UnitValueVolume minVolumeConnectedComponent = new VolumeVoxels(1);
 
     /** Multiplies the distance transform by this factor to make it more meaningful in a short */
-    @BeanField @Getter @Setter private double distanceTransformMultiplyBy = 1.0;
+    @BeanField @Getter @Setter private float distanceTransformMultiplyBy = 1.0f;
 
     /**
      * If non-zero, a Gaussian blur is applied to the distance transform using the sigma in meters
