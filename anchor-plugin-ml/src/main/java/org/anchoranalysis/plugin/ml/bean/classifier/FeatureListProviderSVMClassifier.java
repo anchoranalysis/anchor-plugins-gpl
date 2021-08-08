@@ -50,7 +50,7 @@ import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
-import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
+import org.anchoranalysis.plugin.operator.feature.bean.statistics.ZScore;
 
 public class FeatureListProviderSVMClassifier extends ReferencedFeatures<FeatureInput> {
 
