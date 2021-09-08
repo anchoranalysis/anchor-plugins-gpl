@@ -26,7 +26,7 @@ import java.util.function.ToDoubleFunction;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
@@ -78,7 +78,7 @@ public class DistanceTransform3D extends FromMaskBase {
     // END PROPERTIES
 
     @Override
-    protected Channel createFromMask(Mask mask) throws CreateException {
+    protected Channel createFromMask(Mask mask) throws ProvisionFailedException {
         return createDistanceMapForMask(
                 mask, 1);
     }
@@ -88,7 +88,7 @@ public class DistanceTransform3D extends FromMaskBase {
             BinaryVoxels<UnsignedByteBuffer> voxels,
             Optional<Resolution> resolution,
             float multiplyByZRes)
-            throws CreateException {
+            throws ProvisionFailedException {
         Channel channel =
                 ChannelFactory.instance()
                         .get(UnsignedByteVoxelType.INSTANCE)
@@ -104,13 +104,13 @@ public class DistanceTransform3D extends FromMaskBase {
     private Channel createDistanceMapForMask(
             Mask mask,
             float multiplyByZRes)
-            throws CreateException {
+            throws ProvisionFailedException {
         if (mask.binaryValues().getOnInt() != 255) {
-            throw new CreateException("Binary On must be 255");
+            throw new ProvisionFailedException("Binary On must be 255");
         }
 
         if (mask.binaryValues().getOffInt() != 0) {
-            throw new CreateException("Binary Off must be 0");
+            throw new ProvisionFailedException("Binary Off must be 0");
         }
 
         // Performs some checks on the z-resolution, if it exists
@@ -179,14 +179,14 @@ public class DistanceTransform3D extends FromMaskBase {
         return converter.convert(distanceAsFloat, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
-    private void checkZResolution(Resolution resolution) throws CreateException {
+    private void checkZResolution(Resolution resolution) throws ProvisionFailedException {
         double zRelRes = resolution.zRelative();
         if (!ignoreZIfNaN && Double.isNaN(zRelRes)) {
-            throw new CreateException("Z-resolution is NaN");
+            throw new ProvisionFailedException("Z-resolution is NaN");
         }
 
         if (zRelRes == 0) {
-            throw new CreateException("Z-resolution is 0");
+            throw new ProvisionFailedException("Z-resolution is 0");
         }
     }
 

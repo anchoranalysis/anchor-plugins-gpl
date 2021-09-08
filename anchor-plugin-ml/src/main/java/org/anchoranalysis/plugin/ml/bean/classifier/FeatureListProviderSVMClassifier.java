@@ -34,7 +34,7 @@ import libsvm.svm_model;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -68,17 +68,17 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<FeatureInput> create() throws CreateException {
+    public FeatureList<FeatureInput> get() throws ProvisionFailedException {
 
         try {
-            Path fileSVM = filePathProviderSVM.create();
+            Path fileSVM = filePathProviderSVM.get();
 
-            FeatureList<FeatureInput> features = findModelFeatures(filePathProviderSVM.create());
+            FeatureList<FeatureInput> features = findModelFeatures(filePathProviderSVM.get());
 
             return FeatureListFactory.from(buildClassifierFeature(fileSVM, features));
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
@@ -183,7 +183,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
 
             return out;
 
-        } catch (NamedProviderGetException | CreateException e) {
+        } catch (NamedProviderGetException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

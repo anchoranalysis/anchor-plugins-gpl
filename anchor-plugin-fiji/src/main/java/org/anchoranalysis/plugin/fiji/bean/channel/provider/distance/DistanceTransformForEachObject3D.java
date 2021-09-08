@@ -25,7 +25,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -56,13 +56,13 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
     // END PROPERTIES
 
     @Override
-    protected Channel createFromDimensions(Dimensions dimensions) throws CreateException {
+    protected Channel createFromDimensions(Dimensions dimensions) throws ProvisionFailedException {
 
         Channel out = ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
 
         Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
-        for (ObjectMask object : objects.create()) {
+        for (ObjectMask object : objects.get()) {
             copyObjectToOutput(object, dimensions.resolution(), voxelsOut);
         }
 
@@ -76,13 +76,13 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
      * @param object the object to copy
      * @param resolution the image-resolution
      * @param destination voxels into which
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     private void copyObjectToOutput(
             ObjectMask object,
             Optional<Resolution> resolution,
             Voxels<UnsignedByteBuffer> destination)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         Voxels<UnsignedByteBuffer> voxelsDistance = distanceTransformForObject(object, resolution);
 
@@ -92,7 +92,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
     }
 
     private Voxels<UnsignedByteBuffer> distanceTransformForObject(
-            ObjectMask object, Optional<Resolution> resolution) throws CreateException {
+            ObjectMask object, Optional<Resolution> resolution) throws ProvisionFailedException {
         
         DistanceTransform3D transform = new DistanceTransform3D();
         transform.setSuppressZ(suppressZ);
