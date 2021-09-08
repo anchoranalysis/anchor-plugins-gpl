@@ -26,7 +26,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
@@ -74,12 +74,12 @@ public class MergeSpatialClusters extends MergeBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsToMerge)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             return mergeMultiplex(objectsToMerge, this::clusterAndMerge);
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
@@ -94,13 +94,13 @@ public class MergeSpatialClusters extends MergeBase {
                                 resolutionRequired(), maxDistanceCOG, maxDistanceDeltaContour));
 
         try {
-            Channel distanceMap = distanceMapProvider.create();
+            Channel distanceMap = distanceMapProvider.get();
 
             List<Cluster<ObjectMaskPlus>> clusters =
                     clusterer.cluster(convert(objects, distanceMap));
             return mergeClusters(clusters);
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

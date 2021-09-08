@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -34,41 +35,41 @@ class DistanceTransform3DTest {
     private static final float Z_RESOLUTION = 2.5f;
     
     @Test
-    void test2dWithoutResolution() throws CreateException {
+    void test2dWithoutResolution() throws ProvisionFailedException {
         doTest(EXPECTED_2D_WITHOUT_RESOLUTION, false, false, Optional.empty());
     }
     
     @Test
-    void test3dWithoutResolution() throws CreateException {
+    void test3dWithoutResolution() throws ProvisionFailedException {
         doTest(EXPECTED_3D_WITHOUT_RESOLUTION, true, false, Optional.empty());
     }
     
     @Test
-    void test3dWithoutResolution_withSuppressedZ() throws CreateException {
+    void test3dWithoutResolution_withSuppressedZ() throws ProvisionFailedException {
         doTest(EXPECTED_2D_WITHOUT_RESOLUTION, true, true, Optional.empty());
     }
     
     @Test
-    void test2dWithResolution() throws CreateException {
+    void test2dWithResolution() throws ProvisionFailedException {
         doTest(EXPECTED_2D_WITH_RESOLUTION, false, false, Optional.of(RESOLUTION));
     }
     
     @Test
-    void test3dWithResolution() throws CreateException {
+    void test3dWithResolution() throws ProvisionFailedException {
         doTest(EXPECTED_3D_WITH_RESOLUTION, true, false, Optional.of(RESOLUTION));
     }
     
     @Test
-    void test3dWithResolutionZOnly() throws CreateException {
+    void test3dWithResolutionZOnly() throws ProvisionFailedException {
         doTest(EXPECTED_3D_WITH_RESOLUTION_Z_ONLY, true, false, Optional.of(RESOLUTION_Z_ONLY));
     }
     
     @Test
-    void test3dWithResolutionZNaN() throws CreateException {
+    void test3dWithResolutionZNaN() throws ProvisionFailedException {
         doTest(EXPECTED_3D_WITH_RESOLUTION_Z_NAN, true, false, Optional.of(RESOLUTION_Z_NAN));
     }
     
-    private void doTest(double expectedMaxIntensity, boolean do3D, boolean suppressZ, Optional<Resolution> resolution) throws CreateException {
+    private void doTest(double expectedMaxIntensity, boolean do3D, boolean suppressZ, Optional<Resolution> resolution) throws ProvisionFailedException {
         Mask mask = MaskFixture.create(do3D, resolution);
         
         Channel channel = createTransformer(suppressZ).createFromMask(mask);

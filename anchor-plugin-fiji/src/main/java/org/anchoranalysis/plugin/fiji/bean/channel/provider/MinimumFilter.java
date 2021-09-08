@@ -22,7 +22,7 @@
 package org.anchoranalysis.plugin.fiji.bean.channel.provider;
 
 import ij.ImagePlus;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
@@ -33,13 +33,13 @@ import process3d.MinMaxMedian;
 public class MinimumFilter extends ChannelProviderUnary {
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         try {
             ImagePlus image = ConvertToImagePlus.from(channel);
             ImagePlus convolved = MinMaxMedian.convolve(image, MinMaxMedian.MINIMUM);
             return ConvertFromImagePlus.toChannel(convolved, channel.resolution());
         } catch (ImageJConversionException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

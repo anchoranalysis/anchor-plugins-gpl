@@ -29,7 +29,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
@@ -57,9 +57,9 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<T> create() throws CreateException {
+    public FeatureList<T> get() throws ProvisionFailedException {
 
-        Dictionary dictionaryCreated = dictionary.create();
+        Dictionary dictionaryCreated = dictionary.get();
 
         checkForMissingFeatures(dictionaryCreated);
 
@@ -71,7 +71,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 createClassifierFeature(threshold));
     }
 
-    private void checkForMissingFeatures(Dictionary dictionary) throws CreateException {
+    private void checkForMissingFeatures(Dictionary dictionary) throws ProvisionFailedException {
 
         List<String> list = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
         }
     }
 
-    private Feature<T> createScoreFeature(Dictionary dictionary) throws CreateException {
+    private Feature<T> createScoreFeature(Dictionary dictionary) throws ProvisionFailedException {
 
         Sum<T> sum = new Sum<>();
         sum.setIgnoreNaN(true);
@@ -113,7 +113,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
             }
 
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
         sum.setCustomName(FEATURE_NAME_SCORE);

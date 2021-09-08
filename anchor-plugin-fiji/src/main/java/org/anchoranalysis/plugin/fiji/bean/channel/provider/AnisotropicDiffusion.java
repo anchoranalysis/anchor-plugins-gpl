@@ -30,7 +30,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -57,14 +57,14 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         return diffusion(channel, createDiffusionFunction());
     }
 
     // Assumes XY res are identical
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Channel diffusion(Channel channel, DiffusionFunction diffusionFunction)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             if (do3D) {
@@ -81,7 +81,7 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
 
             return channel;
         } catch (IncompatibleTypeException e1) {
-            throw new CreateException(e1);
+            throw new ProvisionFailedException(e1);
         }
     }
 
