@@ -30,6 +30,7 @@ import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
@@ -83,8 +84,12 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 continue;
             }
 
-            if (getInitialization().getSharedFeatures().keys().contains(name)) {
-                list.add(name);
+            try {
+                if (getInitialization().getSharedFeatures().keys().contains(name)) {
+                    list.add(name);
+                }
+            } catch (InitializeException e) {
+                throw new ProvisionFailedException(e);
             }
         }
 
@@ -112,7 +117,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 sum.getList().add(new MultiplyByConstant<>(feature, dictionary.getAsDouble(name)));
             }
 
-        } catch (NamedProviderGetException e) {
+        } catch (NamedProviderGetException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
 
