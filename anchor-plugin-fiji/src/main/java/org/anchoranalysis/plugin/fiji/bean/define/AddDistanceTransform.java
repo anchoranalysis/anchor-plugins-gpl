@@ -28,8 +28,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
+import org.anchoranalysis.bean.define.DefineAddException;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -98,7 +98,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     // END BEAN PROPERTIES
 
     @Override
-    public void addTo(Define define) throws BeanXmlException {
+    public void addTo(Define define) throws DefineAddException {
 
         // Step 1
         addConnectedInput(define);
@@ -113,7 +113,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
         addSegments(define);
     }
 
-    private void addSegments(Define define) throws BeanXmlException {
+    private void addSegments(Define define) throws DefineAddException {
         addWithName(
                 define,
                 SEGMENTS,
@@ -121,14 +121,14 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
                         objects(CONNECTED_INPUT), objects(SEEDS), channel(DISTANCE_TRANSFORM)));
     }
 
-    private void addConnectedInput(Define define) throws BeanXmlException {
+    private void addConnectedInput(Define define) throws DefineAddException {
         addWithName(
                 define,
                 CONNECTED_INPUT,
                 connectedComponentsInput(inputMask(), minVolumeConnectedComponent));
     }
 
-    private void addDistanceTransform(Define define) throws BeanXmlException {
+    private void addDistanceTransform(Define define) throws DefineAddException {
 
         addWithName(
                 define,
@@ -177,7 +177,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
         return blurStrategy;
     }
 
-    private void addSeedFinding(Define define) throws BeanXmlException {
+    private void addSeedFinding(Define define) throws DefineAddException {
         addWithName(
                 define, MINIMA_UNMERGED, minimaUnmerged(inputMask(), channel(DISTANCE_TRANSFORM)));
 

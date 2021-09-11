@@ -35,6 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -49,7 +50,7 @@ import org.anchoranalysis.io.input.bean.path.provider.FilePathProvider;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
-import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
+import org.anchoranalysis.math.statistics.MeanScale;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.ZScore;
 
 public class FeatureListProviderSVMClassifier extends ReferencedFeatures<FeatureInput> {
@@ -96,18 +97,18 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
         return out;
     }
 
-    private static List<FirstSecondOrderStatistic> readScale(Path filePath)
+    private static List<MeanScale> readScale(Path filePath)
             throws CSVReaderException {
 
-        List<FirstSecondOrderStatistic> out = new ArrayList<>();
+        List<MeanScale> out = new ArrayList<>();
 
         try (ReadByLine reader = CSVReaderByLine.open(filePath, " ", false)) {
             reader.read(
                     (line, firstLine) -> {
-                        FirstSecondOrderStatistic stat = new FirstSecondOrderStatistic();
-                        stat.setMean(Double.parseDouble(line[0]));
-                        stat.setScale(Double.parseDouble(line[1]));
-                        out.add(stat);
+                        MeanScale statistic = new MeanScale();
+                        statistic.setMean(Double.parseDouble(line[0]));
+                        statistic.setScale(Double.parseDouble(line[1]));
+                        out.add(statistic);
                     });
         }
 
@@ -146,10 +147,10 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
             FeatureNameList featureNames = readFeatureNames(filePathFeatures);
 
             Path filePathScale = differentEnding(fileSVM, ".scale");
-            List<FirstSecondOrderStatistic> listStats = readScale(filePathScale);
+            List<MeanScale> listStats = readScale(filePathScale);
 
             return listFromNames(featureNames, getInitialization().getSharedFeatures(), listStats);
-        } catch (CSVReaderException | IOException e) {
+        } catch (CSVReaderException | IOException | InitializeException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -157,7 +158,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
     private FeatureList<FeatureInput> listFromNames(
             FeatureNameList featureNames,
             NamedProvider<Feature<FeatureInput>> allFeatures,
-            List<FirstSecondOrderStatistic> listStats)
+            List<MeanScale> listStats)
             throws OperationFailedException {
 
         List<String> missing = new ArrayList<>();
@@ -191,7 +192,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
     /** Adds a feature to an out-list if it exists, or adds its name to a missing-list otherwise */
     private Optional<Feature<FeatureInput>> getOrAddToMissing(
             String featureName,
-            FirstSecondOrderStatistic stat,
+            MeanScale stat,
             NamedProvider<Feature<FeatureInput>> allFeatures,
             List<String> missing)
             throws NamedProviderGetException {
@@ -205,7 +206,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
     }
 
     private <S extends FeatureInput> Feature<S> maybeNormalise(
-            Feature<S> feature, FirstSecondOrderStatistic stat) {
+            Feature<S> feature, MeanScale stat) {
         if (normalizeFeatures) {
             return createScaledFeature(feature, stat);
         } else {
@@ -214,7 +215,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
     }
 
     private <S extends FeatureInput> Feature<S> createScaledFeature(
-            Feature<S> feature, FirstSecondOrderStatistic stat) {
+            Feature<S> feature, MeanScale stat) {
 
         ZScore<S> featureNormalized = new ZScore<>();
         featureNormalized.setItem(feature);
