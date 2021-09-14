@@ -105,9 +105,10 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
         try (ReadByLine reader = CSVReaderByLine.open(filePath, " ", false)) {
             reader.read(
                     (line, firstLine) -> {
-                        MeanScale statistic = new MeanScale();
-                        statistic.setMean(Double.parseDouble(line[0]));
-                        statistic.setScale(Double.parseDouble(line[1]));
+                        MeanScale statistic = new MeanScale(
+                            Double.parseDouble(line[0]),
+                            Double.parseDouble(line[1])
+                        );
                         out.add(statistic);
                     });
         }
