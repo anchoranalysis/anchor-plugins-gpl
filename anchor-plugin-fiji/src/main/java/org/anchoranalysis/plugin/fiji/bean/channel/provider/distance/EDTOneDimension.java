@@ -24,7 +24,7 @@ package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 abstract class EDTOneDimension extends EDTDimensionBase {
 
@@ -44,7 +44,7 @@ abstract class EDTOneDimension extends EDTDimensionBase {
 
         columnStride = iterateX ? 1 : e.x();
         rowStride = iterateX ? e.x() : 1;
-        offset = e.volumeXY();
+        offset = e.areaXY();
         lastOffset = rowStride * (iterateX ? e.y() : e.x());
         sliceIndex = -1;
     }
