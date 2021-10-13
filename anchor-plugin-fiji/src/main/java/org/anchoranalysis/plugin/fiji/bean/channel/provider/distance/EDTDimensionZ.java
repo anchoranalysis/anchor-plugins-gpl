@@ -43,7 +43,7 @@ class EDTDimensionZ extends EDTDimensionBase {
 
         int d = in.extent().z();
 
-        bufferXYSize = in.extent().volumeXY();
+        bufferXYSize = in.extent().areaXY();
 
         inSlice = new byte[d][];
         outSlice = new float[d][];

@@ -44,7 +44,9 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.Blur;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 
 /**
- * Performs a Watershed on an EDT transform by bundling together several other beans
+ * Performs a <a href="https://en.wikipedia.org/wiki/Watershed_(image_processing)">Watershed</a> on <a href="https://en.wikipedia.org/wiki/Distance_transform">distance transform</a> by bundling together several other beans.
+ * 
+ * <p>The distance transform is Euclidean.
  *
  * <p>This is used to avoid repetitive bean-definitions in Define, but while still providing
  * visualization of all the intermediate steps that occur during the transformation, which are
@@ -52,11 +54,19 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
  *
  * <p>For now, it only works in 2D, but can be easily extended for 3D.
  *
- * <p>The steps are: 1. Find connected components of a binary mask 2. Find the distance transform of
- * the above 3. Invert the distance transform 4. Find minima points from the above 5. Merge minima
- * points that occur within a certain distance (they become the same object, but it can be
- * disconnected voxelwise) 6. Create seeds by drawing a line between the merged-minima-points so
- * they are now connected. 7. Apply the watershed transformation using the seeds to create segments
+ * <p>The steps are:
+ * 
+ * <ol>
+ * <li>Find connected components of a binary mask.
+ * <li>Find the distance transform of the above.
+ * <li>Invert the distance transform.
+ * <li>Find minima points from the above.
+ * <li>Merge minima points that occur within a certain distance (they become the same object, but it can be
+ * disconnected voxelwise).
+ * <li>Create seeds by drawing a line between the merged-minima-points so
+ * they are now connected.
+ * <li>Apply the watershed transformation using the seeds to create segments.
+ * </ol>
  *
  * @author Owen Feehan
  */
@@ -74,18 +84,18 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     private static final String SEGMENTS = "objsSegments";
 
     // START BEAN PROPERTIES
-    /** The ID of the binary input mask that determines the region of the watershed */
+    /** The ID of the binary input mask that determines the region of the Watershed. */
     @BeanField @Getter @Setter private String binaryInputChannelID;
 
     @BeanField @Getter @Setter
     private UnitValueVolume minVolumeConnectedComponent = new VolumeVoxels(1);
 
-    /** Multiplies the distance transform by this factor to make it more meaningful in a short */
+    /** Multiplies the distance transform by this factor to make it more meaningful in a short. */
     @BeanField @Getter @Setter private float distanceTransformMultiplyBy = 1.0f;
 
     /**
      * If non-zero, a Gaussian blur is applied to the distance transform using the sigma in meters
-     * below
+     * below.
      */
     @BeanField @Getter @Setter private double distanceTransformSmoothSigmaMeters = 0;
 
