@@ -25,7 +25,7 @@ import ij.ImagePlus;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -36,8 +36,8 @@ import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.min
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 
     @Override
-    public VoxelsWrapper reconstruction(
-            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask)
+    public VoxelsUntyped reconstruction(
+            VoxelsUntyped mask, VoxelsUntyped marker, Optional<ObjectMask> containingMask)
             throws OperationFailedException {
 
         if (containingMask.isPresent()) {
@@ -60,7 +60,7 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
         Voxels<UnsignedByteBuffer> ret = reconstructionByDilation(maskCast, markerCast);
         ret.arithmetic().subtractFrom(UnsignedByteVoxelType.MAX_VALUE_INT);
 
-        return new VoxelsWrapper(ret);
+        return new VoxelsUntyped(ret);
     }
 
     private Voxels<UnsignedByteBuffer> reconstructionByDilation(

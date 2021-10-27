@@ -29,7 +29,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -58,7 +58,7 @@ public class ThresholderAutoIJ extends Thresholder {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper inputBuffer,
+            VoxelsUntyped inputBuffer,
             BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -84,13 +84,13 @@ public class ThresholderAutoIJ extends Thresholder {
 
     private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(
             ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
-        VoxelsWrapper thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);
+        VoxelsUntyped thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);
 
         if (!thresholdedVoxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             throw new OperationFailedException(
                     "The threshold operation returned a data-type that is not unsigned 8-bit");
         }
 
-        return BinaryVoxelsFactory.reuseByte(thresholdedVoxels.asByte(), binaryValues.createInt());
+        return BinaryVoxelsFactory.reuseByte(thresholdedVoxels.asByte(), binaryValues.asInt());
     }
 }

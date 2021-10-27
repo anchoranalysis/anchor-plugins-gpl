@@ -129,7 +129,7 @@ public class DistanceTransform3D extends FromMaskBase {
                 Channel distanceSlice =
                         createDistanceMapFromPlugin(
                                 slice, true, multiplyBy, multiplyByZRes, createShort, applyResolution);
-                channelOut.voxels().transferSlice(z, distanceSlice.voxels(), 0, true);
+                channelOut.voxels().replaceSlice(z, distanceSlice.voxels(), 0, true);
             }
 
             return channelOut;
