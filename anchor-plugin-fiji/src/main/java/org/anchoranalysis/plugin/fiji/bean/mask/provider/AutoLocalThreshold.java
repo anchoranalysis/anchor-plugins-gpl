@@ -32,7 +32,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
@@ -65,7 +65,7 @@ public class AutoLocalThreshold extends FromChannelBase {
         Stack stack = new Stack(channel);
 
         // The default binary values for <i>off</i> (0) and <i>on</i> (255) match the output from the plugin
-        Mask out = MaskFactory.createMaskOff(channel.dimensions(), BinaryValues.getDefault());
+        Mask out = MaskFactory.createMaskOff(channel.dimensions(), BinaryValuesInt.getDefault());
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();
 
