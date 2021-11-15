@@ -87,9 +87,9 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
 
     private static svm_node[] convert(ResultsVector results) {
 
-        svm_node[] out = new svm_node[results.length()];
+        svm_node[] out = new svm_node[results.size()];
 
-        for (int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < results.size(); i++) {
             out[i] = new svm_node();
             out[i].index = i + 1;
             out[i].value = results.get(i);
