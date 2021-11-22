@@ -93,7 +93,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
 
     private Voxels<UnsignedByteBuffer> distanceTransformForObject(
             ObjectMask object, Optional<Resolution> resolution) throws ProvisionFailedException {
-        
+
         DistanceTransform3D transform = new DistanceTransform3D();
         transform.setSuppressZ(suppressZ);
         transform.setCreateShort(createShort);
