@@ -64,7 +64,8 @@ public class AutoLocalThreshold extends FromChannelBase {
 
         Stack stack = new Stack(channel);
 
-        // The default binary values for <i>off</i> (0) and <i>on</i> (255) match the output from the plugin
+        // The default binary values for <i>off</i> (0) and <i>on</i> (255) match the output from
+        // the plugin
         Mask out = MaskFactory.createMaskOff(channel.dimensions(), BinaryValuesInt.getDefault());
 
         Auto_Local_Threshold at = new Auto_Local_Threshold();

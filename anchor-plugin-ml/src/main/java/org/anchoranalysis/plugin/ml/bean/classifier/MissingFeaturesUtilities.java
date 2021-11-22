@@ -29,7 +29,8 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MissingFeaturesUtilities {
 
-    public static ProvisionFailedException createExceptionForMissingStrings(List<String> listNames) {
+    public static ProvisionFailedException createExceptionForMissingStrings(
+            List<String> listNames) {
         // Then we have at least one missing feature, throw an exception
         StringBuilder builder = new StringBuilder();
 

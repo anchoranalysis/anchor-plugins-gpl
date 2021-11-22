@@ -97,18 +97,16 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
         return out;
     }
 
-    private static List<MeanScale> readScale(Path filePath)
-            throws CSVReaderException {
+    private static List<MeanScale> readScale(Path filePath) throws CSVReaderException {
 
         List<MeanScale> out = new ArrayList<>();
 
         try (ReadByLine reader = CSVReaderByLine.open(filePath, " ", false)) {
             reader.read(
                     (line, firstLine) -> {
-                        MeanScale statistic = new MeanScale(
-                            Double.parseDouble(line[0]),
-                            Double.parseDouble(line[1])
-                        );
+                        MeanScale statistic =
+                                new MeanScale(
+                                        Double.parseDouble(line[0]), Double.parseDouble(line[1]));
                         out.add(statistic);
                     });
         }
@@ -206,8 +204,7 @@ public class FeatureListProviderSVMClassifier extends ReferencedFeatures<Feature
         }
     }
 
-    private <S extends FeatureInput> Feature<S> maybeNormalise(
-            Feature<S> feature, MeanScale stat) {
+    private <S extends FeatureInput> Feature<S> maybeNormalise(Feature<S> feature, MeanScale stat) {
         if (normalizeFeatures) {
             return createScaledFeature(feature, stat);
         } else {

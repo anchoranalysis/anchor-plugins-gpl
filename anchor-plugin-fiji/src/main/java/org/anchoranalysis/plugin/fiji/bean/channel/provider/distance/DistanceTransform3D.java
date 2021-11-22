@@ -55,9 +55,9 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.FromMaskBase;
  *
  * <p>The plugin uses aspect ratio (relative distance between z and xy slices) in its distance
  * calculations.
- * 
- * <p>As a simplification, when resolution is used, the XY plane is multipled by the average
- * of the x and y dimensions.
+ *
+ * <p>As a simplification, when resolution is used, the XY plane is multipled by the average of the
+ * x and y dimensions.
  *
  * @author Owen Feehan
  */
@@ -72,17 +72,16 @@ public class DistanceTransform3D extends FromMaskBase {
 
     /** Multiples the values by the x-resolution, if it exists. */
     @BeanField @Getter @Setter private boolean applyResolution = false;
-    
+
     /** If the z-resolution is undefined, the z dimenion is ignored. */
     @BeanField @Getter @Setter private boolean ignoreZIfNaN = true;
     // END PROPERTIES
 
     @Override
     protected Channel createFromMask(Mask mask) throws ProvisionFailedException {
-        return createDistanceMapForMask(
-                mask, 1);
+        return createDistanceMapForMask(mask, 1);
     }
-    
+
     // We can also change a binary voxel buffer
     public Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
             BinaryVoxels<UnsignedByteBuffer> voxels,
@@ -95,21 +94,17 @@ public class DistanceTransform3D extends FromMaskBase {
                         .create(voxels.voxels(), resolution);
         Mask mask = new Mask(channel, voxels.binaryValues());
 
-        Channel distanceMap =
-                createDistanceMapForMask(
-                        mask, multiplyByZRes);
+        Channel distanceMap = createDistanceMapForMask(mask, multiplyByZRes);
         return distanceMap.voxels().asByte();
     }
 
-    private Channel createDistanceMapForMask(
-            Mask mask,
-            float multiplyByZRes)
+    private Channel createDistanceMapForMask(Mask mask, float multiplyByZRes)
             throws ProvisionFailedException {
-        if (mask.binaryValues().getOnInt() != 255) {
+        if (mask.binaryValuesInt().getOn() != 255) {
             throw new ProvisionFailedException("Binary On must be 255");
         }
 
-        if (mask.binaryValues().getOffInt() != 0) {
+        if (mask.binaryValuesInt().getOff() != 0) {
             throw new ProvisionFailedException("Binary Off must be 0");
         }
 
@@ -117,8 +112,8 @@ public class DistanceTransform3D extends FromMaskBase {
         if (mask.resolution().isPresent() && mask.extent().z() > 1 && !suppressZ) {
             checkZResolution(mask.resolution().get()); // NOSONAR
         }
-        
-        boolean excludeZDimension = suppressZ || hasNanZResolution(mask.resolution()); 
+
+        boolean excludeZDimension = suppressZ || hasNanZResolution(mask.resolution());
 
         if (excludeZDimension) {
 
@@ -128,7 +123,12 @@ public class DistanceTransform3D extends FromMaskBase {
                 Mask slice = mask.extractSlice(z);
                 Channel distanceSlice =
                         createDistanceMapFromPlugin(
-                                slice, true, multiplyBy, multiplyByZRes, createShort, applyResolution);
+                                slice,
+                                true,
+                                multiplyBy,
+                                multiplyByZRes,
+                                createShort,
+                                applyResolution);
                 channelOut.voxels().replaceSlice(z, distanceSlice.voxels(), 0, true);
             }
 
@@ -139,12 +139,12 @@ public class DistanceTransform3D extends FromMaskBase {
                     mask, false, multiplyBy, multiplyByZRes, createShort, applyResolution);
         }
     }
-        
+
     private static boolean hasNanZResolution(Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
-              return Double.isNaN(resolution.get().z());
+            return Double.isNaN(resolution.get().z());
         } else {
-              return false;
+            return false;
         }
     }
 
@@ -153,7 +153,7 @@ public class DistanceTransform3D extends FromMaskBase {
                 createShort ? UnsignedShortVoxelType.INSTANCE : UnsignedByteVoxelType.INSTANCE;
         return ChannelFactory.instance().createUninitialised(dims, dataType);
     }
-    
+
     private static Channel createDistanceMapFromPlugin(
             Mask mask,
             boolean suppressZ,
@@ -161,13 +161,14 @@ public class DistanceTransform3D extends FromMaskBase {
             float multFactorZ,
             boolean createShort,
             boolean applyResolution) {
-        
-        float[] multipliers = new float[]{
-            multiplicationFactor(multFactor, applyResolution, mask, Resolution::x),
-            multiplicationFactor(multFactor, applyResolution, mask, Resolution::y),
-            multiplicationFactor(multFactorZ, applyResolution, mask, Resolution::z)
-        };
-        
+
+        float[] multipliers =
+                new float[] {
+                    multiplicationFactor(multFactor, applyResolution, mask, Resolution::x),
+                    multiplicationFactor(multFactor, applyResolution, mask, Resolution::y),
+                    multiplicationFactor(multFactorZ, applyResolution, mask, Resolution::z)
+                };
+
         Channel distanceAsFloat =
                 EDT.compute(
                         mask,
@@ -191,9 +192,15 @@ public class DistanceTransform3D extends FromMaskBase {
     }
 
     private static float multiplicationFactor(
-            float multFactor, boolean applyResolution, Mask mask, ToDoubleFunction<Resolution> extractFromResolution) {
+            float multFactor,
+            boolean applyResolution,
+            Mask mask,
+            ToDoubleFunction<Resolution> extractFromResolution) {
         if (applyResolution && mask.resolution().isPresent()) {
-            return (float)(multFactor * extractFromResolution.applyAsDouble(mask.resolution().get()));   // NOSONAR
+            return (float)
+                    (multFactor
+                            * extractFromResolution.applyAsDouble(
+                                    mask.resolution().get())); // NOSONAR
         } else {
             return multFactor;
         }

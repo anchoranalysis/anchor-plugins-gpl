@@ -44,8 +44,10 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.Blur;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 
 /**
- * Performs a <a href="https://en.wikipedia.org/wiki/Watershed_(image_processing)">Watershed</a> on <a href="https://en.wikipedia.org/wiki/Distance_transform">distance transform</a> by bundling together several other beans.
- * 
+ * Performs a <a href="https://en.wikipedia.org/wiki/Watershed_(image_processing)">Watershed</a> on
+ * <a href="https://en.wikipedia.org/wiki/Distance_transform">distance transform</a> by bundling
+ * together several other beans.
+ *
  * <p>The distance transform is Euclidean.
  *
  * <p>This is used to avoid repetitive bean-definitions in Define, but while still providing
@@ -55,17 +57,16 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
  * <p>For now, it only works in 2D, but can be easily extended for 3D.
  *
  * <p>The steps are:
- * 
+ *
  * <ol>
- * <li>Find connected components of a binary mask.
- * <li>Find the distance transform of the above.
- * <li>Invert the distance transform.
- * <li>Find minima points from the above.
- * <li>Merge minima points that occur within a certain distance (they become the same object, but it can be
- * disconnected voxelwise).
- * <li>Create seeds by drawing a line between the merged-minima-points so
- * they are now connected.
- * <li>Apply the watershed transformation using the seeds to create segments.
+ *   <li>Find connected components of a binary mask.
+ *   <li>Find the distance transform of the above.
+ *   <li>Invert the distance transform.
+ *   <li>Find minima points from the above.
+ *   <li>Merge minima points that occur within a certain distance (they become the same object, but
+ *       it can be disconnected voxelwise).
+ *   <li>Create seeds by drawing a line between the merged-minima-points so they are now connected.
+ *   <li>Apply the watershed transformation using the seeds to create segments.
  * </ol>
  *
  * @author Owen Feehan

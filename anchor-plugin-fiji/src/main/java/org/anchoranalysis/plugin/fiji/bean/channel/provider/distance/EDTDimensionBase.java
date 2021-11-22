@@ -55,9 +55,9 @@ abstract class EDTDimensionBase {
     protected abstract void set(int column, float value);
 
     protected abstract float getMultiplyConstant();
-    
+
     protected abstract boolean nextRow();
-    
+
     private final void computeRow() {
         // calculate the parabolae ("lower envelope")
         f[0] = Float.MAX_VALUE;
