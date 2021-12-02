@@ -36,7 +36,7 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.bean.list.ReferencedFeatures;
+import org.anchoranalysis.feature.bean.list.ReferencingFeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.bean.operator.Reference;
 import org.anchoranalysis.feature.bean.operator.Sum;
@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByCons
 import org.anchoranalysis.plugin.operator.feature.bean.conditional.IfCondition;
 
 public class FeatureListProviderLDAClassifier<T extends FeatureInput>
-        extends ReferencedFeatures<T> {
+        extends ReferencingFeatureListProvider<T> {
 
     private static final String LDA_THRESHOLD_KEY = "__ldaThreshold";
 
@@ -113,7 +113,7 @@ public class FeatureListProviderLDAClassifier<T extends FeatureInput>
                 }
 
                 Feature<T> feature =
-                        getInitialization().getSharedFeatures().getException(name).downcast();
+                        getInitialization().getSharedFeatures().getException(name).castAs();
                 sum.getList().add(new MultiplyByConstant<>(feature, dictionary.getAsDouble(name)));
             }
 

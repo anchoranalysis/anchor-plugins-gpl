@@ -42,7 +42,7 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.bean.list.ReferencedFeatures;
+import org.anchoranalysis.feature.bean.list.ReferencingFeatureListProvider;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -53,7 +53,7 @@ import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.math.statistics.MeanScale;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.ZScore;
 
-public class FeatureListProviderSVMClassifier extends ReferencedFeatures<FeatureInput> {
+public class FeatureListProviderSVMClassifier extends ReferencingFeatureListProvider<FeatureInput> {
 
     private static final String CLASSIFIER_FEATURE_NAME = "svmClassifier";
 

@@ -26,10 +26,10 @@ import libsvm.svm_model;
 import libsvm.svm_node;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.bean.operator.FeatureFromList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
  *
  * @author Owen Feehan
  */
-class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
+class FeatureSVMClassifier<T extends FeatureInput> extends FeatureFromList<T> {
 
     // What we take in
     private final svm_model model;
@@ -63,7 +63,7 @@ class FeatureSVMClassifier<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
 
         ResultsVector results;
         try {
