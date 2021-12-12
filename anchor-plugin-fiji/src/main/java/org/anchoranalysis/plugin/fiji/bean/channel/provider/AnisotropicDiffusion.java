@@ -37,22 +37,28 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
- * Perona-Malik Anisotropic Diffusion
+ * Performs <a href="https://en.wikipedia.org/wiki/Anisotropic_diffusion">Perona-Malik Anisotropic Diffusion</a>.
  *
+ * <p>See the <a href="http://icy.bioimageanalysis.org/plugin/anisotropicdiffusion-imglib2/">ImgLib2 plugin documentation</a>.
+ * 
  * @author Owen Feehan
  */
 public class AnisotropicDiffusion extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** A parameter <i>kappa</i> associated with the diffusion functions. */
     @BeanField @Positive @Getter @Setter private double kappa;
 
+    /** the integration constant for the numerical integration scheme. Typically less that 1. */
     @BeanField @Positive @Getter @Setter private double deltat;
 
+    /** Whether to perform the diffusion in 3D direction, or rather only in the 2D plane. */
     @BeanField @Getter @Setter private boolean do3D;
 
-    @BeanField @Getter @Setter private int iterations = 30;
+    /** How many iterations to perform diffusion. */
+    @BeanField @Getter @Setter @Positive private int iterations = 30;
 
-    /** Enables the StrongEdgeEnhancer diffusion function */
+    /** If true uses, the <i>strong-edge-enhancer</i> diffusion function, otherwise the <i>wide-region-enhancer</i>. */
     @BeanField @Getter @Setter private boolean strongEdgeEnhancer = true;
     // END BEAN PROPERTIES
 
