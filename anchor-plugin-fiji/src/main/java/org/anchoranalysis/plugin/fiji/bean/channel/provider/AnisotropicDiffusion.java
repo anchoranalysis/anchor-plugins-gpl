@@ -37,10 +37,12 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
- * Performs <a href="https://en.wikipedia.org/wiki/Anisotropic_diffusion">Perona-Malik Anisotropic Diffusion</a>.
+ * Performs <a href="https://en.wikipedia.org/wiki/Anisotropic_diffusion">Perona-Malik Anisotropic
+ * Diffusion</a>.
  *
- * <p>See the <a href="http://icy.bioimageanalysis.org/plugin/anisotropicdiffusion-imglib2/">ImgLib2 plugin documentation</a>.
- * 
+ * <p>See the <a href="http://icy.bioimageanalysis.org/plugin/anisotropicdiffusion-imglib2/">ImgLib2
+ * plugin documentation</a>.
+ *
  * @author Owen Feehan
  */
 public class AnisotropicDiffusion extends ChannelProviderUnary {
@@ -58,7 +60,10 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
     /** How many iterations to perform diffusion. */
     @BeanField @Getter @Setter @Positive private int iterations = 30;
 
-    /** If true uses, the <i>strong-edge-enhancer</i> diffusion function, otherwise the <i>wide-region-enhancer</i>. */
+    /**
+     * If true uses, the <i>strong-edge-enhancer</i> diffusion function, otherwise the
+     * <i>wide-region-enhancer</i>.
+     */
     @BeanField @Getter @Setter private boolean strongEdgeEnhancer = true;
     // END BEAN PROPERTIES
 
