@@ -112,7 +112,7 @@ public class MergeSpatialClusters extends MergeBase {
 
     private static ObjectCollection mergeClusters(List<Cluster<ObjectMaskPlus>> clusters)
             throws OperationFailedException {
-        return ObjectCollectionFactory.mapFrom(clusters, MergeSpatialClusters::mergeCluster);
+        return ObjectCollectionFactory.mapFrom(clusters, OperationFailedException.class, MergeSpatialClusters::mergeCluster);
     }
 
     private static ObjectMask mergeCluster(Cluster<ObjectMaskPlus> cluster)
