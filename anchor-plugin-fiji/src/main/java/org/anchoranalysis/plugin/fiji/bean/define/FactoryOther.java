@@ -27,14 +27,12 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.plugin.fiji.bean.channel.provider.distance.DistanceTransform3D;
 import org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic.SubtractFromConstant;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.FromChannel;
 import org.anchoranalysis.plugin.image.bean.object.provider.connected.ConnectedComponentsFromMask;
 import org.anchoranalysis.plugin.imagej.bean.object.provider.DrawLineAlongConvexHull;
-import org.anchoranalysis.plugin.ml.bean.cluster.MergeSpatialClusters;
 
 /**
  * Beans related to non-segmentation
@@ -73,23 +71,6 @@ class FactoryOther {
         provider.setValue(65535);
         provider.setChannel(source);
         return provider;
-    }
-
-    public static ObjectCollectionProvider mergeMinima(
-            ObjectCollectionProvider unmergedMinima,
-            ObjectCollectionProvider container,
-            DimensionsProvider dimensionsProvider,
-            ChannelProvider sourceDistanceMapProvider,
-            UnitValueDistance maxDistanceCOG,
-            double maxDistanceDeltaContour) {
-        MergeSpatialClusters merge = new MergeSpatialClusters();
-        merge.setObjects(unmergedMinima);
-        merge.setObjectsContainer(container);
-        merge.setDimensions(dimensionsProvider);
-        merge.setDistanceMapProvider(sourceDistanceMapProvider);
-        merge.setMaxDistanceCOG(maxDistanceCOG);
-        merge.setMaxDistanceDeltaContour(maxDistanceDeltaContour);
-        return merge;
     }
 
     public static ObjectCollectionProvider seeds(ObjectCollectionProvider mergedMinima) {
