@@ -68,13 +68,6 @@ class FactoryOther {
         return provider;
     }
 
-    public static ChannelProvider distanceTransformAfterInvert(ChannelProvider source) {
-        SubtractFromConstant provider = new SubtractFromConstant();
-        provider.setValue(65535);
-        provider.setChannel(source);
-        return provider;
-    }
-
     public static ObjectCollectionProvider mergeMinima(
             ObjectCollectionProvider unmergedMinima,
             ObjectCollectionProvider container,
@@ -90,6 +83,13 @@ class FactoryOther {
         merge.setMaxDistanceCOG(maxDistanceCOG);
         merge.setMaxDistanceDeltaContour(maxDistanceDeltaContour);
         return merge;
+    }
+    
+    public static ChannelProvider distanceTransformAfterInvert(ChannelProvider source) {
+        SubtractFromConstant provider = new SubtractFromConstant();
+        provider.setValue(65535);
+        provider.setChannel(source);
+        return provider;
     }
 
     public static ObjectCollectionProvider seeds(ObjectCollectionProvider mergedMinima) {
