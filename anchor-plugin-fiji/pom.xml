@@ -55,7 +55,7 @@
 	</dependency>
 	
 	<!-- We rely on relevant imagej dependencies being
-	  transitivitely included via this link -->
+	  transitivitely included via this link. -->
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-imagej</artifactId>
