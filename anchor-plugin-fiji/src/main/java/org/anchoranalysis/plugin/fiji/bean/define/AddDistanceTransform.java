@@ -85,7 +85,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     private static final String SEGMENTS = "objsSegments";
 
     // START BEAN PROPERTIES
-    /** The ID of the binary input mask that determines the region of the Watershed. */
+    /** The ID of the binary input mask that determines the region of the watershed. */
     @BeanField @Getter @Setter private String binaryInputChannelID;
 
     @BeanField @Getter @Setter
