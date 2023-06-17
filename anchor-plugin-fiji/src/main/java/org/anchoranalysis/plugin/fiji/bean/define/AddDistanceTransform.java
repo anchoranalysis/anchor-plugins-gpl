@@ -103,7 +103,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     @BeanField @Getter @Setter private UnitValueDistance maxDistanceBetweenMinima;
 
     /**
-     * The maximum distance allowed between two seeds in terms of their values in the distance map
+     * The maximum distance allowed between two seeds in terms of their values in the distance map.
      */
     @BeanField @Getter @Setter private double maxDistanceDeltaContour = Double.MAX_VALUE;
     // END BEAN PROPERTIES
