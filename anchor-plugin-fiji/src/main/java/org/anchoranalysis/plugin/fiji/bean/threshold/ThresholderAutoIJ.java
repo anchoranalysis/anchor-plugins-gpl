@@ -45,8 +45,9 @@ public class ThresholderAutoIJ extends Thresholder {
 
     // START BEAN PROPERTIES
     /**
-     * One of the following strings to identify ImageJ's thresholding algorithms (or an empty string
-     * for the default).
+     * One of the following strings to identify ImageJ's thresholding algorithms.
+     * 
+     * <p>An empty string will use the Default.
      *
      * <p>Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)",
      * "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag", "Triangle", "Yen"

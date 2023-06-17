@@ -55,7 +55,7 @@
 	</dependency>
 	
 	<!-- We rely on relevant imagej dependencies being
-	  transitivitely included via this link -->
+	  transitivitely included via this link. -->
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-imagej</artifactId>
@@ -64,7 +64,7 @@
   
 	
 	<!-- We bring in the gpl or other imagej plugins that
-	    were not yet included -->
+	    were not yet included. -->
 	<dependency>
 	    <groupId>net.imglib2</groupId>
 	    <artifactId>imglib2-algorithm-gpl</artifactId>

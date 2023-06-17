@@ -213,7 +213,7 @@ class GreyscaleReconstruct_ implements PlugIn { // NOSONAR
                         pixels5[j] =
                                 (byte) (i & 0xff); // set the thresholded pixels to the greylevel
                     if ((pixels5[j] & 0xff) > (pixels3[j] & 0xff))
-                        pixels3[j] = pixels5[j]; // keep always the max greylevel
+                        pixels3[j] = pixels5[j]; // keep always the max greylevel.
                 }
                 imp4.close();
                 imp5.close();

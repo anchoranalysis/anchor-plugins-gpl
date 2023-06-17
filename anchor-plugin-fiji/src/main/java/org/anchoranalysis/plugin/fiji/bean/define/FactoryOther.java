@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.imagej.bean.object.provider.DrawLineAlongConvex
 import org.anchoranalysis.plugin.ml.bean.cluster.MergeSpatialClusters;
 
 /**
- * Beans related to non-segmentation
+ * Beans related to non-segmentation.
  *
  * @author Owen Feehan
  */

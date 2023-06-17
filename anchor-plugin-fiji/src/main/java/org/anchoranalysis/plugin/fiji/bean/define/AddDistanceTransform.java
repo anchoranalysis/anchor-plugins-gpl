@@ -78,14 +78,14 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     private static final String DISTANCE_TRANSFORM_SMOOTH = "channelDistanceSmooth";
     private static final String DISTANCE_TRANSFORM_BEFORE_INVERT = "channelDistanceBeforeInvert";
     private static final String MINIMA_UNMERGED =
-            "objsMinimaUnmerged"; // Minima have not yet been 'merged' together
+            "objsMinimaUnmerged"; // Minima have not yet been 'merged' together.
     private static final String MINIMA_MERGED =
-            "objsMinimaMerged"; // Minima are merged, but can still be disconnected
+            "objsMinimaMerged"; // Minima are merged, but can still be disconnected.
     private static final String SEEDS = "objsSeeds";
     private static final String SEGMENTS = "objsSegments";
 
     // START BEAN PROPERTIES
-    /** The ID of the binary input mask that determines the region of the Watershed. */
+    /** The ID of the binary input mask that determines the region of the watershed. */
     @BeanField @Getter @Setter private String binaryInputChannelID;
 
     @BeanField @Getter @Setter
@@ -103,7 +103,7 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     @BeanField @Getter @Setter private UnitValueDistance maxDistanceBetweenMinima;
 
     /**
-     * The maximum distance allowed between two seeds in terms of their values in the distance map
+     * The maximum distance allowed between two seeds in terms of their values in the distance map.
      */
     @BeanField @Getter @Setter private double maxDistanceDeltaContour = Double.MAX_VALUE;
     // END BEAN PROPERTIES
