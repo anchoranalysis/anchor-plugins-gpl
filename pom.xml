@@ -108,7 +108,7 @@
 			
 			
 					
-		<!-- Adds license information in each jar -->
+		<!-- Adds license information in each jar. -->
 		 <resources>
 		  <resource>
 		    <directory>src/main/resources</directory>
@@ -118,7 +118,7 @@
 		    <filtering>false</filtering>
 		    <directory>notices</directory>
 		    
-		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <!-- avoid a slash before META-INF as it messes up Linux builds. -->
 		    <targetPath>META-INF/notices</targetPath>
 		    <includes>
 		       <include>*</include>
@@ -129,7 +129,7 @@
 		    <filtering>false</filtering>
 		    <directory>${project.basedir}</directory>
 		    
-		    <!-- avoid a slash before META-INF as it messes up Linux builds -->
+		    <!-- avoid a slash before META-INF as it messes up Linux builds. -->
 		    <targetPath>META-INF/</targetPath>
 		    <includes>
 		      <include>LICENSE.txt</include>
