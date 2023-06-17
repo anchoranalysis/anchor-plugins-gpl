@@ -78,9 +78,9 @@ public class AddDistanceTransform extends DefineAdderWithPrefixBean {
     private static final String DISTANCE_TRANSFORM_SMOOTH = "channelDistanceSmooth";
     private static final String DISTANCE_TRANSFORM_BEFORE_INVERT = "channelDistanceBeforeInvert";
     private static final String MINIMA_UNMERGED =
-            "objsMinimaUnmerged"; // Minima have not yet been 'merged' together
+            "objsMinimaUnmerged"; // Minima have not yet been 'merged' together.
     private static final String MINIMA_MERGED =
-            "objsMinimaMerged"; // Minima are merged, but can still be disconnected
+            "objsMinimaMerged"; // Minima are merged, but can still be disconnected.
     private static final String SEEDS = "objsSeeds";
     private static final String SEGMENTS = "objsSegments";
 
