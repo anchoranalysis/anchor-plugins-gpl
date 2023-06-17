@@ -108,7 +108,7 @@
 			
 			
 					
-		<!-- Adds license information in each jar -->
+		<!-- Adds license information in each jar. -->
 		 <resources>
 		  <resource>
 		    <directory>src/main/resources</directory>
