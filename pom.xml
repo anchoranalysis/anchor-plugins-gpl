@@ -58,7 +58,6 @@
     <modules>
         <module>anchor-plugin-io-gpl</module>
         <module>anchor-plugin-fiji</module>
-        <module>anchor-plugin-ml</module>
     </modules>
 
 	<!-- Provides a means of reaching anchor-pom and ImageJ -->
