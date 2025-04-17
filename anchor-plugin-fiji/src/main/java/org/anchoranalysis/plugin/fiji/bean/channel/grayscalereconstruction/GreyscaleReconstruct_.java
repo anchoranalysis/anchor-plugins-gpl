@@ -127,7 +127,7 @@ class GreyscaleReconstruct_ implements PlugIn { // NOSONAR
      * Executes the greyscale reconstruction algorithm.
      *
      * <p>This does NOT show the new image; just returns it.
-     * 
+     *
      * @param imp1 the mask {@link ImagePlus}
      * @param imp2 the seed {@link ImagePlus}
      * @param new_name the name for the new image (if created)

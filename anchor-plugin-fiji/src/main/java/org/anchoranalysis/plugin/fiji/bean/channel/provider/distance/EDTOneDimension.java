@@ -26,9 +26,7 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.spatial.box.Extent;
 
-/**
- * Base class for computing Euclidean Distance Transform along a single dimension (X or Y).
- */
+/** Base class for computing Euclidean Distance Transform along a single dimension (X or Y). */
 abstract class EDTOneDimension extends EDTDimensionBase {
 
     private Voxels<FloatBuffer> stack;

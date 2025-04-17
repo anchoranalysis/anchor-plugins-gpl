@@ -147,10 +147,10 @@ class BinaryReconstruct_ implements PlugIn { // NOSONAR
 
     /**
      * Executes the binary reconstruction algorithm.
-     * 
-     * <p>Warning!: This method does NOT check whether the two input images are binary,
-     * this is checked in the setup, so be careful when calling this method from another
-     * plugin. Make sure both images are binary!! Does NOT show the new, image; just returns it.
+     *
+     * <p>Warning!: This method does NOT check whether the two input images are binary, this is
+     * checked in the setup, so be careful when calling this method from another plugin. Make sure
+     * both images are binary!! Does NOT show the new, image; just returns it.
      *
      * @param imp1 the mask {@link ImagePlus}
      * @param imp2 the seed {@link ImagePlus}

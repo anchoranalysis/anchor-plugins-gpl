@@ -84,7 +84,7 @@ class FactoryOther {
         merge.setMaxDistanceDeltaContour(maxDistanceDeltaContour);
         return merge;
     }
-    
+
     public static ChannelProvider distanceTransformAfterInvert(ChannelProvider source) {
         SubtractFromConstant provider = new SubtractFromConstant();
         provider.setValue(65535);

@@ -26,9 +26,7 @@ import java.nio.FloatBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.Voxels;
 
-/**
- * Computes the Euclidean Distance Transform along the X dimension.
- */
+/** Computes the Euclidean Distance Transform along the X dimension. */
 class EDTDimensionX extends EDTOneDimension {
 
     /** The constant to multiply the distance values by. */

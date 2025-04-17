@@ -22,9 +22,7 @@
 
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
-/**
- * Base class for computing Euclidean Distance Transform along a single dimension.
- */
+/** Base class for computing Euclidean Distance Transform along a single dimension. */
 abstract class EDTDimensionBase {
     private int extent;
     /*
@@ -52,9 +50,7 @@ abstract class EDTDimensionBase {
         y = new int[extent + 1];
     }
 
-    /**
-     * Computes the Euclidean Distance Transform for all rows in this dimension.
-     */
+    /** Computes the Euclidean Distance Transform for all rows in this dimension. */
     public final void compute() {
         while (nextRow()) {
             computeRow();

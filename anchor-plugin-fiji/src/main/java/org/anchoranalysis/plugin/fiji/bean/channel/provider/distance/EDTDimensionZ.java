@@ -27,9 +27,7 @@ import lombok.Getter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-/**
- * Computes the Euclidean Distance Transform along the Z dimension.
- */
+/** Computes the Euclidean Distance Transform along the Z dimension. */
 class EDTDimensionZ extends EDTDimensionBase {
     private byte[][] inSlice;
     private float[][] outSlice;
