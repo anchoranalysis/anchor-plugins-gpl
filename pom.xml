@@ -11,7 +11,7 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>0.1.3-SNAPSHOT</version>
+		<version>[0.2.6,1.0.0)</version>
     </parent> 
 
     <artifactId>anchor-parent-plugins-gpl</artifactId>
@@ -19,14 +19,26 @@
     <version>0.0.5-SNAPSHOT</version>
     <name>anchor-parent-plugins-gpl</name>
     
+	<url>http://www.anchoranalysis.org/</url>
+	
+	<description>Plugins for the Anchor Image Analysis software that are GPL-licensed (extraordinarily).</description>
+
 	<licenses>
 		<license>
 			<name>GNU General Public License (GPL) version 3.0</name>
-			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+			<url>https://github.com/anchoranalysis/anchor-plugins-gpl/blob/master/LICENSE.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-    
+
+	<developers>
+        <developer>
+            <id>owenfeehan</id>
+            <name>Owen Feehan</name>
+		  <organizationUrl>http://www.owenfeehan.com</organizationUrl>
+        </developer>
+
+
 	<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
 	repository in GitHub Packages. Overrides settings that already are inherited from anchor-pom. -->
 	<distributionManagement>
