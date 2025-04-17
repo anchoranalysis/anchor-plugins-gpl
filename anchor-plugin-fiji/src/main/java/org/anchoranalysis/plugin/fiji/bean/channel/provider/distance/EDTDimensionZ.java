@@ -27,41 +27,59 @@ import lombok.Getter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
+/**
+ * Computes the Euclidean Distance Transform along the Z dimension.
+ */
 class EDTDimensionZ extends EDTDimensionBase {
     private byte[][] inSlice;
     private float[][] outSlice;
     private int offset;
     private int bufferXYSize;
 
+    /** The constant to multiply the distance values by. */
     @Getter private float multiplyConstant;
 
+    /**
+     * Creates a new instance for computing EDT along the Z dimension.
+     *
+     * @param in the input {@link Voxels} containing unsigned byte data
+     * @param out the output {@link Voxels} to store float results
+     * @param multiplyConstant the constant to multiply the distance values by
+     */
     public EDTDimensionZ(
             Voxels<UnsignedByteBuffer> in, Voxels<FloatBuffer> out, float multiplyConstant) {
         super(in.extent().z());
 
         this.multiplyConstant = multiplyConstant;
 
-        int d = in.extent().z();
+        int sizeZ = in.extent().z();
 
         bufferXYSize = in.extent().areaXY();
 
-        inSlice = new byte[d][];
-        outSlice = new float[d][];
-        for (int i = 0; i < d; i++) {
+        inSlice = new byte[sizeZ][];
+        outSlice = new float[sizeZ][];
+        for (int i = 0; i < sizeZ; i++) {
             inSlice[i] = in.sliceBuffer(i).array();
             outSlice[i] = out.sliceBuffer(i).array();
         }
         offset = -1;
     }
 
+    @Override
     public final float get(int x) {
         return inSlice[x][offset] == 0 ? 0 : Float.MAX_VALUE;
     }
 
+    @Override
     public final void set(int x, float value) {
         outSlice[x][offset] = value;
     }
 
+    /**
+     * Moves to the next row (XY plane) for processing.
+     *
+     * @return true if there is a next row to process, false otherwise
+     */
     public final boolean nextRow() {
         return ++offset < bufferXYSize;
     }

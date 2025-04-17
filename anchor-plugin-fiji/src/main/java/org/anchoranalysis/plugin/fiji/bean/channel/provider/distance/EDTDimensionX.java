@@ -26,15 +26,26 @@ import java.nio.FloatBuffer;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.Voxels;
 
+/**
+ * Computes the Euclidean Distance Transform along the X dimension.
+ */
 class EDTDimensionX extends EDTOneDimension {
 
+    /** The constant to multiply the distance values by. */
     @Getter private float multiplyConstant;
 
+    /**
+     * Creates a new instance for computing EDT along the X dimension.
+     *
+     * @param out the {@link Voxels} to store the output
+     * @param multiplyConstant the constant to multiply the distance values by
+     */
     public EDTDimensionX(Voxels<FloatBuffer> out, float multiplyConstant) {
         super(out, true);
         this.multiplyConstant = multiplyConstant;
     }
 
+    @Override
     protected final void set(int x, float value) {
         putIntoBuffer(x, (float) Math.sqrt(value));
     }

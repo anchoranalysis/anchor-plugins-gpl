@@ -124,13 +124,20 @@ class GreyscaleReconstruct_ implements PlugIn { // NOSONAR
     }
 
     /**
-     * Execute the plugin functionality: duplicate and scale the given image.
+     * Executes the greyscale reconstruction algorithm.
      *
-     * @return an Object[] array with the name and the scaled ImagePlus. Does NOT show the new,
-     *     image; just returns it.
+     * <p>This does NOT show the new image; just returns it.
+     * 
+     * @param imp1 the mask {@link ImagePlus}
+     * @param imp2 the seed {@link ImagePlus}
+     * @param new_name the name for the new image (if created)
+     * @param createWindow if true, creates a new window for the result
+     * @param connect4 if true, uses 4-connected neighbors; otherwise, uses 8-connected
+     * @return an Object[] array with the name and the reconstructed {@link ImagePlus}
+     * @throws IllegalArgumentException if input images are null or not 8-bit
      */
     @SuppressWarnings("unused")
-    public Object[] exec( // NOSONAR
+    public Object[] exec(
             ImagePlus imp1,
             ImagePlus imp2,
             String new_name, // NOSONAR

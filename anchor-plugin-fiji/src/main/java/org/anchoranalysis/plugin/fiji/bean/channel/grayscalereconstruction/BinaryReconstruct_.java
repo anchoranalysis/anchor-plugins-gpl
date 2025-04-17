@@ -146,18 +146,26 @@ class BinaryReconstruct_ implements PlugIn { // NOSONAR
     }
 
     /**
-     * Execute the plugin functionality: duplicate and scale the given image.
+     * Executes the binary reconstruction algorithm.
+     * 
+     * <p>Warning!: This method does NOT check whether the two input images are binary,
+     * this is checked in the setup, so be careful when calling this method from another
+     * plugin. Make sure both images are binary!! Does NOT show the new, image; just returns it.
      *
-     * @return an Object[] array with the name and the scaled ImagePlus. Warning!: This method does
-     *     NOT check whether the two input images are binary, this is checked in the setup, so
-     *     careful when calling this method from another plugin. Make sure both images are binary!!
-     *     Does NOT show the new, image; just returns it.
+     * @param imp1 the mask {@link ImagePlus}
+     * @param imp2 the seed {@link ImagePlus}
+     * @param new_name the name for the new image (if created)
+     * @param createWindow if true, creates a new window for the result
+     * @param whiteParticles if true, assumes white particles on black background
+     * @param connect4 if true, uses 4-connected neighbors; otherwise, uses 8-connected
+     * @return an Object[] array with the name and the reconstructed {@link ImagePlus}
+     * @throws IllegalArgumentException if input images are null or not binary
      */
     @SuppressWarnings("unused")
-    public Object[] exec( // NOSONAR
+    public Object[] exec(
             ImagePlus imp1,
             ImagePlus imp2,
-            String new_name, // NOSONAR
+            String new_name,
             boolean createWindow,
             boolean whiteParticles,
             boolean connect4) { // NOSONAR

@@ -41,19 +41,26 @@ import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Applies automatic thresholding using ImageJ's Auto_Threshold plugin.
+ */
 public class ThresholderAutoIJ extends Thresholder {
 
     // START BEAN PROPERTIES
     /**
-     * One of the following strings to identify ImageJ's thresholding algorithms.
+     * The thresholding method to use.
      * 
-     * <p>An empty string will use the Default.
-     *
-     * <p>Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)",
+     * <p>One of the following strings to identify ImageJ's thresholding algorithms:
+     * Default, Huang, "Intermodes", "IsoData", "Li", "MaxEntropy", "Mean", "MinError(I)",
      * "Minimum", "Moments", "Otsu", "Percentile", "RenyiEntropy", "Shanbhag", "Triangle", "Yen"
+     * 
+     * <p>An empty string will use the Default method.
      */
     @BeanField @Getter @Setter private String method = "";
 
+    /**
+     * If true, the thresholding algorithm will not consider black pixels (value 0) in its calculations.
+     */
     @BeanField @Getter @Setter private boolean noBlack = false;
     // END BEAN PROPERTIES
 
@@ -78,11 +85,24 @@ public class ThresholderAutoIJ extends Thresholder {
         }
     }
 
+    /**
+     * Applies the threshold to the given {@link ImagePlus}.
+     *
+     * @param image the {@link ImagePlus} to threshold
+     */
     private void applyThreshold(ImagePlus image) {
         Auto_Threshold at = new Auto_Threshold();
         at.exec(image, method, false, noBlack, true, false, false, true);
     }
 
+    /**
+     * Converts a thresholded {@link ImagePlus} to {@link BinaryVoxels}.
+     *
+     * @param image the thresholded {@link ImagePlus}
+     * @param binaryValues the {@link BinaryValuesByte} to use for the output
+     * @return the converted {@link BinaryVoxels}
+     * @throws OperationFailedException if the conversion fails
+     */
     private static BinaryVoxels<UnsignedByteBuffer> convertToBinary(
             ImagePlus image, BinaryValuesByte binaryValues) throws OperationFailedException {
         VoxelsUntyped thresholdedVoxels = ConvertFromImagePlus.toVoxels(image);

@@ -33,6 +33,9 @@ import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
+/**
+ * Performs 2D grayscale reconstruction using ImageJ's implementation.
+ */
 public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosion {
 
     @Override
@@ -63,6 +66,13 @@ public class GrayscaleReconstruction2DIJ extends GrayscaleReconstructionByErosio
         return new VoxelsUntyped(ret);
     }
 
+    /**
+     * Performs reconstruction by dilation using ImageJ's GreyscaleReconstruct_ plugin.
+     *
+     * @param mask the mask {@link Voxels}
+     * @param marker the marker {@link Voxels}
+     * @return the reconstructed {@link Voxels}
+     */
     private Voxels<UnsignedByteBuffer> reconstructionByDilation(
             Voxels<UnsignedByteBuffer> mask, Voxels<UnsignedByteBuffer> marker) {
 
