@@ -37,6 +37,7 @@
             <name>Owen Feehan</name>
 		  <organizationUrl>http://www.owenfeehan.com</organizationUrl>
         </developer>
+	</developers>
 
 
 	<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
