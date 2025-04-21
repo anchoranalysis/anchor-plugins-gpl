@@ -46,12 +46,12 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.1.0,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-ml</artifactId>
-	  <version>0.0.5-SNAPSHOT</version>
+	  <version>[0.1.0,1.0.0)</version>
 	</dependency>
 	
 	<!-- We rely on relevant imagej dependencies being
@@ -59,7 +59,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-imagej</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.1.0,1.0.0)</version>
 	</dependency>
   
 	
