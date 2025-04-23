@@ -65,6 +65,7 @@ public class AnisotropicDiffusion extends ChannelProviderUnary {
      * <i>wide-region-enhancer</i>.
      */
     @BeanField @Getter @Setter private boolean strongEdgeEnhancer = true;
+
     // END BEAN PROPERTIES
 
     @Override

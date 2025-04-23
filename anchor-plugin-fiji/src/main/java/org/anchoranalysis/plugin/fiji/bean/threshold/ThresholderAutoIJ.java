@@ -61,6 +61,7 @@ public class ThresholderAutoIJ extends Thresholder {
      * calculations.
      */
     @BeanField @Getter @Setter private boolean noBlack = false;
+
     // END BEAN PROPERTIES
 
     @Override

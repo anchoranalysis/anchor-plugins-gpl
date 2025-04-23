@@ -54,6 +54,7 @@ public class AutoLocalThreshold extends FromChannelBase {
     @BeanField @Getter @Setter private String method = "";
 
     @BeanField @Getter @Setter private int radius = 15;
+
     // END BEAN PROPERTIES
 
     @Override

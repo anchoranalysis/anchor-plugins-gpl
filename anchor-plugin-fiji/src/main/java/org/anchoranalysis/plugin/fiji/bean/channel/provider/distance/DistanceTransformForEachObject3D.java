@@ -53,6 +53,7 @@ public class DistanceTransformForEachObject3D extends FromDimensionsBase {
     @BeanField @Getter @Setter private boolean suppressZ = false;
 
     @BeanField @Getter @Setter private boolean createShort = false;
+
     // END PROPERTIES
 
     @Override

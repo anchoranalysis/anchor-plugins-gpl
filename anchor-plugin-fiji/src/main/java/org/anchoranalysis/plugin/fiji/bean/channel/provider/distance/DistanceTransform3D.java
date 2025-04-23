@@ -78,6 +78,7 @@ public class DistanceTransform3D extends FromMaskBase {
 
     /** If true and the z-resolution is undefined, the z dimension is ignored. */
     @BeanField @Getter @Setter private boolean ignoreZIfNaN = true;
+
     // END PROPERTIES
 
     @Override
