@@ -20,12 +20,12 @@
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-beans-shared</artifactId>
+	  <artifactId>anchor-spatial</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-feature</artifactId>
+	  <artifactId>anchor-imagej</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
@@ -40,20 +40,18 @@
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image-io</artifactId>
+	  <artifactId>anchor-image-voxel</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-image</artifactId>
+	  <artifactId>anchor-math</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
-	
-	<!-- We rely on relevant imagej dependencies being
-	  transitivitely included via this link. -->
+
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-imagej</artifactId>
+	  <artifactId>anchor-plugin-image</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
   
