@@ -11,36 +11,33 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>0.1.3-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
 
     <artifactId>anchor-parent-plugins-gpl</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>anchor-parent-plugins-gpl</name>
     
+	<url>http://www.anchoranalysis.org/</url>
+	
+	<description>Plugins for the Anchor Image Analysis software that are GPL-licensed (extraordinarily).</description>
+
 	<licenses>
 		<license>
 			<name>GNU General Public License (GPL) version 3.0</name>
-			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+			<url>https://github.com/anchoranalysis/anchor-plugins-gpl/blob/master/LICENSE.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-    
-	<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
-	repository in GitHub Packages. Overrides settings that already are inherited from anchor-pom. -->
-	<distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub</name>
-            <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins-gpl/</url>
-        </repository>
-	  <snapshotRepository>
-            <id>github</id>
-            <name>GitHub</name>
-            <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins-gpl/</url>
-        </snapshotRepository>
-	</distributionManagement>
+
+	<developers>
+        <developer>
+            <id>owenfeehan</id>
+            <name>Owen Feehan</name>
+		  <organizationUrl>http://www.owenfeehan.com</organizationUrl>
+        </developer>
+	</developers>
 	
 	<!-- For tagging releases. -->
   	<scm>
@@ -50,9 +47,11 @@
 		<tag>anchor-parent-0.0.1</tag>
 	</scm>
 	
-	<!-- For connecting to SonarCloud. -->
+	  	<!-- For connecting to SonarCloud. -->
 	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor-plugins-gpl</sonar.projectKey>
+		<sonar.organization>anchoranalysis</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>anchoranalysis_anchor-plugins-gpl</sonar.projectKey>
 	</properties>
 	
     <modules>
@@ -60,27 +59,22 @@
         <module>anchor-plugin-fiji</module>
     </modules>
 
-	<!-- Provides a means of reaching anchor-pom and ImageJ -->
     <repositories>
-		<repository>
-		  <releases>
-			<enabled>true</enabled>
-			<updatePolicy>never</updatePolicy>
-			<checksumPolicy>warn</checksumPolicy>
-		  </releases>
-		  <snapshots>
-			<enabled>true</enabled>
-			<updatePolicy>always</updatePolicy>
-			<checksumPolicy>warn</checksumPolicy>
-		  </snapshots>
-		  <id>github</id>
-		   <name>GitHub anchor Apache Maven Packages</name>
-		   <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins-gpl</url>
-		  <layout>default</layout>
-		</repository>
+				
+		<!-- Provides a means of reaching Snapshots on Maven Central -->
+	  <repository>
+		<name>Central Portal Snapshots</name>
+		<id>central-portal-snapshots</id>
+		<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		<releases>
+		  <enabled>false</enabled>
+		</releases>
+		<snapshots>
+		  <enabled>true</enabled>
+		</snapshots>
+	  </repository>
 
-
-   	</repositories>
+   	</repositories>	
 	
     <build>
         
@@ -99,12 +93,20 @@
 				    </configuration>
 				</plugin>
 				
-
+				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<!-- When using a release parent pom, this should be true to prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. 
+						When using a snapshot parent pom, this should be false.
+						-->
+						<skip>false</skip>
+					</configuration>
+					<inherited>false</inherited>
+			  </plugin>
 	
             </plugins>
-        
-        			
-			
 			
 					
 		<!-- Adds license information in each jar. -->
@@ -136,7 +138,8 @@
 		    </includes>
 		  </resource>
 		  
-		</resources>			
+		</resources>	
+		
 			
     </build>
 	

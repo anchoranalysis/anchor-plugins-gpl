@@ -30,6 +30,7 @@ import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import process3d.MinMaxMedian;
 
+/** Applies a minimum filter to a channel using ImageJ's MinMaxMedian plugin. */
 public class MinimumFilter extends ChannelProviderUnary {
 
     @Override

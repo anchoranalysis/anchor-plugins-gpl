@@ -22,6 +22,7 @@
 
 package org.anchoranalysis.plugin.fiji.bean.channel.provider.distance;
 
+/** Base class for computing Euclidean Distance Transform along a single dimension. */
 abstract class EDTDimensionBase {
     private int extent;
     /*
@@ -37,6 +38,11 @@ abstract class EDTDimensionBase {
     private float[] f, z; // NOSONAR
     private int[] y;
 
+    /**
+     * Constructs an EDTDimensionBase with a given extent.
+     *
+     * @param extent the extent of the dimension being processed
+     */
     protected EDTDimensionBase(int extent) {
         this.extent = extent;
         f = new float[extent + 1];
@@ -44,18 +50,41 @@ abstract class EDTDimensionBase {
         y = new int[extent + 1];
     }
 
+    /** Computes the Euclidean Distance Transform for all rows in this dimension. */
     public final void compute() {
         while (nextRow()) {
             computeRow();
         }
     }
 
+    /**
+     * Gets the value at a specific column in the current row.
+     *
+     * @param column the column index
+     * @return the value at the specified column
+     */
     protected abstract float get(int column);
 
+    /**
+     * Sets the value at a specific column in the current row.
+     *
+     * @param column the column index
+     * @param value the value to set
+     */
     protected abstract void set(int column, float value);
 
+    /**
+     * Gets the multiplication constant for this dimension.
+     *
+     * @return the multiplication constant
+     */
     protected abstract float getMultiplyConstant();
 
+    /**
+     * Moves to the next row for processing.
+     *
+     * @return true if there is a next row to process, false otherwise
+     */
     protected abstract boolean nextRow();
 
     private final void computeRow() {

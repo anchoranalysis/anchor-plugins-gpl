@@ -80,6 +80,15 @@ import org.anchoranalysis.image.voxel.Voxels;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EDT {
+    /**
+     * Computes the Euclidean Distance Transform for a given mask.
+     *
+     * @param mask the input {@link Mask} to compute the distance transform for
+     * @param factory the {@link ChannelFactorySingleType} to create the output channel
+     * @param suppressZ if true, suppresses calculations in the Z dimension
+     * @param multiplyDimensions array of multiplication factors for each dimension [x, y, z]
+     * @return a {@link Channel} containing the computed Euclidean Distance Transform
+     */
     public static Channel compute(
             Mask mask,
             ChannelFactorySingleType factory,

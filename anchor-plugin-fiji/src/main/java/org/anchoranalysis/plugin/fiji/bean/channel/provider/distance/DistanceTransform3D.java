@@ -64,17 +64,21 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.FromMaskBase;
 public class DistanceTransform3D extends FromMaskBase {
 
     // START PROPERTIES
+    /** If true, suppresses the z-dimension in distance calculations. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
 
+    /** A factor to multiply the distance values by. */
     @BeanField @Getter @Setter private float multiplyBy = 1.0f;
 
+    /** If true, creates a short (16-bit) output instead of byte (8-bit). */
     @BeanField @Getter @Setter private boolean createShort = false;
 
-    /** Multiples the values by the x-resolution, if it exists. */
+    /** If true, multiplies the values by the x-resolution, if it exists. */
     @BeanField @Getter @Setter private boolean applyResolution = false;
 
-    /** If the z-resolution is undefined, the z dimenion is ignored. */
+    /** If true and the z-resolution is undefined, the z dimension is ignored. */
     @BeanField @Getter @Setter private boolean ignoreZIfNaN = true;
+
     // END PROPERTIES
 
     @Override
@@ -82,7 +86,15 @@ public class DistanceTransform3D extends FromMaskBase {
         return createDistanceMapForMask(mask, 1);
     }
 
-    // We can also change a binary voxel buffer
+    /**
+     * Creates a distance map for binary voxels.
+     *
+     * @param voxels the binary voxels to create a distance map for
+     * @param resolution the optional resolution of the voxels
+     * @param multiplyByZRes a factor to multiply the z-resolution by
+     * @return the distance map as {@link Voxels} of {@link UnsignedByteBuffer}
+     * @throws ProvisionFailedException if the distance map creation fails
+     */
     public Voxels<UnsignedByteBuffer> createDistanceMapForVoxels(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             Optional<Resolution> resolution,
