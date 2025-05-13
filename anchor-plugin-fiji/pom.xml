@@ -3,7 +3,7 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins-gpl</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
     </parent> 
   <artifactId>anchor-plugin-fiji</artifactId>
 	
