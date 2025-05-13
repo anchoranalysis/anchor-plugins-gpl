@@ -16,7 +16,7 @@
 
     <artifactId>anchor-parent-plugins-gpl</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>anchor-parent-plugins-gpl</name>
     
 	<url>http://www.anchoranalysis.org/</url>
@@ -44,7 +44,7 @@
 		<connection>scm:git:git@github.com:anchoranalysis/anchor-plugins-gpl.git</connection>
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor-plugins-gpl.git</developerConnection>
 		<url>https://github.com/anchoranalysis/anchor-plugins-gpl</url>
-		<tag>anchor-parent-0.0.1</tag>
+		<tag>anchor-parent-plugins-gpl-1.0.0</tag>
 	</scm>
 	
 	  	<!-- For connecting to SonarCloud. -->
