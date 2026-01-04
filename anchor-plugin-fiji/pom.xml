@@ -3,56 +3,57 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins-gpl</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.4-SNAPSHOT</version>
     </parent> 
   <artifactId>anchor-plugin-fiji</artifactId>
-	
+	<name>Anchor Plugin - FIJI</name>
+	<description>Plugins that call the FIJI image processing software</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-imagej</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-voxel</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-math</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.3</version>
 	</dependency>
   
 	
@@ -122,7 +123,7 @@
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	  <scope>test</scope>
 	 </dependency>	
 	
