@@ -6,6 +6,8 @@
 		<version>1.0.3-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-plugin-io-gpl</artifactId>
+  <name>Anchor Plugin - I/O GPL</name>
+  <description>Plugins that are GPL licenses and are relate to input/output</description>
   <build>
 
   </build>
